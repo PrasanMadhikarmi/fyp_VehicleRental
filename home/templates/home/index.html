@@ -8,7 +8,119 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Home</title>
-	
+	<style>
+		body {
+		  font-family: Arial, sans-serif;
+		  margin: 0;
+		  padding: 0;
+		  background-color: #f5f5f5;
+		}
+	  
+		.search-container {
+		  width: 100%;
+		  display: flex;
+		  flex-wrap: wrap;
+		  justify-content: center;
+		  align-items: center;
+		  background-color: #fff;
+		  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+		  padding: 10px;
+		  box-sizing: border-box;
+		  gap: 10px;
+		  border-radius: 30px;
+		}
+	  
+		.search-column {
+		  flex: 1;
+		  width: 100%;
+		  max-width: 250px;
+		  display: flex;
+		  flex-direction: column;
+		}
+	  
+		.search-input {
+			appearance: none;
+    -webkit-appearance: none;
+    background: transparent;
+    border: none;
+    /* border-bottom: 2px solid #2a2a2a; */
+    padding: 10px 20px;
+    font-size: 14px;
+    width: 100%;
+    cursor: pointer;
+    outline: none;
+		}
+	  
+		.search-button {
+		  background-color: #007bff;
+		  color: #fff;
+		  border: none;
+		  border-radius: 100px;
+		  /* padding: 5px 10px; */
+		  width: 40px;
+		  height: 40px;
+		  cursor: pointer;
+		  transition: background-color 0.3s ease;
+		}
+	  
+		.search-button:hover {
+		  background-color: #0056b3;
+		}
+	  
+		.search-icon {
+		  display: inline-block;
+		  width: 20px;
+		  height: 20px;
+		  background: url('static/home/search-icon.png') center/cover no-repeat;
+		}
+	  
+		@media (min-width: 768px) {
+		  .search-column {
+			max-width: none;
+		  }
+		}
+
+		.search-dropdown {
+    position: relative;
+    width: 100%;
+  }
+
+  .search-dropdown select {
+    appearance: none;
+    -webkit-appearance: none;
+    background: transparent;
+    border: none;
+    /* border-bottom: 2px solid #007bff; */
+    padding: 10px 20px;
+    font-size: 14px;
+    width: 100%;
+    cursor: pointer;
+    outline: none;
+  }
+
+  .search-dropdown::before {
+    content: "\25BC";
+    font-size: 12px;
+    color: #2f2f2f;
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+  .datetimeinput{
+	width: 80% !important;
+  }
+
+  .search-dropdown::after {
+    content: '';
+    border-bottom: 1px solid #ccc;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+  }
+	  </style>
 </head>
 <body>
 	<div class="nav-bar">
@@ -47,13 +159,238 @@
 			<p class="heading wobble-hor-bottom">NEED A RIDE? </p>
 			<p class="subheading wobble-hor-bottom">YOU'VE COME TO THE RIGHT PLACE.</p>
 			<hr class="sep wobble-hor-bottom">
-			<div class="btn-container">
-				<a href=""><button class="btn wobble-hor-bottom">Our Cars</button></a>
-				<a href=""><button class="btn wobble-hor-bottom">About Us</button></a>
-			</div>
+			
+				<div class="search-container">
+					<div class="search-column">
+					  <input class="search-input" type="text" placeholder="Location">
+					</div>
+					<div class="search-column">
+						<input class="search-input datetimeinput" type="text" placeholder="From">
+					  </div>
+					  <div class="search-column">
+						<input class="search-input datetimeinput" type="text" placeholder="Until">
+					  </div>
+					<div class="search-column">
+						<div class="search-dropdown">
+						  <select class="search-input" id="categorySelect">
+							<option value="" disabled selected>Select Category</option>
+							<option value="car">Car</option>
+							<option value="bike">Bike</option>
+							<option value="cycle">Cycle</option>
+						  </select>
+						</div>
+					  </div>
+					  <div class="search-column" id="subcategoryColumn" style="display: none;">
+						<div class="search-dropdown">
+						  <select class="search-input" id="subcategorySelect">
+							<option value="" disabled selected>Select Subcategory</option>
+						  </select>
+						</div>
+					  </div>
+					<button class="search-button" type="submit">
+					  <span class="search-icon"></span>
+					</button>
+				  </div>
+			
 		</div>
 	</div>
 
+	<section id="info1">
+		<div class="container">
+			<h2 class="title">Why Choose Us</h2>
+			<hr class="sep">
+			<p class="title_text">Explore your first class car rental service</p>
+			<div class="card-container">
+				<div class="card" style="background-color: #FCB401;">
+					<img src="{% static 'home/PngItem_2102230.png' %}">
+					<h3>Varieties of Vehicles</h3>
+					<p>We provide varieties of car from low prices to high prices</p>
+				</div>
+				<div class="card" style="background-color: #212181;">
+					<img src="{% static 'home/lipart.png' %}">
+					<h3>Best Rate Guarantee</h3>
+					<p>Lorem ipsum dolor sit amet, consectadipiscing elit. Aenean commodo ligula eget dolor.</p>
+				</div>
+				<div class="card" style="background-color: #FE7000;">
+					<img src="{% static 'home/phone.png' %}">
+					<h3>24/7 Customer Service</h3>
+					<p>Lorem ipsum dolor sit amet, consectadipiscing elit. Aenean commodo ligula eget dolor.</p>
+				</div>
+			</div>
 
+		</div>
+
+	</section>
+
+	<section id="info2">
+		<div class="container">
+			<h2 class="title" style="color: white;">About Us</h2>
+			<hr class="sep">
+			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore molestias ipsa veritatis nihil iusto maiores natus dolor.</p>
+
+		</div>
+	</section>
+
+	<section id="info3">
+		<div class="container">
+			<h2 class="title">Testimonials</h2>
+			<hr class="sep">
+			<p class="title_text">From all over nepal</p>
+			<div class="card-container">
+				<div class="info3-card">
+					<img src="{% static 'home/5.jpg' %}">
+					<h3>Angelina Smith</h3>
+					<div class="container">
+						<p>Lorem ipsum dolor sit amet, consectadipiscing elit.
+							Aenean commodo ligula eget dolor.Lorem ipsum dolor sit amet, consectadipiscing elit. Aenean commodo ligula eget dolor.</p>
+					</div>
+					
+				</div>
+				<div class="info3-card">
+					<img src="{% static 'home/5.jpg' %}">
+					<h3>Angelina Smith</h3>
+					<div class="container">
+						<p>Lorem ipsum dolor sit amet, consectadipiscing elit.
+							Aenean commodo ligula eget dolor.Lorem ipsum dolor sit amet, consectadipiscing elit. Aenean commodo ligula eget dolor.</p>
+					</div>
+				</div>
+				<div class="info3-card">
+					<img src="{% static 'home/5.jpg' %}">
+					<h3>Angelina Smith</h3>
+					<div class="container">
+						<p>Lorem ipsum dolor sit amet, consectadipiscing elit.
+							Aenean commodo ligula eget dolor.Lorem ipsum dolor sit amet, consectadipiscing elit. Aenean commodo ligula eget dolor.
+							Aenean commodo ligula eget dolor</p>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</section>
+
+	<section id="newsletter">
+		<div class="container">
+		<h2 class="title">Join Our Newsletter</h2>
+		<hr class="sep">
+		<form method="POST" action="{% url 'home:index' %}">
+			{% csrf_token %}
+				<input class="input-field" type="email" name ="email" value={{current_user.email}}>
+				<br>
+			{% if exists == "Yes" %}
+				<button style="background-color: grey; width: 15em;" type="submit" class="join-btn" disabled>Newsletter Subscribed</button>
+			{% else %}
+				<button type="submit" class="join-btn">Join</button>
+			{% endif %}
+
+		</form>
+	</div>
+	</section>
+
+	<footer class="footer-distributed">
+ 
+		<div class="footer-left">
+		
+		<h3><span class="highlight">Elite</span>Rental</h3>
+		
+		<p class="footer-links">
+		<a href="">Home</a>
+		·
+		<a href="#">Services</a>
+		·
+		<a href="#">Contact</a>
+		·
+		<a href="#">About</a>
+		·
+		<a href="#">Faq</a>
+
+		</p>
+		
+		<p class="footer-company-name">eliterental &copy; 2021</p>
+		</div>
+		
+		<div class="footer-center">
+		
+		<div>
+		<i class="fa fa-map-marker"></i>
+		<p><span>Dillibazar</span> Kathmandu, Nepal</p>
+		</div>
+		
+		<div>
+		<i class="fa fa-phone"></i>
+		<p>+1 555 123456</p>
+		</div>
+		
+		<div>
+		<i class="fa fa-envelope"></i>
+		<p><a href="mailto:support@company.com">contact@eliterental.com</a></p>
+		</div>
+		
+		</div>
+		
+		<div class="footer-right">
+		
+		<p class="footer-company-about">
+		<span>About the company</span>
+		Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+		</p>
+		
+		<div class="footer-icons">
+		
+		<a href="#"><i class="fa fa-facebook"></i></a>
+		<a href="#"><i class="fa fa-twitter"></i></a>
+		<a href="#"><i class="fa fa-linkedin"></i></a>
+		<a href="#"><i class="fa fa-github"></i></a>
+		
+		</div>
+		
+		</div>
+		
+		</footer>
+		
+
+	
+		<script>
+			const categorySelect = document.getElementById('categorySelect');
+			const subcategoryColumn = document.getElementById('subcategoryColumn');
+			const subcategorySelect = document.getElementById('subcategorySelect');
+		
+			const subcategories = {
+			  car: ['Sedan', 'SUV', 'Electric'],
+			  bike: ['Sports', 'Naked', 'Offroad'],
+			  cycle: ['Mountain Bike', 'BMX', 'Electric'],
+			};
+		
+			categorySelect.addEventListener('change', () => {
+			  const selectedCategory = categorySelect.value;
+			  if (selectedCategory in subcategories) {
+				subcategoryColumn.style.display = 'block';
+				subcategorySelect.innerHTML = '<option value="" disabled selected>Select Subcategory</option>';
+				subcategories[selectedCategory].forEach(subcategory => {
+				  const option = document.createElement('option');
+				  option.value = subcategory.toLowerCase();
+				  option.textContent = subcategory;
+				  subcategorySelect.appendChild(option);
+				});
+			  } else {
+				subcategoryColumn.style.display = 'none';
+			  }
+			});
+
+
+			const datetimeInputs = document.querySelectorAll('.datetimeinput');
+
+    datetimeInputs.forEach(input => {
+      input.addEventListener('focus', () => {
+        input.type = 'datetime-local';
+      });
+
+      input.addEventListener('blur', () => {
+        if (!input.value) {
+          input.type = 'text';
+        }
+      });
+    });
+		  </script>
+		
 </body>
 </html>

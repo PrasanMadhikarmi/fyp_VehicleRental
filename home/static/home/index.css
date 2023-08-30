@@ -124,11 +124,13 @@ ul {
 
 	margin: 0 auto ;
 	height:250px;
-	width:550px;
+	
+  width: 90% !important;
 	background-color: rgba(68, 68, 68, 0.3);
 	color: white;
 	border-radius: 10px;
 	padding-top: 35px;
+  padding: 20px;
 }
 .bounce-in-top{
   animation:bounce-in-top 1.8s both
@@ -151,6 +153,13 @@ ul {
   100%{transform:translateY(0);
     animation-timing-function:ease-out}
   }
+
+
+
+
+
+
+
 
 .btn-container{
 	display: flex;
@@ -554,7 +563,7 @@ ul {
     height: 60vh;
   }
   .box{
-		width: 320px;
+		width: 90% !important;
 		height: 30vh;
 	}
 	.btn{
