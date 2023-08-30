@@ -1,5 +1,5 @@
 from django.shortcuts import render
-
+from home.models import newsletter
 
 
 # Create your views here.

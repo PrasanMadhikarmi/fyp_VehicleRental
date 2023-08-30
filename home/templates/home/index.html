@@ -1,0 +1,59 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="{%static 'home/index.css'%}">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Home</title>
+	
+</head>
+<body>
+	<div class="nav-bar">
+        <div class="nav-logo">
+            <h1>
+            <span class="highlight">Elite</span>Rental
+        </h1></div>
+        <div class="nav-link">
+            
+            <nav>
+				<ul>
+					<li><a class="active link-href" href="{% url 'home:index' %}">Home</a></li>
+					<li><a class="link-href" href="">Cars</a></li>
+					<li><a class="link-href" href="">About</a></li>
+					<li><a class="link-href" href="">Contact</a></li>
+					<li><a class="link-href" href="">FAQ</a></li>
+				</ul>
+			</nav>
+        </div>
+
+        <div class="p-f">
+            <div>
+            {% if user.is_authenticated %}
+				<li><a class="link-href" href="">Booking</a></li>
+                <li><a class="img-hover link-href"   href=""><img src="{% static 'home/user-24.png' %}"></a></li>
+                <li><a class="img-hover link-href" href=""><img src="{% static 'home/logout-24.png' %}"></a></li>
+            {% else %}
+                <li style="color:yellow;"><a href="">Login</a></li>
+            {% endif %}
+            </div>
+        </div>
+    </div>
+	<div class="main-container">
+		
+		<div class="box bounce-in-top">
+			<p class="heading wobble-hor-bottom">NEED A RIDE? </p>
+			<p class="subheading wobble-hor-bottom">YOU'VE COME TO THE RIGHT PLACE.</p>
+			<hr class="sep wobble-hor-bottom">
+			<div class="btn-container">
+				<a href=""><button class="btn wobble-hor-bottom">Our Cars</button></a>
+				<a href=""><button class="btn wobble-hor-bottom">About Us</button></a>
+			</div>
+		</div>
+	</div>
+
+
+</body>
+</html>
