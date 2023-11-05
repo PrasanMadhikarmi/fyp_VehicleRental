@@ -1,0 +1,111 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Registration Form</title>
+    <link rel="stylesheet" href="{% static 'accounts/vehicleRegistration.css' %}">
+    <link rel="stylesheet" type="text/css" href="{%static 'home/index.css'%}">
+</head>
+<body>
+    <div class="nav-bar">
+        <div class="nav-logo">
+            <h1>
+            <span class="highlight">Elite</span>Rental
+        </h1></div>
+        <div class="nav-link">
+            
+            <nav>
+				<ul>
+					<li><a class="active link-href" href="{% url 'home:index' %}">Home</a></li>
+					<li><a class="link-href" href="">Cars</a></li>
+					<li><a class="link-href" href="">About</a></li>
+					<li><a class="link-href" href="">Contact</a></li>
+					<li><a class="link-href" href="">FAQ</a></li>
+				</ul>
+			</nav>
+        </div>
+
+		<div class="p-f">
+            <div>
+            {% if user.is_authenticated %}
+				
+				<li><a class="link-href" href="">Booking</a></li>
+                <li><a class="img-hover link-href"   href=""><img src="{% static 'home/user-24.png' %}" width="20px"></a></li>
+                <li><a class="img-hover link-href" href="{% url 'accounts:logout' %}"><img src="{% static 'home/logout-24.png' %}" width="20px"></a></li>
+            {% else %}
+                <li style="color:yellow;"><a href="{% url 'accounts:loginPage' %}">Login</a></li>
+            {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <h1>Vehicle Registration Form</h1>
+        <hr>
+        <form id="vehicleForm">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="brand">Vehicle Brand:</label>
+                    <input type="text" id="brand" name="brand" required>
+                </div>
+                <div class="form-group">
+                    <label for="model">Vehicle Model:</label>
+                    <input type="text" id="model" name="model" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="location">Location:</label>
+                    <input type="text" id="location" name="location" required>
+                </div>
+                <div class="form-group">
+                    <label for="price">Price per Day ($):</label>
+                    <input type="number" id="price" name="price" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="capacity">Vehicle Capacity:</label>
+                    <input type="number" id="capacity" name="capacity" required>
+                </div>
+                <div class="form-group">
+                    <label for="category">Vehicle Category:</label>
+                    <select id="category" name="category" required>
+                        <option value="car">Car</option>
+                        <option value="bike">Bike</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="description">Vehicle Description:</label>
+                <textarea id="description" name="description" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="image1">Vehicle Image 1:</label>
+                <input type="file" id="image1" name="image1" accept="image/*">
+            </div>
+            <div class="form-group">
+                <label for="image2">Vehicle Image 2:</label>
+                <input type="file" id="image2" name="image2" accept="image/*">
+            </div>
+            <div class="form-group">
+                <label for="image3">Vehicle Image 3:</label>
+                <input type="file" id="image3" name="image3" accept="image/*">
+            </div>
+            <div class="form-group">
+                <label for="image4">Vehicle Image 4:</label>
+                <input type="file" id="image4" name="image4" accept="image/*">
+            </div>
+            <div class="form-group">
+                <label for="image5">Vehicle Image 5:</label>
+                <input type="file" id="image5" name="image5" accept="image/*">
+            </div>
+            
+            <div class="form-group">
+                <button type="submit">Submit</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

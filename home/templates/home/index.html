@@ -144,9 +144,11 @@
 		<div class="p-f">
             <div>
             {% if user.is_authenticated %}
-				<li><a class="link-href" href="{% url 'services:booking' %}">Booking</a></li>
-                <li><a class="img-hover link-href"   href="{% url 'accounts:profile' %}"><img src="{% static 'home/user-24.png' %}"></a></li>
-                <li><a class="img-hover link-href" href="{% url 'accounts:logout' %}"><img src="{% static 'home/logout-24.png' %}"></a></li>
+				<li><a class="" style="background-color: #0056b3;font-size: 14px; color: white; padding: 5px; text-transform: capitalize; border-radius: 5px; text-decoration: none;" 
+					href="{% url 'accounts:vehicle_registration' %}">Register Vehicle</a></li>
+				<li><a class="link-href" href="">Booking</a></li>
+                <li><a class="img-hover link-href"   href=""><img src="{% static 'home/user-24.png' %}" width="20px"></a></li>
+                <li><a class="img-hover link-href" href="{% url 'accounts:logout' %}"><img src="{% static 'home/logout-24.png' %}" width="20px"></a></li>
             {% else %}
                 <li style="color:yellow;"><a href="{% url 'accounts:loginPage' %}">Login</a></li>
             {% endif %}
