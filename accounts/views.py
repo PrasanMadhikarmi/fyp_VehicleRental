@@ -5,7 +5,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.conf import settings
 
-from accounts.models import VehicleRegistration
+from accounts.models import UserAddress, VehicleRegistration
 
 from .forms import CreateUserForm, VehicleRegistrationForm
 from django.contrib.auth import authenticate, login, logout
@@ -90,3 +90,37 @@ def vehicle_registration(request):
 
 
     return render(request, 'accounts/vehicleRegistration.html', {'form': form})
+
+def userProfile(request):
+    current_user = request.user
+
+    data = User.objects.get(id=current_user.id)
+    if UserAddress.objects.filter(user_info_id=current_user.id).exists():
+        data2 = UserAddress.objects.get(user_info_id=current_user.id)
+    else:
+        data2 = "Enter Detail"
+
+
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            user_info_id = request.POST.get('UserId')
+            address_name = request.POST.get('address')
+            street = request.POST.get('street')
+            postalcode = request.POST.get('postalcode')
+            city = request.POST.get('city')
+            country = request.POST.get('country')
+
+            if address_name and street and postalcode and city and country != '':
+                address_data = UserAddress(user_info_id=user_info_id, address=address_name, street=street, postalcode=postalcode, city=city, country= country)
+                address_data.save()
+                current_user = request.user
+                print(f"address saved")
+                data2 = UserAddress.objects.get(user_info_id=current_user.id)
+            else:
+                print("empty")
+        context={
+            'user': data,
+            'address': data2
+        }
+
+        return render(request, "accounts/profile.html", context)

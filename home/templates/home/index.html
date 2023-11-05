@@ -5,6 +5,7 @@
 	
 	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
 	<link rel="stylesheet" type="text/css" href="{%static 'home/index.css'%}">
+
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Home</title>
@@ -146,8 +147,17 @@
             {% if user.is_authenticated %}
 				<li><a class="" style="background-color: #0056b3;font-size: 14px; color: white; padding: 5px; text-transform: capitalize; border-radius: 5px; text-decoration: none;" 
 					href="{% url 'accounts:vehicle_registration' %}">Register Vehicle</a></li>
-				<li><a class="link-href" href="">Booking</a></li>
-                <li><a class="img-hover link-href"   href=""><img src="{% static 'home/user-24.png' %}" width="20px"></a></li>
+                <li>
+					<a class="img-hover link-href" id="userDropdown">
+						<img src="{% static 'home/user-24.png' %}">
+					</a>
+					<div id="userDropdownContent" class="dropdown-content">
+						<a href="{% url 'accounts:profile' %}">Account Details</a>
+						<a href="">My Booking</a>
+						<a href="#">My Vehicles</a>
+						<a href="#">Booking Request</a>
+					</div>
+				</li>
                 <li><a class="img-hover link-href" href="{% url 'accounts:logout' %}"><img src="{% static 'home/logout-24.png' %}" width="20px"></a></li>
             {% else %}
                 <li style="color:yellow;"><a href="{% url 'accounts:loginPage' %}">Login</a></li>
@@ -350,7 +360,7 @@
 		</footer>
 		
 
-	
+		<script src="{% static 'home/dropdown.js' %}"></script>
 		<script>
 			const categorySelect = document.getElementById('categorySelect');
 			const subcategoryColumn = document.getElementById('subcategoryColumn');
