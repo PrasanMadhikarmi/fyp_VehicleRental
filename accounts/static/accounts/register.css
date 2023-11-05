@@ -1,0 +1,134 @@
+*{
+	margin: 0;
+	padding: 0;
+}
+
+body{
+	font-family: Montserrat;
+
+}
+
+#container{
+	background-color: #f6f6f6;
+	position: relative;
+	height: 80vh;
+	width: 80%;
+	margin: 70px auto;
+	box-shadow: 0 2px 3px #C8D0D8;;
+}
+
+.logoHolder{
+	position: absolute;
+	width: 30%;
+	left: 0;
+	text-align: center;
+	margin-top: 15%;
+}
+
+.logo{
+	padding-left: 10%;
+}
+
+.logo img{
+	width: 80%;
+	height: 80%;
+}
+
+#cred-container{
+	position: absolute;
+	width: 70%;
+	right: 0;
+	text-align: center;
+	line-height: 1.5;
+	margin-top: 10%;
+}
+
+.title{
+	color: #3b444b;
+	padding-bottom: 30px;
+	font-size: 1.5vw;
+}
+
+.row1{
+	display: flex;
+	width: 80%;
+	margin: 0 auto;
+}
+
+.row2{
+	display: flex;
+	width: 80%;
+	margin: 20px auto;
+}
+
+.row3{
+	display: flex;
+	width: 80%;
+	margin: 20px auto;
+}
+
+.col{
+	flex: 1;
+}
+
+.col input{
+	border-radius: 5px;
+	width: 90%;
+	height: 40px;
+	border-color: rgba(0, 0, 0, 0.2);
+	padding-left: 10px;
+}
+
+
+.col input:focus{
+	outline: none;
+	border-color: blue;
+}
+
+
+.register-btn{
+	margin-top: 25px;
+	width: 20%;
+	border-radius: 50px;
+	background-color: #005789;
+	border: 0;
+	padding: 15px;
+	color: white;
+	font-size: 1vw;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+.register-btn:hover,
+.register-btn:focus {
+  box-shadow: 0 1em 1em -0.4em grey;
+  transform: translateY(-0.25em);
+  transition: 0.3s;
+}
+.signin{
+	margin-top: 30px;
+	color: #848484;
+	font-family: Montserrat;
+	font-size: 1vw;
+}
+
+.signin a{
+	text-decoration: none;
+	color: #005789;
+	font-weight: bold;
+	font-size: 1em;
+}
+
+a:hover{
+	color: red;
+}
+
+
+.sep{
+	position: absolute;
+	width: 1px;
+	height: 250px;
+	background-color: grey;
+	opacity: 30%;
+	top: 30px;
+}

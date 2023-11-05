@@ -5,9 +5,6 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.conf import settings
 
-from .models import UserAddress
-
-from .forms import CreateUserForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 

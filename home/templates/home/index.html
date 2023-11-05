@@ -141,14 +141,14 @@
 			</nav>
         </div>
 
-        <div class="p-f">
+		<div class="p-f">
             <div>
             {% if user.is_authenticated %}
-				<li><a class="link-href" href="">Booking</a></li>
-                <li><a class="img-hover link-href"   href=""><img src="{% static 'home/user-24.png' %}"></a></li>
-                <li><a class="img-hover link-href" href=""><img src="{% static 'home/logout-24.png' %}"></a></li>
+				<li><a class="link-href" href="{% url 'services:booking' %}">Booking</a></li>
+                <li><a class="img-hover link-href"   href="{% url 'accounts:profile' %}"><img src="{% static 'home/user-24.png' %}"></a></li>
+                <li><a class="img-hover link-href" href="{% url 'accounts:logout' %}"><img src="{% static 'home/logout-24.png' %}"></a></li>
             {% else %}
-                <li style="color:yellow;"><a href="">Login</a></li>
+                <li style="color:yellow;"><a href="{% url 'accounts:loginPage' %}">Login</a></li>
             {% endif %}
             </div>
         </div>

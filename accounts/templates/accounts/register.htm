@@ -1,0 +1,107 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Register</title>
+	<link rel="stylesheet" href="{% static 'accounts/register.css' %}">
+
+</head>
+<body>
+
+	<div id="container">
+		<div class="logoHolder">
+			<div class="logo">
+				<img src="{%static 'accounts/Elite rental logo.png'%}">
+			</div>
+		</div>
+		<div id="cred-container">
+					<div class="sep">
+		</div>
+			<div class="title">
+				<h2>Create an account</h2>
+			</div>
+			<form action="register" method="POST">
+			{% csrf_token %}
+			<div class="row1">		
+				<div class="col">
+					{{form.first_name}}
+				</div>
+				<div class="col">
+
+					{{form.last_name}}
+
+				</div>
+			</div>
+			<div class="row2">	
+				<div class="col">
+					
+					{{form.username}}
+
+				</div>
+				<div class="col">
+
+					{{form.email}}
+				</div>
+			</div>
+			<div class="row3">		
+				<div class="col">
+
+					{{form.password1}}
+				</div>
+				<div class="col">
+					
+					{{form.password2}}
+				</div>
+			</div>
+			<div class="row4">
+				<input type="Submit" class="register-btn">
+				
+			</div>
+		</form>
+
+
+
+
+		<div class="signin">
+			Already have an account? <a href="{% url 'accounts:loginPage' %}">Sign In</a><br><br>
+
+			{% if form.errors %}
+    		{% for field in form %}
+        		{% for error in field.errors %}
+            		<div class="alert alert-danger">
+                		<strong style="color: red;">{{ error|escape }}</strong>
+            		</div>
+        		{% endfor %}
+   			{% endfor %}
+
+    		{% for error in form.non_field_errors %}
+        		<div class="alert alert-danger">
+            		<strong style="color: red;">{{ error|escape }}</strong>
+        		</div>
+    		{% endfor %}
+			{% endif %}
+
+		</div>
+
+		</div>
+
+	</div>
+	<script>
+		//Query All input fields
+		var form_fields = document.getElementsByTagName('input')
+		form_fields[1].placeholder='FirstName';
+		form_fields[2].placeholder='LastName';
+		form_fields[3].placeholder='Username';
+		form_fields[4].placeholder='Email';
+		form_fields[5].placeholder='Password';
+		form_fields[6].placeholder='Confirm Password';
+
+
+		for (var field in form_fields){	
+			form_fields[field].className += ' form-control'
+		}
+	</script>
+</body>
+</html>
