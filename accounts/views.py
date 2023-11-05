@@ -76,22 +76,23 @@ def vehicle_registration(request):
         form = VehicleRegistrationForm(request.POST, request.FILES)
         formset = VehicleImageFormSet(request.POST, request.FILES)
 
-        if form.is_valid() and formset.is_valid():
-            # Save the vehicle registration data
-            vehicle_registration = form.save(commit=False)
-            vehicle_registration.user = request.user  # Assign the current user
-            vehicle_registration.save()
 
-            for form in formset:
-                if form.cleaned_data:
-                    image = form.cleaned_data['image']
-                    vehicle_image = VehicleImage(vehicle=vehicle_registration, image=image)
-                    vehicle_image.save()
+        vehicle_registration = form.save(commit=False)
+        vehicle_registration.user = request.user  # Assign the current user
+        vehicle_registration.save()
 
-            # Redirect to a success page or do something else upon successful registration.
-            return redirect('accounts:successreg')
+        for form in formset:
+            if form.cleaned_data:
+                image = form.cleaned_data['image']
+                vehicle_image = VehicleImage(vehicle=vehicle_registration, image=image)
+                vehicle_image.save()
+        
+        # Redirect to a success page or do something else upon successful registration.
+        return redirect('accounts:successreg')
+   
+
     else:
         form = VehicleRegistrationForm()
         formset = VehicleImageFormSet()
 
-    return render(request, 'accounts/vehicle_registration.html', {'form': form, 'formset': formset})
+    return render(request, 'accounts/vehicleRegistration.html', {'form': form, 'formset': formset})

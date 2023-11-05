@@ -12,9 +12,11 @@ class CreateUserForm(UserCreationForm):
         fields =['first_name', 'last_name','username', 'email', 'password1', 'password2']
 
 
+
 class VehicleRegistrationForm(forms.ModelForm):
     class Meta:
         model = VehicleRegistration
-        fields = ['user', 'brand', 'model', 'location', 'price', 'capacity', 'category', 'description']
+        fields = ['brand', 'model', 'location', 'price', 'capacity', 'category', 'description']
 
-VehicleImageFormSet = inlineformset_factory(VehicleRegistration, VehicleImage, fields=('image',), extra=5)
+VehicleImageFormSet = inlineformset_factory(VehicleRegistration, VehicleImage, fields=('image',), extra=7)
+

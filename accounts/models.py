@@ -11,13 +11,14 @@ class VehicleRegistration(models.Model):
     brand = models.CharField(max_length=100)
     model = models.CharField(max_length=100)
     location = models.CharField(max_length=100)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
+    price = models.IntegerField()
     capacity = models.IntegerField()
     CATEGORY_CHOICES = [
         ('car', 'Car'),
         ('bike', 'Bike'),
+        ('cycle', 'Cycle'),
     ]
-    category = models.CharField(max_length=4, choices=CATEGORY_CHOICES)
+    category = models.CharField(max_length=5, choices=CATEGORY_CHOICES)
     description = models.TextField()
 
     def __str__(self):
