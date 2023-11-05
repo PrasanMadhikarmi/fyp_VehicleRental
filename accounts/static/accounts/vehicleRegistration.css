@@ -45,6 +45,9 @@ input[type="file"] {
     background-color: #f9f9f9;
 }
 
+label{
+    font-size: 12px;
+}
 button {
     background-color: #007BFF;
     color: #fff;

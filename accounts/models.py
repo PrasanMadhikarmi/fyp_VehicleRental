@@ -1,10 +1,6 @@
 from django.db import models
 from django.conf import settings
 
-# Create your models here.
-class VehicleImage(models.Model):
-    vehicle = models.ForeignKey('VehicleRegistration', on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='vehicle_images/')
 
 class VehicleRegistration(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE) 
@@ -19,7 +15,15 @@ class VehicleRegistration(models.Model):
         ('cycle', 'Cycle'),
     ]
     category = models.CharField(max_length=5, choices=CATEGORY_CHOICES)
+    subcategory = models.CharField(max_length=100)
     description = models.TextField()
+    image1 = models.ImageField(default='1', upload_to='vehicle_images/')
+    image2 = models.ImageField(default='1', upload_to='vehicle_images/')
+    image3 = models.ImageField(default='1', upload_to='vehicle_images/')
+    image4 = models.ImageField(default='1', upload_to='vehicle_images/')
+    image5 = models.ImageField(default='1', upload_to='vehicle_images/')
+    bluebookimg = models.ImageField(default='1', upload_to='bluebookimg/')
+    citizenimg = models.ImageField(default='1', upload_to='citizenimg/')
 
     def __str__(self):
         return f"{self.brand} {self.model}"
