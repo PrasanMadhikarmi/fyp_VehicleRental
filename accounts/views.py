@@ -141,3 +141,15 @@ def delete_vehicle(request, vehicle_id):
     vehicle = VehicleRegistration.objects.get(id=vehicle_id)
     vehicle.delete()
     return redirect('accounts:myvehicles')  # Redirect to 'myvehicles' page
+
+def edit_vehicle(request, vehicle_id):
+    vehicle = VehicleRegistration.objects.get(id=vehicle_id)
+
+    if request.method == 'POST':
+        form = VehicleRegistrationForm(request.POST, instance=vehicle)
+        form.save()
+        return redirect('accounts:myvehicles')
+    else:
+        form = VehicleRegistrationForm(instance=vehicle)
+
+    return redirect('accounts:myvehicles')  

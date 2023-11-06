@@ -94,7 +94,19 @@
             height: 40px;
             background: rgb(218, 75, 75);
             border: none;
-            border-radius: 0 0 8px 8px;
+            padding: 0;
+            cursor: pointer;
+        }
+
+        button.edit-button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 40px;
+            background: rgb(75, 132, 218);
+            border: none;
+
             padding: 0;
             cursor: pointer;
         }
@@ -107,6 +119,12 @@
             color: #ffffff;
         }
 
+        button.edit-button svg {
+            width: 24px;
+            height: 24px;
+            color: #ffffff;
+        }
+
         .delete-button {
             display: inline-block;
             background-color: #33ff44;
@@ -114,11 +132,14 @@
             border: none;
             padding: 8px 16px;
             cursor: pointer;
-            border-radius: 4px;
             font-size: 0.9em;
             text-align: center;
             text-decoration: none;
         }
+
+
+
+
         .header {
             display: flex;
             justify-content: space-between;
@@ -143,6 +164,83 @@
 
         .add-vehicle-button:hover {
             background-color: #0056b3;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 8px;
+            position: relative;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        form label,
+        form input,
+        form select,
+        form textarea,
+        form button {
+            display: block;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+
+        form input,
+        form select,
+        form textarea {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        form button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+
+        form input[type="file"] {
+            padding: 5px;
+            border: none;
+            border-radius: 4px;
+            background-color: #f1f1f1;
+        }
+
+        .img-preview {
+            width: 200px;
         }
     </style>
 </head>
@@ -180,14 +278,36 @@
                 {% endif %}
                 <img src="{{ vehicle.image1.url }}" alt="{{ vehicle.brand }} {{ vehicle.model }}">
                 <div class="vehicle-info">
-                    <p>{{ vehicle.location }}</p>
+                    <p style="font-size: 12px; font-weight: 200;">{{ vehicle.location }}</p>
                     <h3>{{ vehicle.brand }} {{ vehicle.model }}</h3>
                     <p style="font-weight: bold;">Type: {{ vehicle.subcategory }}</p>
-                    <p style="font-weight: bold;">Price per day: ${{ vehicle.price }}</p>
+                    <p style="font-weight: bold;">Price per day: NPR {{ vehicle.price }}</p>
                 </div>
                 <div class="button-column">
-                    <form style="width: 100%;" method="post" action="{% url 'accounts:delete_vehicle' vehicle.id %}" 
-                          onsubmit="return confirmDelete();">
+                    <form style="width: 100%;" method="post" action="">
+                        {% csrf_token %}
+                        <input type="hidden" name="id" value="{{ vehicle.id }}">
+                        <button type="button" class="edit-button" data-id="{{ vehicle.id }}"
+                            data-brand="{{ vehicle.brand }}" data-model="{{ vehicle.model }}"
+                            data-location="{{ vehicle.location }}" data-price="{{ vehicle.price }}"
+                            data-capacity="{{ vehicle.capacity }}" data-category="{{ vehicle.category }}"
+                            data-subcategory="{{ vehicle.subcategory }}" data-description="{{ vehicle.description }}"
+                            data-image1="{{ vehicle.image1.url }}" data-image2="{{ vehicle.image2.url }}"
+                            data-image3="{{ vehicle.image3.url }}" data-image4="{{ vehicle.image4.url }}"
+                            data-image5="{{ vehicle.image5.url }}" data-bluebookimg="{{ vehicle.bluebookimg.url }}"
+                            data-citizenimg="{{ vehicle.citizenimg.url }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                                class="bi bi-pencil" viewBox="0 0 16 16">
+                                <path
+                                    d="M11.293 0.293a1 1 0 0 1 1.414 0l2 2a1 1 0 0 1 0 1.414l-9 9a1 1 0 0 1-.32.211l-3 1a1.002 1.002 0 0 1-1.11-1.11l1-3c.05-.165.083-.332.108-.5l9-9zM12 1l2 2-9 9-2-2 9-9zm2.293 2.293L13 3.586 12.586 4l1.707 1.707 1.414-1.414z" />
+                            </svg>
+                        </button>
+
+                    </form>
+
+
+                    <form style="width: 100%;" method="post" action="{% url 'accounts:delete_vehicle' vehicle.id %}"
+                        onsubmit="return confirmDelete();">
                         {% csrf_token %}
                         <input type="hidden" name="id" value="{{ vehicle.id }}">
                         <button type="submit" class="delete-button">
@@ -201,10 +321,192 @@
                 </div>
 
             </div>
+            <div id="editVehicleModal" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <form id="editForm" style="width: 100%;" method="post" action="{% url 'accounts:edit_vehicle' vehicle.id %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input type="hidden" name="id" value="">
+                        <label for="brand">Brand:</label>
+                        <input type="text" id="brand" name="brand"><br>
+                        <label for="model">Model:</label>
+                        <input type="text" id="model" name="model"><br>
+                        <label for="location">Location:</label>
+                        <input type="text" id="location" name="location"><br>
+                        <label for="price">Price:</label>
+                        <input type="number" id="price" name="price"><br>
+                        <label for="capacity">Capacity:</label>
+                        <input type="number" id="capacity" name="capacity"><br>
+                        <label for="category">Category:</label>
+                        <select class="search-input" name="category" id="categorySelect">
+                            <option value="" disabled selected>Select Category</option>
+                            <option value="car">Car</option>
+                            <option value="bike">Bike</option>
+                            <option value="cycle">Cycle</option>
+                        </select><br>
+                        <label for="subcategory">Subcategory:</label>
+                        <div class="search-column" id="subcategoryColumn">
+                            <div class="search-dropdown">
+                                <select class="search-input" name="subcategory" id="subcategorySelect">
+                                    <option value="" disabled selected>Select Subcategory</option>
+                                </select>
+                            </div>
+                        </div>
+                        <label for="description">Description:</label>
+                        <textarea id="description" name="description"></textarea><br>
+                        {% for i in "12345" %}
+                        <label for="image{{ i }}">Image {{ i }}:</label>
+                        <input type="file" id="image{{ i }}" name="image{{ i }}" accept="image/*"
+                            onchange="handleFileSelect(event, 'image{{ i }}')"><br>
+                        <img class="img-preview" id="image{{ i }}-preview" src=""><br>
+                        {% endfor %}
+    
+                        <label for="bluebookimg">Bluebook Image:</label>
+                        <input type="file" id="bluebookimg" name="bluebookimg" accept="image/*"
+                            onchange="handleFileSelect(event, 'bluebookimg')"><br>
+                        <img class="img-preview" id="bluebookimg-preview" src=""><br>
+    
+                        <label for="citizenimg">Citizen Image:</label>
+                        <input type="file" id="citizenimg" name="citizenimg" accept="image/*"
+                            onchange="handleFileSelect(event, 'citizenimg')"><br>
+                        <img class="img-preview" id="citizenimg-preview" src=""><br>
+    
+    
+                        <button type="submit">Save Changes</button>
+
+                    </form>
+                </div>
+            </div>
             {% endfor %}
         </div>
+        <!-- Modal -->
+       
+
     </div>
     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var editButtons = document.querySelectorAll('.edit-button');
+
+            editButtons.forEach(function (button) {
+                button.addEventListener('click', function () {
+
+                    var id = this.getAttribute('data-id');
+                    var brand = this.getAttribute('data-brand');
+                    var model = this.getAttribute('data-model');
+                    var location = this.getAttribute('data-location');
+                    var price = this.getAttribute('data-price');
+                    var capacity = this.getAttribute('data-capacity');
+                    var category = this.getAttribute('data-category');
+                    var subcategory = this.getAttribute('data-subcategory');
+                    var description = this.getAttribute('data-description');
+                    var image1 = this.getAttribute('data-image1');
+                    var image2 = this.getAttribute('data-image2');
+                    var image3 = this.getAttribute('data-image3');
+                    var image4 = this.getAttribute('data-image4');
+                    var image5 = this.getAttribute('data-image5');
+                    var bluebookimg = this.getAttribute('data-bluebookimg');
+                    var citizenimg = this.getAttribute('data-citizenimg');
+
+
+                    openEditModal(id, brand, model, location, price, capacity, category,
+                        subcategory, description,
+                        image1, image2, image3, image4, image5, bluebookimg, citizenimg);
+                });
+            });
+        });
+
+        function handleFileSelect(event, inputId) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function () {
+                const preview = document.getElementById(inputId + '-preview');
+                if (preview) {
+                    preview.src = reader.result;
+                }
+            }
+
+            reader.readAsDataURL(file);
+        }
+
+
+        function openEditModal(id, brand, model, location, price, capacity, category, subcategory, description, image1,
+            image2, image3, image4, image5, bluebookimg, citizenimg) {
+            var modal = document.getElementById('editVehicleModal');
+
+            // Set the values in the modal form
+            modal.querySelector('input[name="id"]').value = id;
+            modal.querySelector('input[name="brand"]').value = brand;
+            modal.querySelector('input[name="model"]').value = model;
+            modal.querySelector('input[name="location"]').value = location;
+            modal.querySelector('input[name="price"]').value = price;
+            modal.querySelector('input[name="capacity"]').value = capacity;
+            modal.querySelector('select[name="category"]').value = category;
+            modal.querySelector('select[name="subcategory"]').value = subcategory;
+            modal.querySelector('textarea[name="description"]').value = description;
+
+            // Display images
+            document.getElementById('image1-preview').src = image1;
+            document.getElementById('image2-preview').src = image2;
+            document.getElementById('image3-preview').src = image3;
+            document.getElementById('image4-preview').src = image4;
+            document.getElementById('image5-preview').src = image5;
+            document.getElementById('bluebookimg-preview').src = bluebookimg;
+            document.getElementById('citizenimg-preview').src = citizenimg;
+
+            // Show the modal
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            var modal = document.getElementById('editVehicleModal');
+            modal.style.display = 'none';
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var span = document.getElementsByClassName('close')[0];
+
+            span.onclick = function () {
+                closeModal();
+            }
+
+            window.onclick = function (event) {
+                var modal = document.getElementById('editVehicleModal');
+                if (event.target == modal) {
+                    closeModal();
+                }
+            }
+        });
+    </script>
+
+    <script>
+        const categorySelect = document.getElementById('categorySelect');
+        const subcategoryColumn = document.getElementById('subcategoryColumn');
+        const subcategorySelect = document.getElementById('subcategorySelect');
+
+        const subcategories = {
+            car: ['Sedan', 'SUV', 'Electric'],
+            bike: ['Sports', 'Naked', 'Offroad'],
+            cycle: ['Mountain Bike', 'BMX', 'Electric'],
+        };
+
+        categorySelect.addEventListener('change', () => {
+            const selectedCategory = categorySelect.value;
+            if (selectedCategory in subcategories) {
+                subcategoryColumn.style.display = 'block';
+                subcategorySelect.innerHTML = '<option value="" disabled selected>Select Subcategory</option>';
+                subcategories[selectedCategory].forEach(subcategory => {
+                    const option = document.createElement('option');
+                    option.value = subcategory.toLowerCase();
+                    option.textContent = subcategory;
+                    subcategorySelect.appendChild(option);
+                });
+            } else {
+                subcategoryColumn.style.display = 'none';
+            }
+        });
+
+
         function confirmDelete() {
             return confirm('Are you sure you want to delete this vehicle?');
         }
