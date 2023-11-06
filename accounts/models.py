@@ -38,6 +38,7 @@ class VehicleRegistration(models.Model):
     image5 = models.ImageField(default='1', upload_to='accounts/vehicle_images')
     bluebookimg = models.ImageField(default='1', upload_to='accounts/bluebookimg')
     citizenimg = models.ImageField(default='1', upload_to='accounts/citizenimg')
+    isVerified = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.brand} {self.model}"

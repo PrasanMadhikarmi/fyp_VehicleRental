@@ -125,5 +125,19 @@ def userProfile(request):
 
         return render(request, "accounts/profile.html", context)
     
-def myVehicles(request): 
-    return render(request, "accounts/my_vehicles.htm")
+def myVehicles(request):
+    # Get all vehicles associated with the logged-in user
+    user_vehicles = VehicleRegistration.objects.filter(user=request.user)
+
+    context = {
+        'user_vehicles': user_vehicles
+    }
+
+    return render(request, "accounts/my_vehicles.html", context)
+
+
+
+def delete_vehicle(request, vehicle_id):
+    vehicle = VehicleRegistration.objects.get(id=vehicle_id)
+    vehicle.delete()
+    return redirect('accounts:myvehicles')  # Redirect to 'myvehicles' page

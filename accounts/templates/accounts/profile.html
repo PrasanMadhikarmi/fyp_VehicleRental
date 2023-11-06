@@ -12,48 +12,7 @@
 
 </head>
 <body>
-
-    <div class="nav-bar">
-        <div class="nav-logo">
-            <h1>
-            <span class="highlight">Elite</span>Rental
-        </h1></div>
-        <div class="nav-link">
-            
-            <nav>
-				<ul>
-					<li><a class="link-href" href="{% url 'home:index' %}">Home</a></li>
-					<li><a class="link-href" href="">Cars</a></li>
-					<li><a class="link-href" href="">About</a></li>
-					<li><a class="link-href" href="">Contact</a></li>
-					<li><a class="link-href" href="">FAQ</a></li>
-				</ul>
-			</nav>
-        </div>
-
-        <div class="p-f">
-            <div>
-            {% if user.is_authenticated %}
-				<li><a class="" style="background-color: #0056b3;font-size: 14px; color: white; padding: 5px; text-transform: capitalize; border-radius: 5px; text-decoration: none;" 
-					href="{% url 'accounts:vehicle_registration' %}">Register Vehicle</a></li>
-                <li>
-					<a class="img-hover link-href" id="userDropdown">
-						<img src="{% static 'home/user-24.png' %}">
-					</a>
-					<div id="userDropdownContent" class="dropdown-content">
-						<a href="{% url 'accounts:profile' %}">Account Details</a>
-						<a href="">My Booking</a>
-						<a href="#">My Vehicles</a>
-						<a href="#">Booking Request</a>
-					</div>
-				</li>
-                <li><a class="img-hover link-href" href="{% url 'accounts:logout' %}"><img src="{% static 'home/logout-24.png' %}" width="20px"></a></li>
-            {% else %}
-                <li style="color:yellow;"><a href="{% url 'accounts:loginPage' %}">Login</a></li>
-            {% endif %}
-            </div>
-        </div>
-    </div>
+    {% include 'home/navbar.html' %}
 
     <section id="headingSection">
         <div class="container">

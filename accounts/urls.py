@@ -13,5 +13,7 @@ urlpatterns = [
     path("success_registration", views.successRegistration, name="successreg"),
     path('vehicle_registration', views.vehicle_registration, name='vehicle_registration'),
     path("profile", views.userProfile,name="profile"),
-    path("myvehicles", views.myVehicles,name="myvehicles")
+    path("myvehicles", views.myVehicles,name="myvehicles"),
+    path('delete_vehicle/<int:vehicle_id>/', views.delete_vehicle, name='delete_vehicle')
+
 ]

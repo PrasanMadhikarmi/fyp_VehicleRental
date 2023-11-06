@@ -7,40 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vehicle Registration Form</title>
     <link rel="stylesheet" href="{% static 'accounts/vehicleRegistration.css' %}">
-    <link rel="stylesheet" type="text/css" href="{%static 'home/index.css'%}">
 </head>
 <body>
-    <div class="nav-bar">
-        <div class="nav-logo">
-            <h1>
-            <span class="highlight">Elite</span>Rental
-        </h1></div>
-        <div class="nav-link">
-            
-            <nav>
-				<ul>
-					<li><a class="active link-href" href="{% url 'home:index' %}">Home</a></li>
-					<li><a class="link-href" href="">Cars</a></li>
-					<li><a class="link-href" href="">About</a></li>
-					<li><a class="link-href" href="">Contact</a></li>
-					<li><a class="link-href" href="">FAQ</a></li>
-				</ul>
-			</nav>
-        </div>
-
-		<div class="p-f">
-            <div>
-            {% if user.is_authenticated %}
-				
-				<li><a class="link-href" href="">Booking</a></li>
-                <li><a class="img-hover link-href"   href=""><img src="{% static 'home/user-24.png' %}" width="20px"></a></li>
-                <li><a class="img-hover link-href" href="{% url 'accounts:logout' %}"><img src="{% static 'home/logout-24.png' %}" width="20px"></a></li>
-            {% else %}
-                <li style="color:yellow;"><a href="{% url 'accounts:loginPage' %}">Login</a></li>
-            {% endif %}
-            </div>
-        </div>
-    </div>
+    {% include 'home/navbar.html' %}
     <div class="container">
         <h1>Vehicle Registration Form</h1>
         <form id="vehicleForm" method="post" enctype="multipart/form-data">
