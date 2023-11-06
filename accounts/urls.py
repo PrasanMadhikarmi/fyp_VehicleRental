@@ -11,6 +11,7 @@ urlpatterns = [
     path("logout", views.logoutUser, name="logout"),
     path("success", views.success, name="success"),
     path("success_registration", views.successRegistration, name="successreg"),
-    path('vehicle_registration/', views.vehicle_registration, name='vehicle_registration'),
-    path("profile", views.userProfile,name="profile")
+    path('vehicle_registration', views.vehicle_registration, name='vehicle_registration'),
+    path("profile", views.userProfile,name="profile"),
+    path("myvehicles", views.myVehicles,name="myvehicles")
 ]

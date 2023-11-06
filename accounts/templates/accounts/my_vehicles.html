@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Vehicle Listing Page</title>
+    <style>
+        .vehicle-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin: -15px; /* Add negative margin to counteract padding */
+        }
+
+        .vehicle-card {
+            width: calc(33.33% - 30px); /* Set width to 33.33% of container, minus padding */
+            margin: 15px; /* Add padding */
+            background-color: #f8f8f8;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 10px;
+        }
+
+        .vehicle-card img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .vehicle-info {
+            margin-top: 10px;
+        }
+
+        .vehicle-info h3 {
+            margin: 0;
+        }
+
+        .vehicle-info p {
+            margin: 5px 0;
+        }
+
+        form {
+            margin-top: 10px;
+        }
+
+        button {
+            background-color: #ff5733;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>My Vehicle Listing Page</h1>
+
+    <div class="vehicle-container">
+        <!-- Vehicle Cards -->
+        <div class="vehicle-card">
+            <img src="path_to_vehicle_image" alt="Vehicle Name">
+            <div class="vehicle-info">
+                <h3>Vehicle Name</h3>
+                <p>Location: Vehicle Location</p>
+                <p>Type: Vehicle Type</p>
+                <p>Price per day: $Price</p>
+            </div>
+            <form method="post">
+                <input type="hidden" name="id" value="vehicle_id">
+                <button type="submit">Delete Vehicle</button>
+            </form>
+        </div>
+        <!-- Repeat for each vehicle -->
+    </div>
+</body>
+
+</html>

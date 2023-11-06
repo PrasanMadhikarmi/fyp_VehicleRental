@@ -124,3 +124,6 @@ def userProfile(request):
         }
 
         return render(request, "accounts/profile.html", context)
+    
+def myVehicles(request): 
+    return render(request, "accounts/my_vehicles.htm")
