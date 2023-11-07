@@ -1,0 +1,185 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Services</title>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'services/displayStyle.css' %}"> 
+
+
+</head>
+<body>
+
+    <div class="nav-bar">
+        <div class="nav-logo">
+            <h1>
+            <span class="highlight">Elite</span>Rental
+        </h1></div>
+        <div class="nav-link">
+            
+            <nav>
+				<ul>
+					<li><a class="link-href" href="{% url 'home:index' %}">Home</a></li>
+					<li><a class="active link-href" href="{% url 'services:index' %}">Cars</a></li>
+					<li><a class="link-href" href="{% url 'about:about_index' %}">About</a></li>
+					<li><a class="link-href" href="{% url 'contact:contact_index' %}">Contact</a></li>
+					<li><a class="link-href" href="{% url 'faq:faq_index' %}">FAQ</a></li>
+				</ul>
+			</nav>
+        </div>
+
+        <div class="p-f">
+            <div>
+            {% if user.is_authenticated %}
+                <li><a class="link-href" href="{% url 'services:booking' %}">Booking</a></li>
+                <li><a class="img-hover link-href"   href="{% url 'accounts:profile' %}"><img src="{% static 'home/user-24.png' %}"></a></li>
+                <li><a class="img-hover link-href" href="{% url 'accounts:logout' %}"><img src="{% static 'home/logout-24.png' %}"></a></li>
+            {% else %}
+                <li style="color:yellow;"><a href="{% url 'accounts:loginPage' %}">Login</a></li>
+            {% endif %}
+            </div>
+        </div>
+    </div>
+
+
+    <section id="headingSection">
+        <div class="container">
+            <center>
+            <h1 class="title">{{category_name}}</h1>
+            <hr class="sep">
+            </center>
+        </div>
+    </section>
+
+    <section id="typeBox">
+       <div class="container">
+
+        {% for info in vehicle_info  %}
+            <div class="row">  
+                <div class="card">
+                    <a href="/services/detail/{{info.id}}?{{info.brand}}{{info.name}}">
+                        <img src={{info.vehicleImage.url}}>
+                    </a>
+                </div>
+                
+            </div>
+            
+            <div class="info-row">  
+                <div class="left-wrapper">
+                    <h3 class="info-text">{{info.brand}} {{info.name}}</h3>
+                    <div class="feature-wrapper">
+                        <img src="{% static 'services/avatar.png' %}">
+                        <img src="{% static 'services/pump.png' %}">
+                        <img src="{% static 'services/settings.png' %}">
+                    </div>
+                    <div class="featureNum-wrapper">
+                        <h6>{{info.passenger}}</h6>
+                        <h6>{{info.carFuel}}</h6>
+                        <h6 class="bring-left">{{info.transmission}}</h6>
+
+                    </div>                
+                    </div>
+
+                    <div class="right-wrapper">
+                        <div class="info-price"><span style="font-size: 16px;">Rs</span>{{info.price}}</div>
+                        <div class="info-perday">Per Day</div>
+                    </div>
+            </div>
+                    <div class="lower-pane">
+                        <div class="ava-wrapper">
+                        <h4>Available:
+                            {% if info.availability == "Yes" %}
+                                <div class="img-wrp">
+                                    <img class = "yesImg" src ="{% static 'services/yes.png' %}">
+                                </div>
+                            {% else %}
+                                <div class="img-wrp">
+                                    <img class = "yesImg" src ="{% static 'services/no.png' %}">
+                                </div>
+                            {% endif %}
+
+                        </h4>
+                    </div>
+                    <a href="/services/detail/{{info.id}}?{{info.brand}}{{info.name}}"><button class="detail-btn">Detail</button></a>
+                </div>
+                    
+                
+        {% endfor %}
+        </div>
+
+    </section>
+
+    
+
+
+
+
+<footer class="footer-distributed">
+ 
+    <div class="footer-left">
+    
+    <h3><span class="highlight">Elite</span>Rental</h3>
+    
+    <p class="footer-links">
+    <a href="">Home</a>
+    ·
+    <a href="#">Services</a>
+    ·
+    <a href="#">Contact</a>
+    ·
+    <a href="#">About</a>
+    ·
+    <a href="#">Faq</a>
+
+    </p>
+    
+    <p class="footer-company-name">eliterental &copy; 2021</p>
+    </div>
+    
+    <div class="footer-center">
+    
+    <div>
+    <i class="fa fa-map-marker"></i>
+    <p><span>Dillibazar</span> Kathmandu, Nepal</p>
+    </div>
+    
+    <div>
+    <i class="fa fa-phone"></i>
+    <p>+1 555 123456</p>
+    </div>
+    
+    <div>
+    <i class="fa fa-envelope"></i>
+    <p><a href="mailto:support@company.com">contact@eliterental.com</a></p>
+    </div>
+    
+    </div>
+    
+    <div class="footer-right">
+    			
+    <p class="footer-company-about">
+    <span>About the company</span>
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+    </p>
+    
+    <div class="footer-icons">
+    
+    <a href="#"><i class="fa fa-facebook"></i></a>
+    <a href="#"><i class="fa fa-twitter"></i></a>
+    <a href="#"><i class="fa fa-linkedin"></i></a>
+    <a href="#"><i class="fa fa-github"></i></a>
+    
+    </div>
+    
+    </div>
+    
+    </footer>
+
+
+  
+
+</body>
+</html>
+	

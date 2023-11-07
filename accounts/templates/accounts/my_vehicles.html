@@ -326,6 +326,7 @@
                     <span class="close">&times;</span>
                     <form id="editForm" style="width: 100%;" method="post" action="{% url 'accounts:edit_vehicle' vehicle.id %}" enctype="multipart/form-data">
                         {% csrf_token %}
+                        <h2>Edit {{ vehicle.brand }} {{ vehicle.model }}</h2>
                         <input type="hidden" name="id" value="">
                         <label for="brand">Brand:</label>
                         <input type="text" id="brand" name="brand"><br>
