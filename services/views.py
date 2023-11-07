@@ -8,6 +8,7 @@ from services.models import bookInstantly
 # Create your views here.
 
 def vehicleDisplay(request):
+    context={}
     if request.method == 'POST':
         location = request.POST.get('location')
         from_date = request.POST.get('from')
@@ -38,5 +39,5 @@ def vehicleDisplay(request):
 
         return render(request, "services/display.html", context)
 
-    return render(request, "services/display.html")
+    return render(request, "services/display.html",context)
 
