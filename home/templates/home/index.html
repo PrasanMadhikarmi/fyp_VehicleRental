@@ -127,44 +127,47 @@
 	{% include 'home/navbar.html' %}
 	<div class="main-container">
 		
-		<div class="box bounce-in-top">
-			<p class="heading wobble-hor-bottom">NEED A RIDE? </p>
-			<p class="subheading wobble-hor-bottom">YOU'VE COME TO THE RIGHT PLACE.</p>
-			<hr class="sep wobble-hor-bottom">
-			
+		<form style="margin: 0 auto;" action="{% url 'services:vehicle_display' %}" method="post">
+			{% csrf_token %}
+			<div class="box bounce-in-top">
+				<p class="heading wobble-hor-bottom">NEED A RIDE? </p>
+				<p class="subheading wobble-hor-bottom">YOU'VE COME TO THE RIGHT PLACE.</p>
+				<hr class="sep wobble-hor-bottom">
+				
 				<div class="search-container">
 					<div class="search-column">
-					  <input class="search-input" type="text" placeholder="Location">
+						<input class="search-input" type="text" name="location" placeholder="Location">
 					</div>
 					<div class="search-column">
-						<input class="search-input datetimeinput" type="text" placeholder="From">
-					  </div>
-					  <div class="search-column">
-						<input class="search-input datetimeinput" type="text" placeholder="Until">
-					  </div>
+						<input class="search-input datetimeinput" type="text" name="from" placeholder="From">
+					</div>
+					<div class="search-column">
+						<input class="search-input datetimeinput" type="text" name="until" placeholder="Until">
+					</div>
 					<div class="search-column">
 						<div class="search-dropdown">
-						  <select class="search-input" id="categorySelect">
-							<option value="" disabled selected>Select Category</option>
-							<option value="car">Car</option>
-							<option value="bike">Bike</option>
-							<option value="cycle">Cycle</option>
-						  </select>
+							<select class="search-input" name="category" id="categorySelect">
+								<option value="" disabled selected>Select Category</option>
+								<option value="car">Car</option>
+								<option value="bike">Bike</option>
+								<option value="cycle">Cycle</option>
+							</select>
 						</div>
-					  </div>
-					  <div class="search-column" id="subcategoryColumn" style="display: none;">
+					</div>
+					<div class="search-column" id="subcategoryColumn" style="display: none;">
 						<div class="search-dropdown">
-						  <select class="search-input" id="subcategorySelect">
-							<option value="" disabled selected>Select Subcategory</option>
-						  </select>
+							<select class="search-input" name="subcategory" id="subcategorySelect">
+								<option value="" disabled selected>Select Subcategory</option>
+							</select>
 						</div>
-					  </div>
+					</div>
 					<button class="search-button" type="submit">
-					  <span class="search-icon"></span>
+						<span class="search-icon"></span>
 					</button>
-				  </div>
-			
-		</div>
+				</div>
+			</div>
+		</form>
+		
 	</div>
 
 	<section id="info1">

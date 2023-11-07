@@ -1,0 +1,126 @@
+body {
+    background: #ebe9e9;
+    margin: 0;
+    padding: 0;
+  }
+    h1 {
+      color: #88B04B;
+      font-family: "Nunito Sans", "Helvetica Neue", sans-serif;
+      font-weight: 900;
+      font-size: 40px;
+      margin-bottom: 10px;
+    }
+    p {
+      color: #404F5E;
+      font-family: "Nunito Sans", "Helvetica Neue", sans-serif;
+      font-size:20px;
+      text-align: justify;
+      
+    }
+  i {
+    color: #abdd61;
+    font-size: 100px;
+    line-height: 200px;
+    margin-left:-15px;
+  }
+
+
+  .card {
+    background: white;
+    border-radius: 4px;
+    box-shadow: 0 2px 3px #C8D0D8;
+    margin: 0 auto;
+    width: 50%;
+    height: 50vh;
+  }
+    .upper-pane{
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        height: 50%;
+        flex-wrap: wrap;
+    }
+
+        .row{
+          width: 100%;
+          margin-left: 60px;
+        }
+          .info{
+            font-weight: 400;
+          }
+
+          .-c{
+            text-align: center;
+            margin:0 auto;
+          }
+        .left{
+          flex: 1;
+        }
+        .right{
+            flex: 1;
+            padding-top: 20px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .QR{
+          width: 80%;
+          height: 80%;
+        }
+        
+
+
+        .lower-pane{
+          width: 50%;
+          height:200px;
+          margin: 0 auto;
+
+        }
+
+
+    
+
+  .btn{
+    margin-top: 25px;
+    width: 20%;
+    border-radius: 50px;
+    background-color: #005789;
+    border: 0;
+    padding: 15px;
+    font-size: 0.9vw;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  .btn:hover,
+  .btn:focus {
+    box-shadow: 0 1em 1em -0.4em grey;
+    transform: translateY(-0.25em);
+    transition: 0.3s;
+  }
+
+  @media screen and (max-width: 850px) {  
+
+    
+    .left{
+      flex-basis: 100%;
+    }
+    .right{
+      flex-basis: 100%;
+    }
+    .btn{
+      width: 40%;
+      font-size: 14px;
+    }
+    .card{
+      width: 100%;
+      height: auto;
+    }
+    .lower-pane{
+      width: 90%;
+      height: 350px;
+    }
+    .row{
+      width: 85%;
+    }
+
+  }

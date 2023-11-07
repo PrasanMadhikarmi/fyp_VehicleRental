@@ -12,12 +12,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
 
-
-
 # Create your views here.
 def register(request):
     if request.user.is_authenticated:
-        return redirect ('home:index')
+        return redirect('home:index')
     else:
         form = CreateUserForm()
 
@@ -29,67 +27,70 @@ def register(request):
             else:
                 messages.error(request, "Error")
 
-    context ={
-        'form':form
+    context = {
+        'form': form
     }
-    return render(request, 'accounts/register.htm',context)
+    return render(request, 'accounts/register.htm', context)
 
 
 def loginPage(request):
     if request.user.is_authenticated:
-        return redirect ('home:index')
+        return redirect('home:index')
     else:
         if request.method == 'POST':
             username = request.POST.get('username')
             password = request.POST.get('password')
 
-            user = authenticate(request,username=username, password=password)
+            user = authenticate(request, username=username, password=password)
 
             if username and password != '':
                 if user is not None:
-                    login(request,user)
+                    login(request, user)
                     return redirect('home:index')
                 else:
-                    messages.info(request, "*Username or password is incorrect")
+                    messages.info(
+                        request, "*Username or password is incorrect")
             else:
                 messages.info(request, "*Enter username and password")
 
-        context={
+        context = {
 
         }
     return render(request, "accounts/login.htm")
 
-def success(request): 
+
+def success(request):
     return render(request, "accounts/success.htm")
 
-def successRegistration(request): 
+
+def successRegistration(request):
     return render(request, "accounts/success_registration.htm")
+
 
 def logoutUser(request):
     logout(request)
     return redirect('home:index')
 
 
-
+@login_required
 def vehicle_registration(request):
     if request.method == 'POST':
         form = VehicleRegistrationForm(request.POST, request.FILES)
-    
 
-       # Save the vehicle registration data
+            
+        # Save the vehicle registration data
         vehicle_registration = form.save(commit=False)
         vehicle_registration.user = request.user
         vehicle_registration.save()
 
         # Redirect to a success page or do something else upon successful registration.
         return redirect('accounts:successreg')
-   
 
     else:
         form = VehicleRegistrationForm()
 
-
     return render(request, 'accounts/vehicleRegistration.html', {'form': form})
+
 
 def userProfile(request):
     current_user = request.user
@@ -99,7 +100,6 @@ def userProfile(request):
         data2 = UserAddress.objects.get(user_info_id=current_user.id)
     else:
         data2 = "Enter Detail"
-
 
     if request.user.is_authenticated:
         if request.method == 'POST':
@@ -111,20 +111,22 @@ def userProfile(request):
             country = request.POST.get('country')
 
             if address_name and street and postalcode and city and country != '':
-                address_data = UserAddress(user_info_id=user_info_id, address=address_name, street=street, postalcode=postalcode, city=city, country= country)
+                address_data = UserAddress(user_info_id=user_info_id, address=address_name,
+                                           street=street, postalcode=postalcode, city=city, country=country)
                 address_data.save()
                 current_user = request.user
                 print(f"address saved")
                 data2 = UserAddress.objects.get(user_info_id=current_user.id)
             else:
                 print("empty")
-        context={
+        context = {
             'user': data,
             'address': data2
         }
 
         return render(request, "accounts/profile.html", context)
-    
+
+
 def myVehicles(request):
     # Get all vehicles associated with the logged-in user
     user_vehicles = VehicleRegistration.objects.filter(user=request.user)
@@ -136,11 +138,11 @@ def myVehicles(request):
     return render(request, "accounts/my_vehicles.html", context)
 
 
-
 def delete_vehicle(request, vehicle_id):
     vehicle = VehicleRegistration.objects.get(id=vehicle_id)
     vehicle.delete()
     return redirect('accounts:myvehicles')  # Redirect to 'myvehicles' page
+
 
 def edit_vehicle(request, vehicle_id):
     vehicle = VehicleRegistration.objects.get(id=vehicle_id)
@@ -152,4 +154,4 @@ def edit_vehicle(request, vehicle_id):
     else:
         form = VehicleRegistrationForm(instance=vehicle)
 
-    return redirect('accounts:myvehicles')  
+    return redirect('accounts:myvehicles')

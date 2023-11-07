@@ -11,7 +11,8 @@
 <body>
     {% include 'home/navbar.html' %}
     <div class="container">
-        <h1>Vehicle Registration Form</h1>
+        <h1>Vehicle Registration</h1>
+        <hr>
         <form id="vehicleForm" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             {% if form.non_field_errors %}
@@ -42,7 +43,7 @@
                     {{ form.location.errors }}
                 </div>
                 <div class="form-group">
-                    <label for="price">Price per Day ($):</label>
+                    <label for="price">Price per Day (NPR):</label>
                     <input type="number" id="price" name="price" required>
                     {{ form.price.errors }}
                 </div>
@@ -65,12 +66,12 @@
                 </div>
             </div>
             <div class="form-row">
-
                 <div class="form-group">
-                    <label for="description">Vehicle Description:</label>
-                    <textarea id="description" name="description" required></textarea>
-                    {{ form.description.errors }}
+                    <label for="cc">Vehicle CC:</label>
+                    <input type="text" id="cc" name="cc" required>
+                    {{ form.cc.errors }}
                 </div>
+                
                 <div class="form-group">
                     <label for="description">Vehicle Subcategory:</label>
                     <div class="search-column"   id="subcategoryColumn">
@@ -83,7 +84,65 @@
                     {{ form.subcategory.errors }}
                 </div>
             </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="carFuel">Car Fuel:</label>
+                    <select id="carFuel" name="carFuel" required>
+                        <option value="Petrol">Petrol</option>
+                        <option value="Diesel">Diesel</option>
+                        <option value="Electric">Electric</option>
+                    </select>
+                    {{ form.carFuel.errors }}
+                </div>
+                <div class="form-group">
+                    <label for="year">Year:</label>
+                    <input type="text" id="year" name="year" required>
+                    {{ form.year.errors }}
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="color">Color:</label>
+                    <input type="text" id="color" name="color" required>
+                    {{ form.color.errors }}
+                </div>
+                <div class="form-group">
+                    <label for="transmission">Transmission:</label>
+                    <select id="transmission" name="transmission" required>
+                        <option value="Manual">Manual</option>
+                        <option value="Automatic">Automatic</option>
+                        <option value="CVT">CVT</option>
+                    </select>
+                    {{ form.transmission.errors }}
+                </div>
+            </div>
+            <div class="form-row">
+
+           
+            <div class="form-group">
+                <label for="bootCapacity">Boot Capacity:</label>
+                <input type="text" id="bootCapacity" name="bootCapacity" required>
+                {{ form.bootCapacity.errors }}
+            </div>
             
+            <div class="form-group">
+                <label for="description">Vehicle Description:</label>
+                <textarea id="description" name="description" required></textarea>
+                {{ form.description.errors }}
+            </div>
+            </div>
+            <div class="form-group">
+                <label for="features">Features (Ctrl + Left click) for multiple selction:</label>
+                <select id="features" name="features" multiple>
+                    {% for choice in form.features.field.choices %}
+                        <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                    {% endfor %}
+                </select>
+                {{ form.features.errors }}
+            </div>
+            
+            
+            <h3>Vehicle Images</h3>
             <div class="form-row">
                 <div class="form-group">
                     <label for="image1">Vehicle Image 1:</label>
@@ -113,6 +172,7 @@
                 <input type="file" id="image5" name="image5" accept="image/*">
                 {{ form.image5.errors }}
             </div>
+            <h3>Verification Documents</h3>
             <div class="form-row">
                 <div class="form-group">
                     <label for="image1">Vehicle Bluebook:</label>

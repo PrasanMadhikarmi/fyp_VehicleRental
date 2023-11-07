@@ -61,25 +61,41 @@
             color: #555;
         }
 
-        .verified-indicator {
-            width: 45px;
-            height: 45px;
+        .not-verified-indicator {
+            width: 120px;
+            height: 35px;
             position: absolute;
             top: 10px;
             right: 10px;
-            background-color: white;
-            border-radius: 50%;
+            background-color: #5cb85b;
+            border-radius: 5px;
             display: flex;
             justify-content: center;
             align-items: center;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
         }
 
-        .verified-indicator svg {
-            width: 24px;
-            height: 24px;
-            color: #5cb85c;
+        .not-verified-indicator {
+            width: 120px;
+            height: 35px;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgb(211, 50, 50);
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
         }
+
+
 
 
         form {
@@ -243,6 +259,80 @@
             width: 200px;
         }
     </style>
+
+
+    <style>
+        .row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        /* Style the switch */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 25px;
+            margin-top: 10px;
+        }
+
+        /* Hide default HTML checkbox */
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        /* The slider (circle) */
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 4px;
+            bottom: 3px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        input:checked+.slider {
+            background-color: #2196F3;
+        }
+
+        input:focus+.slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        input:checked+.slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+        }
+
+        /* Rounded sliders */
+        .slider.round {
+            border-radius: 34px;
+        }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+    </style>
 </head>
 
 <body>
@@ -261,19 +351,11 @@
             <div class="vehicle-card">
                 {% if vehicle.isVerified %}
                 <div class="verified-indicator">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
-                        class="bi bi-check" viewBox="0 0 16 16">
-                        <path
-                            d="M13.78 4.22a1 1 0 0 1 0 1.41l-7 7a1 1 0 0 1-1.41 0L2.22 9.22a1 1 0 0 1 1.41-1.41L6 10.59l6.37-6.36a1 1 0 0 1 1.41 0z" />
-                    </svg>
+                    Verified
                 </div>
                 {% else %}
                 <div class="not-verified-indicator">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-x"
-                        viewBox="0 0 16 16">
-                        <path
-                            d="M4.293 4.293a1 1 0 1 1 1.414-1.414L8 6.586l2.293-2.293a1 1 0 1 1 1.414 1.414L9.414 8l2.293 2.293a1 1 0 1 1-1.414 1.414L8 9.414l-2.293 2.293a1 1 0 1 1-1.414-1.414L6.586 8 4.293 5.707a1 1 0 0 1 0-1.414z" />
-                    </svg>
+                    Not verified
                 </div>
                 {% endif %}
                 <img src="{{ vehicle.image1.url }}" alt="{{ vehicle.brand }} {{ vehicle.model }}">
@@ -292,9 +374,14 @@
                             data-location="{{ vehicle.location }}" data-price="{{ vehicle.price }}"
                             data-capacity="{{ vehicle.capacity }}" data-category="{{ vehicle.category }}"
                             data-subcategory="{{ vehicle.subcategory }}" data-description="{{ vehicle.description }}"
-                            data-image1="{{ vehicle.image1.url }}" data-image2="{{ vehicle.image2.url }}"
-                            data-image3="{{ vehicle.image3.url }}" data-image4="{{ vehicle.image4.url }}"
-                            data-image5="{{ vehicle.image5.url }}" data-bluebookimg="{{ vehicle.bluebookimg.url }}"
+                            data-cc="{{ vehicle.cc }}" data-year="{{ vehicle.year }}" data-color="{{ vehicle.color }}"
+                            data-transmission="{{ vehicle.transmission }}"
+                            data-bootCapacity="{{ vehicle.bootCapacity }}" data-carFuel="{{ vehicle.carFuel }}"
+                            data-features="{{ vehicle.features|join:',' }}" data-isVerified="{{ vehicle.isVerified }}"
+                            data-available="{{ vehicle.available }}" data-image1="{{ vehicle.image1.url }}"
+                            data-image2="{{ vehicle.image2.url }}" data-image3="{{ vehicle.image3.url }}"
+                            data-image4="{{ vehicle.image4.url }}" data-image5="{{ vehicle.image5.url }}"
+                            data-bluebookimg="{{ vehicle.bluebookimg.url }}"
                             data-citizenimg="{{ vehicle.citizenimg.url }}">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
                                 class="bi bi-pencil" viewBox="0 0 16 16">
@@ -302,6 +389,7 @@
                                     d="M11.293 0.293a1 1 0 0 1 1.414 0l2 2a1 1 0 0 1 0 1.414l-9 9a1 1 0 0 1-.32.211l-3 1a1.002 1.002 0 0 1-1.11-1.11l1-3c.05-.165.083-.332.108-.5l9-9zM12 1l2 2-9 9-2-2 9-9zm2.293 2.293L13 3.586 12.586 4l1.707 1.707 1.414-1.414z" />
                             </svg>
                         </button>
+
 
                     </form>
 
@@ -324,10 +412,27 @@
             <div id="editVehicleModal" class="modal">
                 <div class="modal-content">
                     <span class="close">&times;</span>
-                    <form id="editForm" style="width: 100%;" method="post" action="{% url 'accounts:edit_vehicle' vehicle.id %}" enctype="multipart/form-data">
+                    <form id="editForm" style="width: 100%;" method="post"
+                        action="{% url 'accounts:edit_vehicle' vehicle.id %}" enctype="multipart/form-data">
+
                         {% csrf_token %}
-                        <h2>Edit {{ vehicle.brand }} {{ vehicle.model }}</h2>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h3>Edit {{ vehicle.brand }} {{ vehicle.model }}</h3>
+                            </div>
+                            <div class="col-md-6" style="text-align: right;">
+                                <label class="switch">
+                                    <input type="checkbox" id="available" name="available"
+                                        {% if vehicle.available %}checked{% endif %}>
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                        </div>
+
                         <input type="hidden" name="id" value="">
+
+
+
                         <label for="brand">Brand:</label>
                         <input type="text" id="brand" name="brand"><br>
                         <label for="model">Model:</label>
@@ -353,6 +458,45 @@
                                 </select>
                             </div>
                         </div>
+                        <label for="cc">Engine Displacement:</label>
+                        <input type="text" id="cc" name="cc"><br>
+
+                        <label for="year">Manufacture Year:</label>
+                        <input type="text" id="year" name="year"><br>
+
+                        <label for="color">Color:</label>
+                        <input type="text" id="color" name="color"><br>
+
+                        <label for="transmission">Transmission:</label>
+                        <select id="transmission" name="transmission">
+                            <option value="Manual">Manual</option>
+                            <option value="Automatic">Automatic</option>
+                            <option value="CVT">CVT</option>
+                        </select><br>
+
+                        <label for="bootCapacity">Boot Capacity:</label>
+                        <input type="text" id="bootCapacity" name="bootCapacity"><br>
+
+                        <label for="carFuel">Fuel Type:</label>
+                        <select id="carFuel" name="carFuel">
+                            <option value="Petrol">Petrol</option>
+                            <option value="Diesel">Diesel</option>
+                            <option value="Electric">Electric</option>
+                        </select><br>
+
+                        <label for="features">Vehicle Features:</label>
+                        <select id="features" name="features" multiple>
+                            <option value="Sunroof">Sunroof</option>
+                            <option value="GPS">GPS</option>
+                            <option value="All Wheel drive">All Wheel drive</option>
+                            <option value="Heated seats">Heated seats</option>
+                            <option value="Bluetooth">Bluetooth</option>
+                            <option value="Apple CarPlay">Apple CarPlay</option>
+                            <option value="Android Auto">Android Auto</option>
+                            <option value="Backup camera">Backup camera</option>
+                            <option value="Cruise Control">Cruise Control</option>
+                            <option value="Push-Button Start">Push-Button Start</option>
+                        </select><br>
                         <label for="description">Description:</label>
                         <textarea id="description" name="description"></textarea><br>
                         {% for i in "12345" %}
@@ -361,18 +505,18 @@
                             onchange="handleFileSelect(event, 'image{{ i }}')"><br>
                         <img class="img-preview" id="image{{ i }}-preview" src=""><br>
                         {% endfor %}
-    
+
                         <label for="bluebookimg">Bluebook Image:</label>
                         <input type="file" id="bluebookimg" name="bluebookimg" accept="image/*"
                             onchange="handleFileSelect(event, 'bluebookimg')"><br>
                         <img class="img-preview" id="bluebookimg-preview" src=""><br>
-    
+
                         <label for="citizenimg">Citizen Image:</label>
                         <input type="file" id="citizenimg" name="citizenimg" accept="image/*"
                             onchange="handleFileSelect(event, 'citizenimg')"><br>
                         <img class="img-preview" id="citizenimg-preview" src=""><br>
-    
-    
+
+
                         <button type="submit">Save Changes</button>
 
                     </form>
@@ -381,10 +525,20 @@
             {% endfor %}
         </div>
         <!-- Modal -->
-       
+
 
     </div>
     <script>
+        document.getElementById('editForm').addEventListener('submit', function (event) {
+            var availableCheckbox = document.getElementById('available');
+            var availableValue = availableCheckbox.checked;
+            availableCheckbox.name = 'available';
+            availableCheckbox.value = availableValue;
+        });
+
+
+
+
         document.addEventListener('DOMContentLoaded', function () {
             var editButtons = document.querySelectorAll('.edit-button');
 
@@ -400,6 +554,17 @@
                     var category = this.getAttribute('data-category');
                     var subcategory = this.getAttribute('data-subcategory');
                     var description = this.getAttribute('data-description');
+                    var cc = this.getAttribute('data-cc');
+                    var year = this.getAttribute('data-year');
+                    var color = this.getAttribute('data-color');
+                    var transmission = this.getAttribute('data-transmission');
+                    var bootCapacity = this.getAttribute('data-bootCapacity');
+                    var carFuel = this.getAttribute('data-carFuel');
+                    var features = this.getAttribute('data-features');
+                    var available = this.getAttribute('data-available');
+
+
+
                     var image1 = this.getAttribute('data-image1');
                     var image2 = this.getAttribute('data-image2');
                     var image3 = this.getAttribute('data-image3');
@@ -409,9 +574,12 @@
                     var citizenimg = this.getAttribute('data-citizenimg');
 
 
+
+
                     openEditModal(id, brand, model, location, price, capacity, category,
-                        subcategory, description,
-                        image1, image2, image3, image4, image5, bluebookimg, citizenimg);
+                        subcategory, description, cc,
+                        year, color, transmission, bootCapacity, carFuel, features, image1,
+                        image2, image3, image4, image5, bluebookimg, citizenimg, available);
                 });
             });
         });
@@ -431,8 +599,10 @@
         }
 
 
-        function openEditModal(id, brand, model, location, price, capacity, category, subcategory, description, image1,
-            image2, image3, image4, image5, bluebookimg, citizenimg) {
+        function openEditModal(id, brand, model, location, price, capacity, category, subcategory, description,
+            cc,
+            year, color, transmission, bootCapacity, carFuel, features, image1,
+            image2, image3, image4, image5, bluebookimg, citizenimg, available) {
             var modal = document.getElementById('editVehicleModal');
 
             // Set the values in the modal form
@@ -443,8 +613,17 @@
             modal.querySelector('input[name="price"]').value = price;
             modal.querySelector('input[name="capacity"]').value = capacity;
             modal.querySelector('select[name="category"]').value = category;
+            changeCategory(category);
             modal.querySelector('select[name="subcategory"]').value = subcategory;
             modal.querySelector('textarea[name="description"]').value = description;
+            modal.querySelector('input[name="cc"]').value = cc;
+            modal.querySelector('input[name="year"]').value = year;
+            modal.querySelector('input[name="color"]').value = color;
+            modal.querySelector('select[name="transmission"]').value = transmission;
+            modal.querySelector('input[name="bootCapacity"]').value = bootCapacity;
+            modal.querySelector('select[name="carFuel"]').value = carFuel;
+            modal.querySelector('select[name="features"]').value = features;
+            modal.querySelector('input[name="available"]').checked = (available === 'True');
 
             // Display images
             document.getElementById('image1-preview').src = image1;
@@ -454,6 +633,20 @@
             document.getElementById('image5-preview').src = image5;
             document.getElementById('bluebookimg-preview').src = bluebookimg;
             document.getElementById('citizenimg-preview').src = citizenimg;
+
+            var featuresSelect = modal.querySelector('select[name="features"]');
+
+
+            // Loop through all options in the select element
+            featuresSelect.querySelectorAll('option').forEach(function (option) {
+                // Check if the feature is in the list of selected features
+                if (features.includes(option.value)) {
+                    // If yes, set the selected attribute
+                    option.selected = true;
+                }
+            });
+
+
 
             // Show the modal
             modal.style.display = 'block';
@@ -506,6 +699,34 @@
                 subcategoryColumn.style.display = 'none';
             }
         });
+
+        function changeCategory(category) {
+            const categorySelect = document.getElementById('categorySelect');
+            const subcategoryColumn = document.getElementById('subcategoryColumn');
+            const subcategorySelect = document.getElementById('subcategorySelect');
+            const subcategories = {
+                car: ['Sedan', 'SUV', 'Electric'],
+                bike: ['Sports', 'Naked', 'Offroad'],
+                cycle: ['Mountain Bike', 'BMX', 'Electric'],
+            };
+
+            const selectedCategory = category;
+            if (selectedCategory in subcategories) {
+                subcategoryColumn.style.display = 'block';
+                subcategorySelect.innerHTML =
+                    '<option value="" disabled selected>Select Subcategory</option>';
+                subcategories[selectedCategory].forEach(subcategory => {
+                    const option = document.createElement('option');
+                    option.value = subcategory.toLowerCase();
+                    option.textContent = subcategory;
+                    subcategorySelect.appendChild(option);
+                });
+            } else {
+                subcategoryColumn.style.display = 'none';
+            }
+
+
+        }
 
 
         function confirmDelete() {

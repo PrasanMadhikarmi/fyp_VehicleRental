@@ -14,10 +14,14 @@ class CreateUserForm(UserCreationForm):
 
 
 class VehicleRegistrationForm(forms.ModelForm):
+    features = forms.MultipleChoiceField(
+        choices=VehicleRegistration.vehicle_feature, 
+        widget=forms.CheckboxSelectMultiple,
+        required=False  # Set to False if not mandatory
+    )
+
     class Meta:
         model = VehicleRegistration
-        fields = ['brand', 'model', 'location', 'price', 'capacity', 'category', 'subcategory', 'description','image1','image2','image3','image4','image5','bluebookimg','citizenimg']
-    
- 
+        fields = ['brand', 'model', 'cc', 'year', 'color', 'transmission', 'bootCapacity', 'carFuel', 'features', 'location', 'price', 'capacity', 'category', 'subcategory', 'description', 'image1', 'image2', 'image3', 'image4', 'image5', 'bluebookimg', 'citizenimg', 'isVerified', 'available']
 
 
