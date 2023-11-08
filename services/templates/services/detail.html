@@ -1,0 +1,256 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>{{car_pk.name}}</title>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'services/detail.css' %}">
+
+
+</head>
+
+<body>
+    {% include 'home/navbar.html' %}
+
+
+
+    <section id="showcase">
+        <div class="container">
+            <img src="{{car_pk.vehicleImage.url}}" class="img-fluid">
+        </div>
+    </section>
+
+
+    <div class="main-container">
+        <div class="panel1">
+            <h1 class="title">{{car_pk.brand}} {{car_pk.name}}</h1>
+            <h6>{{review_count}} Reviews</h6>
+            <hr class="dash-hr">
+            <div class="ft-container">
+                <div class="ft">
+                    <img src="{% static 'services/avatar.png' %}"><span>{{car_pk.passenger}} Passenger</span>
+                </div>
+                <div class="ft">
+                    <img src="{% static 'services/pump.png' %}"><span>{{car_pk.carFuel}}</span>
+                </div>
+                <div class="ft">
+                    <img src="{% static 'services/settings.png' %}"><span> {{car_pk.transmission}}</span>
+                </div>
+                <div class="ft">
+                    <img src="{% static 'services/boot.png' %}"><span> {{car_pk.bootCapacity}} litres </span>
+                </div>
+            </div>
+            <hr class="dash-hr">
+            <h5 class="sub-title">Included</h5>
+            <div class="full-ft-container">
+                {% for feature in car_pk.features %}
+                <div class="s-ft">✔ {{feature}}</div>
+                {% endfor %}
+            </div>
+            <hr class="large-sep">
+            <h5 class="sub-title">Reviews</h5>
+
+            <!-- need loop -->
+            {% for uR in review_car %}
+
+            <div class="review">
+                <div class="picture-panel">
+                    <div class="profile-pic">
+                        <img src="{% static 'services/rv-img.png' %}" alt="">
+                    </div>
+                </div>
+                <div class="text-panel">
+                    <div class="name-dt">
+                        <h4 class="tp-n">{{uR.name}}</h4>
+                        <h5 class="tp-dt">{{uR.timeStamp}}</h5>
+                    </div>
+                    <div class="rv">
+                        <p>{{uR.message}}</p>
+                    </div>
+                </div>
+            </div>
+            <hr class="dash-hr">
+            {% endfor %}
+            <!-- end loop -->
+
+
+            <h5 class="sub-title">Write a Review</h5>
+            <div class="reviewForm-container">
+
+                <h5 class="form-label forRV">Message</h5>
+                <form method="POST" action="/services/detail/{{car_pk.id}}">
+                    {% csrf_token %}
+                    <textarea class="form-entry msg" type="message" name="message"></textarea>
+                    <div class="divided">
+                        <div class="i-f1">
+                            <h5 class="form-label forRV">Full Name</h5>
+                            <input class="review-entry" type="text" name="fullname">
+                        </div>
+                        <div class="i-f2">
+                            <h5 class="form-label forRV">Email Address</h5>
+                            <input class="review-entry" type="email" name="email">
+                        </div>
+                        <div class="row btn-p">
+                            <button class="btn post" name="SendReview"> Post Review</button>
+                        </div>
+                    </div>
+                </form>
+
+
+
+            </div>
+        </div>
+
+
+
+
+        <div class="panel2">
+
+            <div class="book-form">
+                <div class="p-cont">
+                    <h1> <span>Rs</span>{{car_pk.price}}</h1>
+                    <h5 class="d-f">Per Day</h5>
+                </div>
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="column">
+
+                        <div class="row">
+                            <h5 class="form-label">Full Name</h5>
+                            <input class="form-entry" type="text" name="name" placeholder="Emily Clarke">
+                        </div>
+                        <div class="row">
+                            <h5 class="form-label">Email Address</h5>
+                            <input class="form-entry" type="email" name="email" placeholder="example@email.com">
+                        </div>
+                        <div class="row">
+                            <h5 class="form-label">Phone Number</h5>
+                            <input class="form-entry" type="text" name="phone" placeholder="9841000000">
+                        </div>
+                        <div class="row">
+                            <h5 class="form-label">Pickup Address</h5>
+                            <input class="form-entry date" type="text" name="pickupAddress"
+                                placeholder="Kamalbinayak, Bhaktapur">
+                        </div>
+                        <div class="row">
+                            <h5 class="form-label">Pickup Date</h5>
+                            <input class="form-entry date" type="date" name="pickupDate">
+                        </div>
+                        <div class="row">
+                            <h5 class="form-label">Pickup Time</h5>
+                            <input class="form-entry" type="time" name="pickupTime">
+                        </div>
+                        <div class="row">
+                            <h5 class="form-label">Drop Off Address</h5>
+                            <input class="form-entry" type="text" name="dropAddress"
+                                placeholder="Softwarica College, Dillibazar">
+                        </div>
+                        <div class="row">
+                            <h5 class="form-label">Drop Off Date</h5>
+                            <input class="form-entry" type="date" name="dropDate">
+                        </div>
+                        <div class="row">
+                            <h5 class="form-label">Drop Off Time</h5>
+                            <input class="form-entry" type="time" name="dropTime">
+                        </div>
+                        {% if user.is_authenticated %}
+                        <div class="row btn-c">
+                            <button class="btn" type="submit" name="Callback">Request Callback</button>
+                        </div>
+                        <hr class="sep">
+                        <div class="row btn-c">
+                            <button class="btn book" type="submit" name="BookInstantly">Book Instantly</button>
+                        </div>
+                        {% else %}
+                        <div class="row btn-c">
+                            <button class="btn" type="submit" name="Callback" disabled>Request Callback</button>
+                        </div>
+                        <hr class="sep">
+                        <div class="row btn-c">
+                            <button class="btn book" type="submit" name="BookInstantly" disabled>Book Instantly</button>
+                        </div>
+                        <h4 style="color: red; margin-top: 7px; font-weight: 600;">*Please Login to rent vehicle</h4>
+                        <br>
+                        {% endif %}
+
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+
+    <footer class="footer-distributed">
+
+        <div class="footer-left">
+
+            <h3><span class="highlight">Elite</span>Rental</h3>
+
+            <p class="footer-links">
+                <a href="">Home</a>
+                ·
+                <a href="#">Services</a>
+                ·
+                <a href="#">Contact</a>
+                ·
+                <a href="#">About</a>
+                ·
+                <a href="#">Faq</a>
+
+            </p>
+
+            <p class="footer-company-name">eliterental &copy; 2021</p>
+        </div>
+
+        <div class="footer-center">
+
+            <div>
+                <i class="fa fa-map-marker"></i>
+                <p><span>Dillibazar</span> Kathmandu, Nepal</p>
+            </div>
+
+            <div>
+                <i class="fa fa-phone"></i>
+                <p>+1 555 123456</p>
+            </div>
+
+            <div>
+                <i class="fa fa-envelope"></i>
+                <p><a href="mailto:support@company.com">contact@eliterental.com</a></p>
+            </div>
+
+        </div>
+
+        <div class="footer-right">
+
+            <p class="footer-company-about">
+                <span>About the company</span>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+            </p>
+
+            <div class="footer-icons">
+
+                <a href="#"><i class="fa fa-facebook"></i></a>
+                <a href="#"><i class="fa fa-twitter"></i></a>
+                <a href="#"><i class="fa fa-linkedin"></i></a>
+                <a href="#"><i class="fa fa-github"></i></a>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+
+
+
+</body>
+
+</html>

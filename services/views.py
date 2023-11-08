@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 
 from accounts.models import VehicleRegistration
 from datetime import datetime
@@ -41,3 +41,11 @@ def vehicleDisplay(request):
 
     return render(request, "services/display.html",context)
 
+
+def detail(request,car_id):
+    car_pk = VehicleRegistration.objects.get(pk=car_id)
+
+    context ={
+        'car_pk':car_pk,
+    }
+    return render(request, 'services/detail.html',context)
