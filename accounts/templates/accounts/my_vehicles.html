@@ -370,6 +370,7 @@
                         {% csrf_token %}
                         <input type="hidden" name="id" value="{{ vehicle.id }}">
                         <button type="button" class="edit-button" data-id="{{ vehicle.id }}"
+                            data-isVerified="{{ vehicle.isVerified }}"
                             data-brand="{{ vehicle.brand }}" data-model="{{ vehicle.model }}"
                             data-location="{{ vehicle.location }}" data-price="{{ vehicle.price }}"
                             data-capacity="{{ vehicle.capacity }}" data-category="{{ vehicle.category }}"
@@ -430,6 +431,7 @@
                         </div>
 
                         <input type="hidden" name="id" value="">
+                        <input type="hidden" name="isVerified" value="">
 
 
 
@@ -546,6 +548,7 @@
                 button.addEventListener('click', function () {
 
                     var id = this.getAttribute('data-id');
+                    var isVerified = this.getAttribute('data-isVerified');
                     var brand = this.getAttribute('data-brand');
                     var model = this.getAttribute('data-model');
                     var location = this.getAttribute('data-location');
@@ -576,7 +579,7 @@
 
 
 
-                    openEditModal(id, brand, model, location, price, capacity, category,
+                    openEditModal(id,isVerified, brand, model, location, price, capacity, category,
                         subcategory, description, cc,
                         year, color, transmission, bootCapacity, carFuel, features, image1,
                         image2, image3, image4, image5, bluebookimg, citizenimg, available);
@@ -599,7 +602,7 @@
         }
 
 
-        function openEditModal(id, brand, model, location, price, capacity, category, subcategory, description,
+        function openEditModal(id,isVerified, brand, model, location, price, capacity, category, subcategory, description,
             cc,
             year, color, transmission, bootCapacity, carFuel, features, image1,
             image2, image3, image4, image5, bluebookimg, citizenimg, available) {
@@ -607,6 +610,7 @@
 
             // Set the values in the modal form
             modal.querySelector('input[name="id"]').value = id;
+            modal.querySelector('input[name="isVerified"]').value = isVerified;
             modal.querySelector('input[name="brand"]').value = brand;
             modal.querySelector('input[name="model"]').value = model;
             modal.querySelector('input[name="location"]').value = location;

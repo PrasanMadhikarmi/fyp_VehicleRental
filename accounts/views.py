@@ -150,6 +150,7 @@ def edit_vehicle(request, vehicle_id):
     if request.method == 'POST':
         form = VehicleRegistrationForm(request.POST, instance=vehicle)
         form.save()
+        print(form.fields)
         return redirect('accounts:myvehicles')
     else:
         form = VehicleRegistrationForm(instance=vehicle)
