@@ -77,7 +77,7 @@ def vehicle_registration(request):
     if request.method == 'POST':
         form = VehicleRegistrationForm(request.POST, request.FILES)
 
-            
+        print(form.data)
         # Save the vehicle registration data
         vehicle_registration = form.save(commit=False)
         vehicle_registration.user = request.user

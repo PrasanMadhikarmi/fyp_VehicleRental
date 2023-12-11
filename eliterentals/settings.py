@@ -82,7 +82,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'eliterentalsDB',
         'USER': 'root',
-        'PASSWORD': 'root',
+        'PASSWORD': 'Heraldstuds123',
         'HOST': 'localhost',
         'PORT': '3306',
     }

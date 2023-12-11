@@ -22,6 +22,6 @@ class VehicleRegistrationForm(forms.ModelForm):
 
     class Meta:
         model = VehicleRegistration
-        fields = ['brand', 'model', 'cc', 'year', 'color', 'transmission', 'bootCapacity', 'carFuel', 'features', 'location', 'price', 'capacity', 'category', 'subcategory', 'description', 'image1', 'image2', 'image3', 'image4', 'image5', 'bluebookimg', 'citizenimg', 'isVerified', 'available']
+        fields = ['brand', 'model', 'year', 'color', 'transmission', 'bootCapacity', 'carFuel', 'features', 'location', 'price', 'capacity', 'category', 'cc', 'subcategory', 'description', 'image1', 'image2', 'image3', 'image4', 'image5', 'bluebookimg', 'citizenimg', 'isVerified', 'available']
 
 

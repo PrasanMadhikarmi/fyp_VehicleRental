@@ -16,7 +16,7 @@ def vehicleDisplay(request):
         category = request.POST.get('category')
         subcategory = request.POST.get('subcategory')
 
-        user_vehicles = VehicleRegistration.objects.filter(isVerified=True, available=True)
+        user_vehicles = VehicleRegistration.objects.filter(isVerified=True)
 
         if user_vehicles.exists():
             # Filter vehicles based on form data
