@@ -19,6 +19,40 @@ body {
     padding: 20px;
     background-color: rgba(0, 0, 0, 1);
   }
+  .pay-button {
+    background-color: #0a914d; /* Red color */
+    color: #fff; /* White text color */
+    padding: 8px 1px; /* Padding around the button */
+    border: none; /* Remove border */
+    border-radius: 4px; /* Add border radius for a rounded look */
+    cursor: pointer; /* Change cursor to pointer on hover */
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.pay-button:hover {
+    background-color: #037c40; 
+}
+
+  .cancel-button {
+    background-color: #e74c3c; /* Red color */
+    color: #fff; /* White text color */
+    padding: 8px 16px; /* Padding around the button */
+    border: none; /* Remove border */
+    border-radius: 4px; /* Add border radius for a rounded look */
+    cursor: pointer; /* Change cursor to pointer on hover */
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.cancel-button:hover {
+    background-color: #c0392b; /* Darker red color on hover */
+}
+
+.cancel-button:disabled{
+  background-color: #acacac;
+  color: #f0f0f0;
+}
 
 .nav-logo{
       text-align: center;

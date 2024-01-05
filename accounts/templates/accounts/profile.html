@@ -1,190 +1,282 @@
 {% load static %}
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
     <title>Profile</title>
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="{% static 'accounts/profile.css' %}"> 
-    <link rel="stylesheet" type="text/css" href="{% static 'home/index.css' %}"> 
+    <link rel="stylesheet" type="text/css" href="{% static 'accounts/profile.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'home/index.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+        integrity="sha512-xrT5sHriM3nLtXyrP9fuWhbAEzlP/U9+W1xrFBzOc/sipCZJh/FGG26OeNmRgCBoWGSgQuLty516EMz/FVbmrQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
 
+    <style>
+        cards {
+            .card {
+                height: 110px;
+                width: 200px;
+                background: #fff;
+                margin: 30px;
+                margin-top: 0px;
+                padding: 15px;
+                border-radius: 5px;
+                box-shadow: rgba(17, 12, 46, 0.15) 0px 5px 10px 0px;
 
+                h4 {
+                    color: #313233;
+                }
+
+                .card-main {
+                    display: flex;
+                    justify-content: space-between;
+                    height: 50px;
+                    align-items: center;
+
+                    span {
+                        color: #1d2357;
+                        font-size: 30px;
+                        font-weight: 600;
+                        margin-left: 5px;
+                    }
+
+                    #green {
+                        background: #e0f7d8;
+                        color: #79e454;
+                        border-radius: 5px;
+                        text-align: center;
+                        width: 35%;
+                        margin-right: 20px;
+                        font-size: 13px;
+                        padding: 3px;
+                    }
+
+                    #red {
+                        background: #f9d9df;
+                        color: #c9484c;
+                        ;
+                        border-radius: 5px;
+                        text-align: center;
+                        width: 35%;
+                        margin-right: 20px;
+                        font-size: 13px;
+                        padding: 3px;
+                    }
+                }
+            }
+        }
+    </style>
 </head>
+
 <body>
     {% include 'home/navbar.html' %}
 
     <section id="headingSection">
         <div class="container">
             <center>
-            <h1 class="title">User Profile</h1>
-            <hr class="sep">
+                <h1 class="title">Account Settings</h1>
+                <hr class="sep">
             </center>
         </div>
     </section>
 
     <section id="profileBox">
         <div class="left-sidebar">
-            <div class="container">
+            <div class="container"
+                style="display:flex; flex-direction:column; justify-content: center; align-items: center;">
 
-            
+                <div class="pp default-avatar"></div>
 
-            <label for="Username">Username:</label>
-            <input name="Username" type="text" value={{user.username}} class="inf1"readonly>
+                <h3 for="Username">{{user.username}}</h3>
 
-            <label for="DateJoin">Date Joined:</label>
-            <input name="DateJoin" type="datetime" value="{{user.date_joined}}" class="inf1" readonly>
+                <div class="acctab">
+                    <span class="home-icon"><i class="fa fa-home" aria-hidden="true"></i></span> Accounts
+                </div>
 
-            <label for="LastLogin">Last Login:</label>
-            <input name="LastLogin" type="datetime" value="{{user.last_login}}" class="inf1" readonly>
+
+
+            </div>
         </div>
-    </div>
 
         <div class="main-content">
-        <div class="container">
-            <h1 class="secondaryTitle">Account Information</h1>
-            <form method="POST">
-                {% csrf_token %}
-                <label for="UserId">User Id:</label>
-                <input name="Userid" type="text" value={{user.id}} class="inf1"readonly>
+            <div style="width: 100%; text-align: left;">
+                <h1 class="secondaryTitle" style="color: #202020;">Payment Details</h1>
+            </div>
+            <cards>
+                <div class="card" style="background-color: #f9d9df;">
+                    <h4 style="color: #313233;">Awaiting Payment</h4>
+                    <div class="card-main">
+                        <span style="color: #d5696c;">Nrs {{total_unpaid_to_vendor}}</span>
+                        
+                    </div>
+                </div>
 
-                <label for="FirstName">First Name:</label>
-                <input name="FirstName" type="text" value={{user.first_name}} class="inf1"  readonly>
+                <div class="card" style="background-color: #e0f7d9;">
+                    <h4 style="color: #313233;">Paid Amount</h4>
+                    <div class="card-main">
+                        <span style="color: #86e564;">Nrs {{total_paid_to_vendor}}</span>
+                        
+                    </div>
+                </div>
+            </cards>
+            <div class="container">
+                <div style="width: 100%; text-align: left;">
+                    <h1 class="secondaryTitle" style="color: #202020;">Account Details</h1>
+                </div>
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="FirstName">First Name:</label>
+                            <input name="FirstName" type="text" value={{user.first_name}} class="inf1" readonly>
 
-                <label for="LastName">Last Name:</label>
-                <input name="LastName" type="text" value={{user.last_name}} class="inf1" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="LastName">Last Name:</label>
+                            <input name="LastName" type="text" value={{user.last_name}} class="inf1" readonly>
 
-                <label for="Email">Email:</label>
-                <input name="Email" type="text" class="inf1"  value={{user.email}} readonly>
-                <br>
-            <h1 class="secondaryTitle">Address Information</h1>
-                    <label for="address">Address:</label>
-                    <input name="address" type="text" 
+                        </div>
+                    </div>
 
-                    {% if address == "Enter Detail"%}
-                    placeholder="Enter Address"
-                    {% else %}
-                    value="{{address.address}}" 
-                    readonly
-                    {% endif %}
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="Email">Email:</label>
+                            <input name="Email" type="text" class="inf1" value={{user.email}} readonly>
 
-                    class="inf1">
+                        </div>
+                        <div class="form-group">
+                            <label for="country">Country:</label>
+                            <input name="country" type="text" value="Nepal" class="inf1" readonly>
 
-                    <label for="street">Street:</label>
-                    <input name="street" type="text" 
-                    
-                    {% if address == "Enter Detail"%}
-                    placeholder="Enter Street"
-                    {% else %}
-                    value="{{address.street}}" 
-                    readonly
-                    {% endif %}
-                    
-                    class="inf1">
 
-                    <label for="postalcode">Postal Code:</label>
-                    <input name="postalcode" type="text" 
-                    
-                    {% if address == "Enter Detail"%}
-                    placeholder="Enter Postal Code"
-                    {% else %}
-                    value={{address.postalcode}} 
-                    readonly
-                    {% endif %}
-                    
-                    class="inf1">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="street">Street:</label>
+                            <input name="street" type="text" {% if address == "Enter Detail"%}
+                                placeholder="Enter Street" {% else %} value="{{address.street}}" readonly {% endif %}
+                                class="inf1">
 
-                    <label for="city">City:</label>
-                    <input name="city" type="text" 
-                    
-                    {% if address == "Enter Detail"%}
-                    placeholder="Enter City"
-                    {% else %}
-                    value={{address.city}} 
-                    readonly
-                    {% endif %}
-                    
-                    class="inf1">
+                        </div>
+                        <div class="form-group">
+                            <label for="postalcode">Postal Code:</label>
+                            <input name="postalcode" type="text" {% if address == "Enter Detail"%}
+                                placeholder="Enter Postal Code" {% else %} value={{address.postalcode}} readonly
+                                {% endif %} class="inf1">
 
-                    <label for="country">Country:</label>
-                    <input name="country" type="text" value="Nepal" class="inf1"readonly>
-                    {% if address != "Enter Detail"%}
-                        <button type="submit" disabled>Save</button>
-                    {% else %}
-                        <button type="submit">Save</button>
-                    {% endif %}
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="city">City:</label>
+                            <input name="city" type="text" {% if address == "Enter Detail"%} placeholder="Enter City"
+                                {% else %} value={{address.city}} readonly {% endif %} class="inf1">
+
+                        </div>
+                        <div class="form-group">
+                            <label for="address">Address:</label>
+                            <input name="address" type="text" {% if address == "Enter Detail"%}
+                                placeholder="Enter Address" {% else %} value="{{address.address}}" readonly {% endif %}
+                                class="inf1">
+
+                        </div>
+                    </div>
+
+                    <div style=" width:100%; display:flex; margin-left: 0; align-items: end;">
+                        {% if address != "Enter Detail"%}
+                        <button class="logbtn" type="submit" style="color: white;" disabled>Save</button>
+                        {% else %}
+                        <button class="logbtn" type="submit" style="color: white;">Save</button>
+                        {% endif %}
+
+                        <a href="{% url 'reset_password' %}"
+                            style="margin-left: 20px; margin-bottom: 2px; text-decoration: none; font-size: 13px; background-color: #0c4377; padding-right: 15px; padding-left: 15px; padding-top: 10px; padding-bottom: 10px; color: white; border-radius: 10px;">
+                            Change password
+                        </a>
+
+
+                    </div>
                 </form>
 
-        </div>
+            </div>
         </div>
     </section>
 
 
 
 
-<footer class="footer-distributed">
- 
-    <div class="footer-left">
-    
-    <h3><span class="highlight">Elite</span>Rental</h3>
-    
-    <p class="footer-links">
-    <a href="">Home</a>
-    ·
-    <a href="#">Services</a>
-    ·
-    <a href="#">Contact</a>
-    ·
-    <a href="#">About</a>
-    ·
-    <a href="#">Faq</a>
 
-    </p>
-    
-    <p class="footer-company-name">eliterental &copy; 2021</p>
-    </div>
-    
-    <div class="footer-center">
-    
-    <div>
-    <i class="fa fa-map-marker"></i>
-    <p><span>Dillibazar</span> Kathmandu, Nepal</p>
-    </div>
-    
-    <div>
-    <i class="fa fa-phone"></i>
-    <p>+1 555 123456</p>
-    </div>
-    
-    <div>
-    <i class="fa fa-envelope"></i>
-    <p><a href="mailto:support@company.com">contact@eliterental.com</a></p>
-    </div>
-    
-    </div>
-    
-    <div class="footer-right">
-    
-    <p class="footer-company-about">
-    <span>About the company</span>
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-    </p>
-    
-    <div class="footer-icons">
-    
-    <a href="#"><i class="fa fa-facebook"></i></a>
-    <a href="#"><i class="fa fa-twitter"></i></a>
-    <a href="#"><i class="fa fa-linkedin"></i></a>
-    <a href="#"><i class="fa fa-github"></i></a>
-    
-    </div>
-    
-    </div>
-    
+    <footer class="footer-distributed">
+
+        <div class="footer-left">
+
+            <h3><span class="highlight">Elite</span>Rental</h3>
+
+            <p class="footer-links">
+                <a href="">Home</a>
+                ·
+                <a href="#">Services</a>
+                ·
+                <a href="#">Contact</a>
+                ·
+                <a href="#">About</a>
+                ·
+                <a href="#">Faq</a>
+
+            </p>
+
+            <p class="footer-company-name">eliterental &copy; 2021</p>
+        </div>
+
+        <div class="footer-center">
+
+            <div>
+                <i class="fa fa-map-marker"></i>
+                <p><span>Dillibazar</span> Kathmandu, Nepal</p>
+            </div>
+
+            <div>
+                <i class="fa fa-phone"></i>
+                <p>+1 555 123456</p>
+            </div>
+
+            <div>
+                <i class="fa fa-envelope"></i>
+                <p><a href="mailto:support@company.com">contact@eliterental.com</a></p>
+            </div>
+
+        </div>
+
+        <div class="footer-right">
+
+            <p class="footer-company-about">
+                <span>About the company</span>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+            </p>
+
+            <div class="footer-icons">
+
+                <a href="#"><i class="fa fa-facebook"></i></a>
+                <a href="#"><i class="fa fa-twitter"></i></a>
+                <a href="#"><i class="fa fa-linkedin"></i></a>
+                <a href="#"><i class="fa fa-github"></i></a>
+
+            </div>
+
+        </div>
+
     </footer>
 
 
-  
-    <script src="{% static 'home/dropdown.js' %}"></script>
+
+    <script>
+
+    </script>
 </body>
+
+
 </html>

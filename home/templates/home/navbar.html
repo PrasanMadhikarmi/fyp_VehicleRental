@@ -19,7 +19,7 @@
             <nav>
                 <ul>
                     <li><a class="link-href" href="{% url 'home:index' %}">Home</a></li>
-                    <li><a class="link-href" href="">Cars</a></li>
+                    <li><a class="link-href" href="{% url 'services:index' %}">Services</a></li>
                     <li><a class="link-href" href="">About</a></li>
                     <li><a class="link-href" href="">Contact</a></li>
                     <li><a class="link-href" href="">FAQ</a></li>
@@ -39,9 +39,9 @@
                     </a>
                     <div id="userDropdownContent" class="dropdown-content">
                         <a href="{% url 'accounts:profile' %}">Account Details</a>
-                        <a href="">My Booking</a>
+                        <a href="{% url 'services:booking' %}">My Booking</a>
                         <a href="{% url 'accounts:myvehicles' %}">My Vehicles</a>
-                        <a href="#">Booking Request</a>
+                        <a href="{% url 'services:booking_request' %}">Booking Request</a>
                     </div>
                 </li>
                 <li><a class="img-hover link-href" href="{% url 'accounts:logout' %}"><img

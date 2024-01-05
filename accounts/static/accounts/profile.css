@@ -79,6 +79,19 @@ body {
       box-shadow: 0 4px 2px -2px aqua;
     }  
 
+    .pp {
+      width: 100px; /* Adjust the size of the circle */
+      height: 100px; /* Adjust the size of the circle */
+      border-radius: 50%; /* Creates a circle by setting border-radius to 50% */
+      overflow: hidden; /* Clips the content that goes beyond the circle */
+      background-size: cover;
+      background-position: center;
+    }
+
+    /* Add some styles to make it visually appealing */
+    .pp.default-avatar {
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none"><circle cx="50" cy="50" r="40" fill="grey"/><circle cx="50" cy="50" r="40" fill="none" stroke="black" stroke-width="5"/></svg>');
+    }
 
 #headingSection{
   width: 100%;
@@ -114,46 +127,88 @@ body {
 }
 
 .left-sidebar{
-  width: 30%;
+  width: 20%;
   min-height: 250px;
   background-color: #ffffff;
   border-radius: 5px;
-  box-shadow: 3px 1px 5px grey;
+  box-shadow: 1px 5px 20px rgb(230, 230, 230);
   float: left;
   margin:  0 20px 0 80px;
   text-align: center;
   padding-top: 50px;
 
 }
+.acctab {
+  width: 100%;
+  padding: 20px;
+  background-color: #005789;
+  color: white;
+  display: flex;
+  align-items: center;
+}
 
+.home-icon {
+  margin-right: 10px; /* Adjust the spacing between the home icon and text */
+  margin-left: 20px;
+}
 .inf1{
   display: block;
   margin: 0 auto;
   margin-bottom: 20px;
-  text-align: center;
-  width: 70%;
+  width: 90%;
   height: 35px;
+  padding-left: 10px;
   color: #292c2f;
   border: none;
   border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  
+}
+.inf1:read-only {
+  background-color: #eaecef;  
+  color: #33383b;
 }
 
+.form-row {
+  display: flex;
+  justify-content: space-between;
 
+}
+
+.form-group {
+  margin-top: 10px;
+  width: 100%; /* Each input field takes up 48% of the row, leaving a small gap between them */
+}
 
 
 
 .main-content{
   width: 50%;
   float: left;
-  height: 1000px;
   background-color: #ffffff;
   border-radius: 5px;
-  box-shadow: 3px 1px 5px grey;
+  box-shadow: 1px 5px 20px rgb(230, 230, 230);
   margin: 0 auto;
   text-align: center;
   padding: 20px;
 }
+.logbtn{
+  margin-top: 12px;
+  padding: 10px 0;
+  width: 125px;
+  height: 40px;
+  color: black;
+  border-radius: 10px;
+  cursor: pointer;
+  border: none;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  background:#0b4377 ;
+}
 
+.logbtn:hover{
+  background: rgb(11, 45, 107);
+}
 
 @media screen and (max-width: 850px) {
 
@@ -348,3 +403,6 @@ footer{
   margin-left: 0;
   }
   }
+
+
+  

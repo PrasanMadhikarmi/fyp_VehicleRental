@@ -25,7 +25,7 @@
 
     <section id="typeBox">
         <div class="container">
-
+            {% if user_vehicles %}
             {% for info in user_vehicles  %}
             <div class="row">
                 <div class="img-card">
@@ -76,6 +76,12 @@
 
 
             {% endfor %}
+            {% else %}
+            <center>
+
+                <P>No results for the specified filter</P>
+            </center>
+            {% endif %}
         </div>
 
     </section>

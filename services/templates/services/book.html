@@ -1,0 +1,245 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Booking</title>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'services/bookStyle.css' %}">
+    <link rel="stylesheet" type="text/css" href="{%static 'home/index.css'%}">
+
+    <style>
+        .d-none {
+            display: none;
+        }
+    </style>
+
+</head>
+
+<body>
+    {% include 'home/navbar.html' %}
+
+    <form id="esewa-form" action="https://rc-epay.esewa.com.np/api/epay/main/v2/form" method="POST"
+        class="d-none esewa-info">
+        <input type="text" id="amount" name="amount" value="0" required>
+        <input type="text" id="tax_amount" name="tax_amount" value="0" required>
+        <input type="text" id="total_amount" name="total_amount" value="0" required>
+        <input type="text" id="transaction_uuid" name="transaction_uuid" required>
+        <input type="text" id="product_code" name="product_code" value="EPAYTEST" required>
+        <input type="text" id="product_service_charge" name="product_service_charge" value="0" required>
+        <input type="text" id="product_delivery_charge" name="product_delivery_charge" value="0" required>
+        <input type="text" id="success_url" name="success_url" required>
+        <input type="text" id="failure_url" name="failure_url" value="http://127.0.0.1:8000/services/payment_failed"
+            required>
+        <input type="text" id="signed_field_names" name="signed_field_names"
+            value="total_amount,transaction_uuid,product_code" required>
+        <input type="text" id="signature" name="signature" required>
+        <input value="Submit" type="submit">
+    </form>
+    <div class="tb-container">
+        <h1 class="title">Booking History</h1>
+        <hr class="sep">
+        <table>
+            <thead>
+                <tr>
+                    <th scope="col">Vehicle</th>
+                    <th scope="col">PickUp Date</th>
+                    <th scope="col">PickUp Address</th>
+                    <th scope="col">PickUp Time</th>
+                    <th scope="col">DropUp Date</th>
+                    <th scope="col">DropUp Address</th>
+                    <th scope="col">PickUp Time</th>
+                    <th scope="col">Duration</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            {% for hist in history%}
+            <tbody>
+                <tr>
+                    <td data-label="Vehicle">
+                        <div class="img-container">
+                            <a href="/services/detail/{{hist.vehicle_id_id}}?{{hist.brand}}{{hist.model}}"> <img
+                                    src="{{hist.vehicle_id.image1.url}}" alt="{{hist.brand}}"> </a>
+
+                        </div>
+                    </td>
+                    <td data-label="PickDate">{{hist.pickDate}}</td>
+                    <td data-label="PickAddress">{{hist.vehicle_id.location}}</td>
+                    <td data-label="PickTime">{{hist.pickTime}}</td>
+                    <td data-label="DropDate">{{hist.dropDate}}</td>
+                    <td data-label="DropAddress">{{hist.vehicle_id.location}}</td>
+                    <td data-label="DropTime">{{hist.dropTime}}</td>
+                    <td data-label="Duration">{{hist.booking_duration}} Hours</td>
+                    <div>
+                        <td data-label="Status">
+                            {% if hist.status == "Processing" %}
+                            <h4 class="st processing"> {{hist.status}}</h4>
+                            {% elif hist.status == "Accepted" %}
+                            <h4 class="st processing" style="width:90%; font-size: 14px;"> Pay Requested for <br> {{hist.total_price}}</h4>
+                            {% elif hist.status == "Paid" %}
+                            <h4 class="st processing" style="background-color: rgb(3, 131, 3); color: white;"> Paid</h4>
+                            {% elif hist.status == "Cancelled" %}
+                            <h4 class="st cancelled"> {{hist.status}}</h4>
+                            {% elif hist.status == "Booked" %}
+                            <h4 class="st booked"> {{hist.status}}</h4>
+                            {% elif hist.status == "Done" %}
+                            <h4 class="st done"> {{hist.status}}</h4>
+                            {% elif hist.status == "Decline" %}
+                            <h4 class="st done"> {{hist.status}}</h4>
+                            {% endif %}
+                        </td>
+
+                        <td data-label="Action">
+                            {% if hist.status == "Processing" %}
+                            <a href="{% url 'services:cancel_booking' booking_id=hist.id %}"
+                                class="cancel-button">Cancel</a>
+                            {% elif hist.status == "Accepted" %}
+                            <div
+                                style="height: 90px; display: flex; flex-direction: column; row-gap: 10px; justify-content: center;">
+                                <a onclick="PayWithEsewa('{{ hist.id }}', '{{ hist.total_price }}')"
+                                    class="pay-button">Pay</a>
+                                <a href="{% url 'services:cancel_booking' booking_id=hist.id %}"
+                                    class="cancel-button">Cancel</a>
+                            </div>
+                            {% elif hist.status == "Done" %}
+                            <button class="cancel-button" disabled data-booking-id="{{ hist.id }}">Cancel
+                                Booking</button>
+                            {% elif hist.status == "Cancelled" %}
+                            <button class="cancel-button" disabled data-booking-id="{{ hist.id }}">Cancel
+                                Booking</button>
+                            {% elif hist.status == "Booked" %}
+                            <button class="cancel-button" disabled data-booking-id="{{ hist.id }}">Cancel
+                                Booking</button>
+                            {% elif hist.status == "Decline" %}
+                            <button class="cancel-button" disabled data-booking-id="{{ hist.id }}">Cancel
+                                Booking</button>
+                            {% endif %}
+                        </td>
+
+                    </div>
+                </tr>
+
+            </tbody>
+            {% endfor %}
+        </table>
+    </div>
+
+
+    <footer class="footer-distributed">
+
+        <div class="footer-left">
+
+            <h3><span class="highlight">Elite</span>Rental</h3>
+
+            <p class="footer-links">
+                <a href="">Home</a>
+                ·
+                <a href="#">Services</a>
+                ·
+                <a href="#">Contact</a>
+                ·
+                <a href="#">About</a>
+                ·
+                <a href="#">Faq</a>
+
+            </p>
+
+            <p class="footer-company-name">eliterental &copy; 2021</p>
+        </div>
+
+        <div class="footer-center">
+
+            <div>
+                <i class="fa fa-map-marker"></i>
+                <p><span>Dillibazar</span> Kathmandu, Nepal</p>
+            </div>
+
+            <div>
+                <i class="fa fa-phone"></i>
+                <p>+1 555 123456</p>
+            </div>
+
+            <div>
+                <i class="fa fa-envelope"></i>
+                <p><a href="mailto:support@company.com">contact@eliterental.com</a></p>
+            </div>
+
+        </div>
+
+        <div class="footer-right">
+
+            <p class="footer-company-about">
+                <span>About the company</span>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+            </p>
+
+            <div class="footer-icons">
+
+                <a href="#"><i class="fa fa-facebook"></i></a>
+                <a href="#"><i class="fa fa-twitter"></i></a>
+                <a href="#"><i class="fa fa-linkedin"></i></a>
+                <a href="#"><i class="fa fa-github"></i></a>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
+    <script>
+        function PayWithEsewa(id, quotation) {
+            document.querySelector('input[name="total_amount"]').value = quotation;
+            document.querySelector('input[name="amount"]').value = quotation;
+            document.querySelector('input[name="transaction_uuid"]').value = id;
+            var successUrl = 'http://127.0.0.1:8000/services/payment_success/' + id;
+            document.querySelector('input[name="success_url"]').value = successUrl;
+
+
+            generateSignature();
+
+            var esewaInfo = document.querySelector('.esewa-info');
+            esewaInfo.classList.remove('d-none');
+
+            setTimeout(function () {
+                document.getElementById("esewa-form").submit();
+            });
+        }
+
+        function generateSignature() {
+            console.log('generating')
+            var currentTime = new Date();
+            var formattedTime = currentTime.toISOString().slice(2, 10).replace(/-/g, '') + '-' + currentTime
+                .getHours() +
+                currentTime.getMinutes() + currentTime.getSeconds();
+            document.getElementById("transaction_uuid").value = formattedTime;
+            var total_amount = document.getElementById("total_amount").value;
+            var transaction_uuid = document.getElementById("transaction_uuid").value;
+            var product_code = document.getElementById("product_code").value;
+            var secret = '8gBm/:&EnhH.1/q';
+
+            var hash = CryptoJS.HmacSHA256(
+                `total_amount=${total_amount},transaction_uuid=${transaction_uuid},product_code=${product_code}`,
+                `${secret}`);
+            var hashInBase64 = CryptoJS.enc.Base64.stringify(hash);
+            document.getElementById("signature").value = hashInBase64;
+        }
+
+        // Event listeners to call generateSignature() when inputs are changed
+        document.getElementById("total_amount").addEventListener("input", generateSignature);
+        document.getElementById("transaction_uuid").addEventListener("input", generateSignature);
+        document.getElementById("product_code").addEventListener("input", generateSignature);
+        document.getElementById("secret").addEventListener("input", generateSignature);
+
+
+    </script>
+
+</body>
+
+</html>

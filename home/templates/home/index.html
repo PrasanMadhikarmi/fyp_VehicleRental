@@ -1,8 +1,9 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-	
+
 	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
 	<link rel="stylesheet" type="text/css" href="{%static 'home/index.css'%}">
 
@@ -11,138 +12,140 @@
 	<title>Home</title>
 	<style>
 		body {
-		  font-family: Arial, sans-serif;
-		  margin: 0;
-		  padding: 0;
-		  background-color: #f5f5f5;
+			font-family: Arial, sans-serif;
+			margin: 0;
+			padding: 0;
+			background-color: #f5f5f5;
 		}
-	  
+
 		.search-container {
-		  width: 100%;
-		  display: flex;
-		  flex-wrap: wrap;
-		  justify-content: center;
-		  align-items: center;
-		  background-color: #fff;
-		  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-		  padding: 10px;
-		  box-sizing: border-box;
-		  gap: 10px;
-		  border-radius: 30px;
+			width: 100%;
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: center;
+			align-items: center;
+			background-color: #fff;
+			box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+			padding: 10px;
+			box-sizing: border-box;
+			gap: 10px;
+			border-radius: 30px;
 		}
-	  
+
 		.search-column {
-		  flex: 1;
-		  width: 100%;
-		  max-width: 250px;
-		  display: flex;
-		  flex-direction: column;
+			flex: 1;
+			width: 100%;
+			max-width: 250px;
+			display: flex;
+			flex-direction: column;
 		}
-	  
+
 		.search-input {
 			appearance: none;
-    -webkit-appearance: none;
-    background: transparent;
-    border: none;
-    /* border-bottom: 2px solid #2a2a2a; */
-    padding: 10px 20px;
-    font-size: 14px;
-    width: 100%;
-    cursor: pointer;
-    outline: none;
+			-webkit-appearance: none;
+			background: transparent;
+			border: none;
+			/* border-bottom: 2px solid #2a2a2a; */
+			padding: 10px 20px;
+			font-size: 14px;
+			width: 100%;
+			cursor: pointer;
+			outline: none;
 		}
-	  
+
 		.search-button {
-		  background-color: #007bff;
-		  color: #fff;
-		  border: none;
-		  border-radius: 100px;
-		  /* padding: 5px 10px; */
-		  width: 40px;
-		  height: 40px;
-		  cursor: pointer;
-		  transition: background-color 0.3s ease;
+			background-color: #007bff;
+			color: #fff;
+			border: none;
+			border-radius: 100px;
+			/* padding: 5px 10px; */
+			width: 40px;
+			height: 40px;
+			cursor: pointer;
+			transition: background-color 0.3s ease;
 		}
-	  
+
 		.search-button:hover {
-		  background-color: #0056b3;
+			background-color: #0056b3;
 		}
-	  
+
 		.search-icon {
-		  display: inline-block;
-		  width: 20px;
-		  height: 20px;
-		  background: url('static/home/search-icon.png') center/cover no-repeat;
+			display: inline-block;
+			width: 20px;
+			height: 20px;
+			background: url('static/home/search-icon.png') center/cover no-repeat;
 		}
-	  
+
 		@media (min-width: 768px) {
-		  .search-column {
-			max-width: none;
-		  }
+			.search-column {
+				max-width: none;
+			}
 		}
 
 		.search-dropdown {
-    position: relative;
-    width: 100%;
-  }
+			position: relative;
+			width: 100%;
+		}
 
-  .search-dropdown select {
-    appearance: none;
-    -webkit-appearance: none;
-    background: transparent;
-    border: none;
-    /* border-bottom: 2px solid #007bff; */
-    padding: 10px 20px;
-    font-size: 14px;
-    width: 100%;
-    cursor: pointer;
-    outline: none;
-  }
+		.search-dropdown select {
+			appearance: none;
+			-webkit-appearance: none;
+			background: transparent;
+			border: none;
+			/* border-bottom: 2px solid #007bff; */
+			padding: 10px 20px;
+			font-size: 14px;
+			width: 100%;
+			cursor: pointer;
+			outline: none;
+		}
 
-  .search-dropdown::before {
-    content: "\25BC";
-    font-size: 12px;
-    color: #2f2f2f;
-    position: absolute;
-    top: 50%;
-    right: 10px;
-    transform: translateY(-50%);
-    pointer-events: none;
-  }
-  .datetimeinput{
-	width: 80% !important;
-  }
+		.search-dropdown::before {
+			content: "\25BC";
+			font-size: 12px;
+			color: #2f2f2f;
+			position: absolute;
+			top: 50%;
+			right: 10px;
+			transform: translateY(-50%);
+			pointer-events: none;
+		}
 
-  .search-dropdown::after {
-    content: '';
-    border-bottom: 1px solid #ccc;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-  }
-	  </style>
+		.datetimeinput {
+			width: 80% !important;
+		}
+
+		.search-dropdown::after {
+			content: '';
+			border-bottom: 1px solid #ccc;
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			width: 100%;
+		}
+	</style>
 </head>
+
 <body>
 	{% include 'home/navbar.html' %}
 	<div class="main-container">
-		
+
 		<form style="margin: 0 auto;" action="{% url 'services:vehicle_display' %}" method="post">
 			{% csrf_token %}
 			<div class="box bounce-in-top">
 				<p class="heading wobble-hor-bottom">NEED A RIDE? </p>
 				<p class="subheading wobble-hor-bottom">YOU'VE COME TO THE RIGHT PLACE.</p>
 				<hr class="sep wobble-hor-bottom">
-				
+
 				<div class="search-container">
 					<div class="search-column">
 						<input class="search-input" type="text" name="location" placeholder="Location">
 					</div>
 					<div class="search-column">
-						<input class="search-input datetimeinput" type="text" name="from" placeholder="From">
+						<input class="search-input datetimeinput" type="text" name="from" placeholder="From" onchange=saveToCookie()> 
 					</div>
 					<div class="search-column">
-						<input class="search-input datetimeinput" type="text" name="until" placeholder="Until">
+						<input class="search-input datetimeinput" type="text" name="until" placeholder="Until" onchange=saveToCookie()>
 					</div>
 					<div class="search-column">
 						<div class="search-dropdown">
@@ -163,11 +166,11 @@
 					</div>
 					<button class="search-button" type="submit">
 						<span class="search-icon"></span>
-					</button>
+					</button>					
 				</div>
 			</div>
 		</form>
-		
+
 	</div>
 
 	<section id="info1">
@@ -201,7 +204,8 @@
 		<div class="container">
 			<h2 class="title" style="color: white;">About Us</h2>
 			<hr class="sep">
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore molestias ipsa veritatis nihil iusto maiores natus dolor.</p>
+			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore molestias ipsa veritatis nihil iusto
+				maiores natus dolor.</p>
 
 		</div>
 	</section>
@@ -217,16 +221,18 @@
 					<h3>Angelina Smith</h3>
 					<div class="container">
 						<p>Lorem ipsum dolor sit amet, consectadipiscing elit.
-							Aenean commodo ligula eget dolor.Lorem ipsum dolor sit amet, consectadipiscing elit. Aenean commodo ligula eget dolor.</p>
+							Aenean commodo ligula eget dolor.Lorem ipsum dolor sit amet, consectadipiscing elit. Aenean
+							commodo ligula eget dolor.</p>
 					</div>
-					
+
 				</div>
 				<div class="info3-card">
 					<img src="{% static 'home/5.jpg' %}">
 					<h3>Angelina Smith</h3>
 					<div class="container">
 						<p>Lorem ipsum dolor sit amet, consectadipiscing elit.
-							Aenean commodo ligula eget dolor.Lorem ipsum dolor sit amet, consectadipiscing elit. Aenean commodo ligula eget dolor.</p>
+							Aenean commodo ligula eget dolor.Lorem ipsum dolor sit amet, consectadipiscing elit. Aenean
+							commodo ligula eget dolor.</p>
 					</div>
 				</div>
 				<div class="info3-card">
@@ -234,7 +240,8 @@
 					<h3>Angelina Smith</h3>
 					<div class="container">
 						<p>Lorem ipsum dolor sit amet, consectadipiscing elit.
-							Aenean commodo ligula eget dolor.Lorem ipsum dolor sit amet, consectadipiscing elit. Aenean commodo ligula eget dolor.
+							Aenean commodo ligula eget dolor.Lorem ipsum dolor sit amet, consectadipiscing elit. Aenean
+							commodo ligula eget dolor.
 							Aenean commodo ligula eget dolor</p>
 					</div>
 				</div>
@@ -245,125 +252,160 @@
 
 	<section id="newsletter">
 		<div class="container">
-		<h2 class="title">Join Our Newsletter</h2>
-		<hr class="sep">
-		<form method="POST" action="{% url 'home:index' %}">
-			{% csrf_token %}
-				<input class="input-field" type="email" name ="email" value={{current_user.email}}>
+			<h2 class="title">Join Our Newsletter</h2>
+			<hr class="sep">
+			<form method="POST" action="{% url 'home:index' %}">
+				{% csrf_token %}
+				<input class="input-field" type="email" name="email" value={{current_user.email}}>
 				<br>
-			{% if exists == "Yes" %}
-				<button style="background-color: grey; width: 15em;" type="submit" class="join-btn" disabled>Newsletter Subscribed</button>
-			{% else %}
+				{% if exists == "Yes" %}
+				<button style="background-color: grey; width: 15em;" type="submit" class="join-btn" disabled>Newsletter
+					Subscribed</button>
+				{% else %}
 				<button type="submit" class="join-btn">Join</button>
-			{% endif %}
+				{% endif %}
 
-		</form>
-	</div>
+			</form>
+		</div>
 	</section>
 
 	<footer class="footer-distributed">
- 
-		<div class="footer-left">
-		
-		<h3><span class="highlight">Elite</span>Rental</h3>
-		
-		<p class="footer-links">
-		<a href="">Home</a>
-		·
-		<a href="#">Services</a>
-		·
-		<a href="#">Contact</a>
-		·
-		<a href="#">About</a>
-		·
-		<a href="#">Faq</a>
 
-		</p>
-		
-		<p class="footer-company-name">eliterental &copy; 2021</p>
+		<div class="footer-left">
+
+			<h3><span class="highlight">Elite</span>Rental</h3>
+
+			<p class="footer-links">
+				<a href="">Home</a>
+				·
+				<a href="#">Services</a>
+				·
+				<a href="#">Contact</a>
+				·
+				<a href="#">About</a>
+				·
+				<a href="#">Faq</a>
+
+			</p>
+
+			<p class="footer-company-name">eliterental &copy; 2021</p>
 		</div>
-		
+
 		<div class="footer-center">
-		
-		<div>
-		<i class="fa fa-map-marker"></i>
-		<p><span>Dillibazar</span> Kathmandu, Nepal</p>
+
+			<div>
+				<i class="fa fa-map-marker"></i>
+				<p><span>Dillibazar</span> Kathmandu, Nepal</p>
+			</div>
+
+			<div>
+				<i class="fa fa-phone"></i>
+				<p>+1 555 123456</p>
+			</div>
+
+			<div>
+				<i class="fa fa-envelope"></i>
+				<p><a href="mailto:support@company.com">contact@eliterental.com</a></p>
+			</div>
+
 		</div>
-		
-		<div>
-		<i class="fa fa-phone"></i>
-		<p>+1 555 123456</p>
-		</div>
-		
-		<div>
-		<i class="fa fa-envelope"></i>
-		<p><a href="mailto:support@company.com">contact@eliterental.com</a></p>
-		</div>
-		
-		</div>
-		
+
 		<div class="footer-right">
-		
-		<p class="footer-company-about">
-		<span>About the company</span>
-		Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-		</p>
-		
-		<div class="footer-icons">
-		
-		<a href="#"><i class="fa fa-facebook"></i></a>
-		<a href="#"><i class="fa fa-twitter"></i></a>
-		<a href="#"><i class="fa fa-linkedin"></i></a>
-		<a href="#"><i class="fa fa-github"></i></a>
-		
+
+			<p class="footer-company-about">
+				<span>About the company</span>
+				Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+			</p>
+
+			<div class="footer-icons">
+
+				<a href="#"><i class="fa fa-facebook"></i></a>
+				<a href="#"><i class="fa fa-twitter"></i></a>
+				<a href="#"><i class="fa fa-linkedin"></i></a>
+				<a href="#"><i class="fa fa-github"></i></a>
+
+			</div>
+
 		</div>
-		
-		</div>
-		
-		</footer>
-		
-		<script>
-			const categorySelect = document.getElementById('categorySelect');
-			const subcategoryColumn = document.getElementById('subcategoryColumn');
-			const subcategorySelect = document.getElementById('subcategorySelect');
-		
-			const subcategories = {
-			  car: ['Sedan', 'SUV', 'Electric'],
-			  bike: ['Sports', 'Naked', 'Offroad'],
-			  cycle: ['Mountain Bike', 'BMX', 'Electric'],
+
+	</footer>
+
+	<script>
+		function saveToCookie() {
+			// Get values from the input fields
+			var fromDateTimeValue = document.querySelector('.datetimeinput[name="from"]').value;
+			var untilDateTimeValue = document.querySelector('.datetimeinput[name="until"]').value;
+
+			// Separate date and time from the datetime values
+			var fromDateTimeParts = fromDateTimeValue.split(" ");
+			var untilDateTimeParts = untilDateTimeValue.split(" ");
+
+			console.log(fromDateTimeValue)
+			console.log(untilDateTimeValue)
+			console.log(fromDateTimeParts)
+			console.log(untilDateTimeParts)
+
+			// Create an object to store in the cookie
+			var searchData = {
+				fromDate: fromDateTimeParts[0], // Date part
+				fromTime: fromDateTimeParts[1], // Time part
+				untilDate: untilDateTimeParts[0], // Date part
+				untilTime: untilDateTimeParts[1] // Time part
 			};
-		
-			categorySelect.addEventListener('change', () => {
-			  const selectedCategory = categorySelect.value;
-			  if (selectedCategory in subcategories) {
+
+			// Convert the object to a JSON string
+			var searchDataJSON = JSON.stringify(searchData);
+
+			// Set the cookie with the JSON string
+			document.cookie = "searchData=" + encodeURIComponent(searchDataJSON) + "; path=/"; // Ensure path is set to root
+
+		}
+
+
+		const categorySelect = document.getElementById('categorySelect');
+		const subcategoryColumn = document.getElementById('subcategoryColumn');
+		const subcategorySelect = document.getElementById('subcategorySelect');
+
+		const subcategories = {
+			car: ['Sedan', 'SUV', 'Electric'],
+			bike: ['Sports', 'Naked', 'Offroad'],
+			cycle: ['Mountain Bike', 'BMX', 'Electric'],
+		};
+
+		categorySelect.addEventListener('change', () => {
+			const selectedCategory = categorySelect.value;
+			if (selectedCategory in subcategories) {
 				subcategoryColumn.style.display = 'block';
 				subcategorySelect.innerHTML = '<option value="" disabled selected>Select Subcategory</option>';
 				subcategories[selectedCategory].forEach(subcategory => {
-				  const option = document.createElement('option');
-				  option.value = subcategory.toLowerCase();
-				  option.textContent = subcategory;
-				  subcategorySelect.appendChild(option);
+					const option = document.createElement('option');
+					option.value = subcategory.toLowerCase();
+					option.textContent = subcategory;
+					subcategorySelect.appendChild(option);
 				});
-			  } else {
+			} else {
 				subcategoryColumn.style.display = 'none';
-			  }
+			}
+		});
+
+
+		const datetimeInputs = document.querySelectorAll('.datetimeinput');
+
+		datetimeInputs.forEach(input => {
+			input.addEventListener('focus', () => {
+				input.type = 'datetime-local';
 			});
 
+			input.addEventListener('blur', () => {
+				if (!input.value) {
+					input.type = 'text';
+				}
+			});
+		});
+	</script>
 
-			const datetimeInputs = document.querySelectorAll('.datetimeinput');
 
-    datetimeInputs.forEach(input => {
-      input.addEventListener('focus', () => {
-        input.type = 'datetime-local';
-      });
 
-      input.addEventListener('blur', () => {
-        if (!input.value) {
-          input.type = 'text';
-        }
-      });
-    });
-		  </script>
-		
 </body>
+
 </html>

@@ -6,13 +6,16 @@ from django.contrib import messages
 from django.conf import settings
 
 from accounts.models import UserAddress, VehicleRegistration
+from services.models import CustomerPayment
 
 from .forms import CreateUserForm, VehicleRegistrationForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-
+from django.db.models import Sum
 
 # Create your views here.
+
+
 def register(request):
     if request.user.is_authenticated:
         return redirect('home:index')
@@ -77,7 +80,6 @@ def vehicle_registration(request):
     if request.method == 'POST':
         form = VehicleRegistrationForm(request.POST, request.FILES)
 
-            
         # Save the vehicle registration data
         vehicle_registration = form.save(commit=False)
         vehicle_registration.user = request.user
@@ -119,9 +121,21 @@ def userProfile(request):
                 data2 = UserAddress.objects.get(user_info_id=current_user.id)
             else:
                 print("empty")
+         # Calculate total unpaid amount to vendor
+        total_unpaid_to_vendor = CustomerPayment.objects.filter(
+            booking_id__vehicle_id__user=current_user, vendor_paid_status=False
+        ).aggregate(Sum('vendor_payment'))['vendor_payment__sum'] or 0
+
+        # Calculate total amount paid to vendor
+        total_paid_to_vendor = CustomerPayment.objects.filter(
+            booking_id__vehicle_id__user=current_user, vendor_paid_status=True
+        ).aggregate(Sum('vendor_payment'))['vendor_payment__sum'] or 0
+
         context = {
             'user': data,
-            'address': data2
+            'address': data2,
+            'total_unpaid_to_vendor': total_unpaid_to_vendor,
+            'total_paid_to_vendor': total_paid_to_vendor,
         }
 
         return render(request, "accounts/profile.html", context)

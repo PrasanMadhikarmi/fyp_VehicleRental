@@ -1,15 +1,41 @@
 {% load static %}
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
     <title>{{car_pk.name}}</title>
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="{% static 'services/detail.css' %}"> 
+    <link rel="stylesheet" type="text/css" href="{% static 'services/detail.css' %}">
 
+    <style>
+        /* Add this CSS in your stylesheet or within a style tag in your HTML head */
+        .popup {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+        }
 
+        .popup-content {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .popup-close {
+            margin-top: 10px;
+        }
+    </style>
 </head>
+
 <body>
 
 
@@ -21,38 +47,38 @@
     </section>
 
 
-<div class="main-detail-container">
-    <div class="panel1">
-        <h1 class="title">{{car_pk.brand}} {{car_pk.model}}</h1>
-        <h6>{{review_count}} Reviews</h6>
-        <hr class="dash-hr">  
-        <div class="ft-container">
-            <div class="ft">
-                <img src="{% static 'services/avatar.png' %}"><span>{{car_pk.capacity}} Passenger</span>
+    <div class="main-detail-container">
+        <div class="panel1">
+            <h1 class="title">{{car_pk.brand}} {{car_pk.model}}</h1>
+            <h6>{{review_count}} Reviews</h6>
+            <hr class="dash-hr">
+            <div class="ft-container">
+                <div class="ft">
+                    <img src="{% static 'services/avatar.png' %}"><span>{{car_pk.capacity}} Passenger</span>
+                </div>
+                <div class="ft">
+                    <img src="{% static 'services/pump.png' %}"><span>{{car_pk.carFuel}}</span>
+                </div>
+                <div class="ft">
+                    <img src="{% static 'services/settings.png' %}"><span> {{car_pk.transmission}}</span>
+                </div>
+                <div class="ft">
+                    <img src="{% static 'services/boot.png' %}"><span> {{car_pk.bootCapacity}} litres </span>
+                </div>
             </div>
-            <div class="ft">
-                <img src="{% static 'services/pump.png' %}"><span>{{car_pk.carFuel}}</span>
+            <hr class="dash-hr">
+            <h5 class="sub-title">Included</h5>
+            <div class="full-ft-container">
+                {% for feature in car_pk.features %}
+                <div class="s-ft">✔ {{feature}}</div>
+                {% endfor %}
             </div>
-             <div class="ft">
-                 <img src="{% static 'services/settings.png' %}"><span> {{car_pk.transmission}}</span>
-            </div>
-            <div class="ft">
-                <img src="{% static 'services/boot.png' %}"><span> {{car_pk.bootCapacity}} litres </span>
-            </div>
-        </div>
-        <hr class="dash-hr">    
-        <h5 class="sub-title">Included</h5>
-        <div class="full-ft-container">  
-            {% for feature in car_pk.features %}
-            <div class="s-ft">✔ {{feature}}</div>
-            {% endfor %}
-        </div>   
-        <hr class="large-sep">
-        <h5 class="sub-title">Reviews</h5>
+            <hr class="large-sep">
+            <h5 class="sub-title">Reviews</h5>
 
-        <!-- need loop -->
-        {% for uR in review_car %}
-            
+            <!-- need loop -->
+            {% for uR in review_car %}
+
             <div class="review">
                 <div class="picture-panel">
                     <div class="profile-pic">
@@ -70,175 +96,219 @@
                 </div>
             </div>
             <hr class="dash-hr">
-        {% endfor %}
-        <!-- end loop -->
+            {% endfor %}
+            <!-- end loop -->
 
 
-        <h5 class="sub-title">Write a Review</h5>
-        <div class="reviewForm-container">
-    
-            <h5 class="form-label forRV">Message</h5>
-            <form method="POST" action="/services/detail/{{car_pk.id}}">
-                {% csrf_token %}
-            <textarea class="form-entry msg" type="message" name="message"></textarea>
-            <div class="divided">
-                <div class="i-f1">
-                    <h5 class="form-label forRV">Full Name</h5>
-                    <input class="review-entry" type="text" name="fullname">
-                </div>
-                <div class="i-f2">
-                    <h5 class="form-label forRV">Email Address</h5>
-                    <input class="review-entry" type="email" name="email">
-                </div>
-                <div class="row btn-p">
-                    <button class="booking-btn post" name="SendReview"> Post Review</button>
-                </div>
+            <h5 class="sub-title">Write a Review</h5>
+            <div class="reviewForm-container">
+
+                <h5 class="form-label forRV">Message</h5>
+                <form method="POST" action="/services/detail/{{car_pk.id}}">
+                    {% csrf_token %}
+                    <textarea class="form-entry msg" type="message" name="message"></textarea>
+                    <div class="divided">
+                        <div class="i-f1">
+                            <h5 class="form-label forRV">Full Name</h5>
+                            <input class="review-entry" type="text" name="fullname">
+                        </div>
+                        <div class="i-f2">
+                            <h5 class="form-label forRV">Email Address</h5>
+                            <input class="review-entry" type="email" name="email">
+                        </div>
+                        <div class="row btn-p">
+                            <button class="booking-btn post" name="SendReview"> Post Review</button>
+                        </div>
+                    </div>
+                </form>
+
+
+
             </div>
-        </form>  
-
-
-            
-        </div>   
-    </div>
-
-
-
-
-    <div class="panel2">
-
-    <div class="book-form">
-        <div class="p-cont">
-            <h1> <span>Rs</span>{{car_pk.price}}</h1>
-                    <h5 class="d-f">Per Day</h5>
         </div>
-        <form method="POST">
-            {% csrf_token %}
-            <div class="column">
-    
-                <div class="row">
-                    <h5 class="form-label">Full Name</h5>
-                    <input class="form-entry" type="text" name="name" placeholder="Emily Clarke">
+
+
+
+
+        <div class="panel2">
+
+            <div class="book-form">
+                <div class="p-cont">
+                    <h1> <span>Rs</span>{{car_pk.price}}</h1>
+                    <h5 class="d-f">Per Day</h5>
                 </div>
-                <div class="row">
-                    <h5 class="form-label">Email Address</h5>
-                    <input class="form-entry" type="email" name="email" placeholder="example@email.com">
-                </div>
-                <div class="row">
-                    <h5 class="form-label">Phone Number</h5>
-                    <input class="form-entry" type="text" name="phone" placeholder="9841000000">
-                </div>
-                <div class="row">
-                    <h5 class="form-label">Pickup Address</h5>
-                    <input class="form-entry date" type="text" name="pickupAddress" value="{{car_pk.location}}" disabled>
-                </div>
-                <div class="row">
-                    <h5 class="form-label">Pickup Date</h5>
-                    <input class="form-entry date" type="date" name="pickupDate">
-                </div>
-                <div class="row">
-                    <h5 class="form-label">Pickup Time</h5>
-                    <input class="form-entry" type="time" name="pickupTime">
-                </div>
-                <div class="row">
-                    <h5 class="form-label">Drop Off Address</h5>
-                    <input class="form-entry" type="text" name="dropAddress"  value="{{car_pk.location}}" disabled>
-                </div>
-                <div class="row">
-                    <h5 class="form-label">Drop Off Date</h5>
-                    <input class="form-entry" type="date" name="dropDate">
-                </div>
-                <div class="row">
-                    <h5 class="form-label">Drop Off Time</h5>
-                    <input class="form-entry" type="time" name="dropTime">
-                </div>
-                {% if user.is_authenticated %}
-                    
-                    <div class="row btn-c">
-                        <button class="booking-btn book" type="submit" name="BookInstantly">Book Instantly</button>
+                <form method="POST" {% url 'services:detail' car_id=car_pk.id %}>
+                    {% csrf_token %}
+                    <div class="column">
+
+                        <div class="row">
+                            <h5 class="form-label">Full Name</h5>
+                            <input class="form-entry" type="text" name="name" placeholder="Emily Clarke">
+                        </div>
+                        <div class="row">
+                            <h5 class="form-label">Email Address</h5>
+                            <input class="form-entry" type="email" name="email" placeholder="example@email.com">
+                        </div>
+                        <div class="row">
+                            <h5 class="form-label">Phone Number</h5>
+                            <input class="form-entry" type="text" name="number" placeholder="9841000000">
+                        </div>
+                        <div class="row">
+                            <h5 class="form-label">Pickup Address</h5>
+                            <input class="form-entry date" type="text" name="pickupAddress" value="{{car_pk.location}}"
+                                disabled>
+                        </div>
+                        <div class="row">
+                            <h5 class="form-label">Pickup Date</h5>
+                            <input class="form-entry" type="date" name="pickDate">
+                        </div>
+                        <div class="row">
+                            <h5 class="form-label">Pickup Time</h5>
+                            <input class="form-entry" type="time" name="pickTime">
+                        </div>
+                        <div class="row">
+                            <h5 class="form-label">Drop Off Address</h5>
+                            <input class="form-entry" type="text" name="dropAddress" value="{{car_pk.location}}"
+                                disabled>
+                        </div>
+                        <div class="row">
+                            <h5 class="form-label">Drop Off Date</h5>
+                            <input class="form-entry" type="date" name="dropDate">
+                        </div>
+                        <div class="row">
+                            <h5 class="form-label">Drop Off Time</h5>
+                            <input class="form-entry" type="time" name="dropTime">
+                        </div>
+                        {% if user.is_authenticated %}
+
+                        <div class="row btn-c">
+                            <button class="booking-btn book" type="submit" name="BookInstantly">Book Instantly</button>
+                        </div>
+                        {% else %}
+
+                        <div class="row btn-c">
+                            <button class="booking-btn book" type="submit" name="BookInstantly" disabled>Book
+                                Instantly</button>
+                        </div>
+
+                        <h4 style="color: red; margin-top: 7px; font-weight: 600;">*Please Login to rent vehicle</h4>
+                        <br>
+                        {% endif %}
+
+
                     </div>
-                {% else %}
-                    
-                    <div class="row btn-c">
-                        <button class="booking-btn book" type="submit" name="BookInstantly" disabled>Book Instantly</button>
-                    </div>
-                    <h4 style="color: red; margin-top: 7px; font-weight: 600;">*Please Login to rent vehicle</h4><br>
-                {% endif %}
-            
-            </div>  
-        </form>
+                </form>
+            </div>
+
+        </div>
     </div>
-    
+
+    {% if messages %}
+    <div class="popup">
+        <div class="popup-content">
+            <ul class="messages">
+                {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                    {% endfor %}
+            </ul>
+            <!-- Add a link to a page -->
+            <p><a href="{% url 'services:booking' %}">Please go to my booking page for payment.</a></p>
+            <button class="popup-close" onclick="closePopup()">Close</button>
+        </div>
     </div>
-</div>
-    
+    {% endif %}
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            setTimeout(function () {
+                setValuesFromSearchData();
+            }, 100);
+
+        });
+
+
+
+        function showPopup() {
+            var popup = document.getElementById('popup');
+            popup.style.display = 'block';
+        }
+
+        function closePopup() {
+            var popup = document.getElementById('popup');
+            popup.style.display = 'none';
+        }
+
+        // Function to set values in respective fields
+        function setValuesFromSearchData() {
+            // Retrieve the searchData cookie
+            var searchDataCookie = getCookie("searchData");
+
+            // Check if the cookie exists
+            if (searchDataCookie) {
+                // Decode the URL-encoded JSON string
+                var decodedSearchData = decodeURIComponent(searchDataCookie);
+
+                // Parse the JSON string to an object
+                var searchDataObj = JSON.parse(decodedSearchData);
+
+                // Format date and time strings
+                var formattedFromDate = formatDate(searchDataObj.fromDate);
+                var formattedUntilDate = formatDate(searchDataObj.untilDate);
+                var formattedFromTime = searchDataObj.fromDate.split("T")[1];
+                var formattedUntilTime = searchDataObj.untilDate.split("T")[1];
+
+
+
+                // Set values in respective fields
+                document.querySelector('.form-entry[name="pickDate"]').value = formattedFromDate;
+                document.querySelector('.form-entry[name="pickTime"]').value = formattedFromTime;
+
+                document.querySelector('.form-entry[name="dropDate"]').value = formattedUntilDate;
+                document.querySelector('.form-entry[name="dropTime"]').value = formattedUntilTime;
+            }
+        }
+
+        // Function to format date as "yyyy-MM-dd"
+        function formatDate(dateString) {
+            var date = new Date(dateString);
+            if (!isNaN(date.getTime())) {
+                var year = date.getFullYear();
+                var month = ("0" + (date.getMonth() + 1)).slice(-2);
+                var day = ("0" + date.getDate()).slice(-2);
+                return year + "-" + month + "-" + day;
+            } else {
+                // Handle invalid date values
+                return "";
+            }
+        }
+
+
+
+        // Function to get the value of a cookie by name
+        function getCookie(cookieName) {
+            var name = cookieName + "=";
+            var decodedCookie = decodeURIComponent(document.cookie);
+            var cookieArray = decodedCookie.split(';');
+
+            for (var i = 0; i < cookieArray.length; i++) {
+                var cookie = cookieArray[i].trim();
+                if (cookie.indexOf(name) === 0) {
+                    return cookie.substring(name.length, cookie.length);
+                }
+            }
+
+            return null;
+        }
+
+        // Call the function on page load
+        setValuesFromSearchData();
+    </script>
 
 
 
 
-<footer class="footer-distributed">
- 
-    <div class="footer-left">
-    
-    <h3><span class="highlight">Elite</span>Rental</h3>
-    
-    <p class="footer-links">
-    <a href="">Home</a>
-    ·
-    <a href="#">Services</a>
-    ·
-    <a href="#">Contact</a>
-    ·
-    <a href="#">About</a>
-    ·
-    <a href="#">Faq</a>
 
-    </p>
-    
-    <p class="footer-company-name">eliterental &copy; 2021</p>
-    </div>
-    
-    <div class="footer-center">
-    
-    <div>
-    <i class="fa fa-map-marker"></i>
-    <p><span>Dillibazar</span> Kathmandu, Nepal</p>
-    </div>
-    
-    <div>
-    <i class="fa fa-phone"></i>
-    <p>+1 555 123456</p>
-    </div>
-    
-    <div>
-    <i class="fa fa-envelope"></i>
-    <p><a href="mailto:support@company.com">contact@eliterental.com</a></p>
-    </div>
-    
-    </div>
-    
-    <div class="footer-right">
-    			
-    <p class="footer-company-about">
-    <span>About the company</span>
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-    </p>
-    
-    <div class="footer-icons">
-    
-    <a href="#"><i class="fa fa-facebook"></i></a>
-    <a href="#"><i class="fa fa-twitter"></i></a>
-    <a href="#"><i class="fa fa-linkedin"></i></a>
-    <a href="#"><i class="fa fa-github"></i></a>
-    
-    </div>
-    
-    </div>
-    
-    </footer>
-
-
-  
 
 </body>
+
 </html>
-	
