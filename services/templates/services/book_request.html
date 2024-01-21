@@ -8,7 +8,7 @@
     <title>Booking</title>
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="{% static 'services/bookStyle.css' %}">
-	<link rel="stylesheet" type="text/css" href="{%static 'home/index.css'%}">
+    <link rel="stylesheet" type="text/css" href="{%static 'home/index.css'%}">
 
 </head>
 
@@ -29,6 +29,7 @@
                     <th scope="col">PickUp Time</th>
                     <th scope="col">Duration</th>
                     <th scope="col">Status</th>
+                    <th scope="col">Fees</th>
                     <th scope="col">Action</th>
                 </tr>
             </thead>
@@ -53,9 +54,16 @@
                             {% if hist.status == "Processing" %}
                             <h4 class="st processing"> Unpaid</h4>
                             {% elif hist.status == "Accepted" %}
-                            <h4 class="st processing" style="width:90%; font-size: 14px;"> Awaiting Pay for <br> Rs {{hist.total_price}}</h4>
+                            <h4 class="st processing" style="width:90%; font-size: 14px;"> Awaiting Pay for <br> Rs
+                                {{hist.total_price}}</h4>
                             {% elif hist.status == "Paid" %}
-                            <h4 class="st processing" style="background-color: rgb(3, 131, 3); color: white;"> Pay Received</h4>
+                            <h4 class="st processing" style="background-color: rgb(3, 131, 3); color: white;">
+                                {% for payment in custPay  %}
+                                {% if payment.booking_id_id == hist.id %}
+                                Rs {{ payment.total_paid_amount }} Received
+                                {% endif %}
+                                {% endfor %}
+                            </h4>
                             {% elif hist.status == "Cancelled" %}
                             <h4 class="st cancelled"> {{hist.status}}</h4>
                             {% elif hist.status == "Booked" %}
@@ -66,30 +74,69 @@
                             <h4 class="st done"> {{hist.status}}</h4>
                             {% endif %}
                         </td>
+                       
+                        <td data-label="Fees">
+                            {% if hist.status == "Paid" %}
+                            {% for payment in custPay %}
+                                {% for fees in fees_list %}
+                                    {% if payment.booking_id_id == fees.booking_id %}
+                                        Rs {{ fees.fees }}
+                                    {% endif %}
+                                {% endfor %}
+                            {% endfor %}
+                            {% endif %}
+                        </td>
+                        
+                        
+                            
 
                         <td data-label="Action">
                             {% if hist.status == "Processing" %}
-                            <a href="{% url 'services:request_payment' booking_id=hist.id %}" class="pay-button">Request Payment</a>
+                            <a href="{% url 'services:request_payment' booking_id=hist.id %}" class="pay-button">Request
+                                Payment</a>
                             {% elif hist.status == "Accepted" %}
-                            <div style="height: 90px; display: flex; flex-direction: column; row-gap: 10px; justify-content: center;">
-                                <a href="{% url 'services:cancel_booking_by_vendor' booking_id=hist.id %}" class="cancel-button">Cancel</a>
+                            <div
+                                style="height: 90px; display: flex; flex-direction: column; row-gap: 10px; justify-content: center;">
+                                <a href="{% url 'services:cancel_booking_by_vendor' booking_id=hist.id %}"
+                                    class="cancel-button">Cancel</a>
                             </div>
                             {% elif hist.status == "Done" %}
-                            <button class="cancel-button" disabled data-booking-id="{{ hist.id }}">Cancel Booking</button>
+                            <button class="cancel-button" disabled data-booking-id="{{ hist.id }}">Cancel
+                                Booking</button>
                             {% elif hist.status == "Cancelled" %}
-                            
+
                             {% elif hist.status == "Booked" %}
-                            <button class="cancel-button" disabled data-booking-id="{{ hist.id }}">Cancel Booking</button>
+                            <button class="cancel-button" disabled data-booking-id="{{ hist.id }}">Cancel
+                                Booking</button>
                             {% elif hist.status == "Decline" %}
-                            <button class="cancel-button" disabled data-booking-id="{{ hist.id }}">Cancel Booking</button>
+                            <button class="cancel-button" disabled data-booking-id="{{ hist.id }}">Cancel
+                                Booking</button>
                             {% endif %}
                         </td>
 
                     </div>
+
                 </tr>
 
             </tbody>
             {% endfor %}
+        </table>
+        <table>
+            <thead>
+                <tr>
+                    <th scope="col" style="width: 200px;">Total Receivable :</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                    
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                    <th scope="col">Rs {{ total_pay }}</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
         </table>
     </div>
 

@@ -157,11 +157,30 @@ def booking(request):
 
 def booking_request(request):
     history = bookInstantly.objects.filter(vehicle_id__user=request.user)
+    custPay = CustomerPayment.objects.filter(booking_id__vehicle_id__user=request.user)
+
+    # Calculate the fees for each payment in the view
+    fees_list = []
+    total_fees = 0
+    total_pay = 0
+    for payment in custPay:
+        fees = payment.total_paid_amount - payment.vendor_payment
+        total_pay += payment.vendor_payment
+        fees_list.append({
+            'booking_id': payment.booking_id_id,
+            'fees': fees
+        })
+        total_fees += fees
 
     context = {
-        'history': history
+        'history': history,
+        'custPay': custPay,
+        'fees_list': fees_list,
+        'total_fees': total_fees,
+        'total_pay': total_pay
     }
     return render(request, 'services/book_request.html', context)
+
 
 
 def cancel_booking_view(request, booking_id):

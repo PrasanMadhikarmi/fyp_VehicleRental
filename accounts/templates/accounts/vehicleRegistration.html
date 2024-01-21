@@ -7,6 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vehicle Registration Form</title>
     <link rel="stylesheet" href="{% static 'accounts/vehicleRegistration.css' %}">
+    <style>
+        .not-applicable-tag{
+            display: none;
+        }
+    </style>
 </head>
 <body>
     {% include 'home/navbar.html' %}
@@ -70,6 +75,7 @@
                 <div class="form-group">
                     <label for="cc">Vehicle CC:</label>
                     <input type="text" id="cc" name="cc" required>
+                    <p class="not-applicable-tag">Not applicable for Cycle category</p>
                     {{ form.cc.errors }}
                 </div>
                 
@@ -93,6 +99,7 @@
                         <option value="Diesel">Diesel</option>
                         <option value="Electric">Electric</option>
                     </select>
+                    <p class="not-applicable-tag">Not applicable for Cycle category</p>
                     {{ form.carFuel.errors }}
                 </div>
                 <div class="form-group">
@@ -114,6 +121,7 @@
                         <option value="Automatic">Automatic</option>
                         <option value="CVT">CVT</option>
                     </select>
+                    <p class="not-applicable-tag">Not applicable for Cycle category</p>
                     {{ form.transmission.errors }}
                 </div>
             </div>
@@ -124,6 +132,7 @@
                 <label for="bootCapacity">Boot Capacity:</label>
                 <input type="text" id="bootCapacity" name="bootCapacity" required>
                 {{ form.bootCapacity.errors }}
+                <p class="not-applicable-tag">Not applicable for Cycle category</p>
             </div>
             
             <div class="form-group">
@@ -139,6 +148,7 @@
                         <option value="{{ choice.0 }}">{{ choice.1 }}</option>
                     {% endfor %}
                 </select>
+                <p class="not-applicable-tag">Not applicable for Cycle category</p>
                 {{ form.features.errors }}
             </div>
             
@@ -195,29 +205,57 @@
         const categorySelect = document.getElementById('categorySelect');
         const subcategoryColumn = document.getElementById('subcategoryColumn');
         const subcategorySelect = document.getElementById('subcategorySelect');
+        const notApplicableTags = document.querySelectorAll('.not-applicable-tag');
+        const ccInput = document.getElementById('cc');
+        const carFuelSelect = document.getElementById('carFuel');
+        const transmissionSelect = document.getElementById('transmission');
+        const bootCapacityInput = document.getElementById('bootCapacity');
+        const featuresSelect = document.getElementById('features');
     
         const subcategories = {
-          car: ['Sedan', 'SUV', 'Electric'],
-          bike: ['Sports', 'Naked', 'Offroad'],
-          cycle: ['Mountain Bike', 'BMX', 'Electric'],
+            car: ['Sedan', 'SUV', 'Electric'],
+            bike: ['Sports', 'Naked', 'Offroad'],
+            cycle: ['Mountain Bike', 'BMX', 'Electric'],
         };
     
         categorySelect.addEventListener('change', () => {
-          const selectedCategory = categorySelect.value;
-          if (selectedCategory in subcategories) {
-            subcategoryColumn.style.display = 'block';
-            subcategorySelect.innerHTML = '<option value="" disabled selected>Select Subcategory</option>';
-            subcategories[selectedCategory].forEach(subcategory => {
-              const option = document.createElement('option');
-              option.value = subcategory.toLowerCase();
-              option.textContent = subcategory;
-              subcategorySelect.appendChild(option);
-            });
-          } else {
-            subcategoryColumn.style.display = 'none';
-          }
+            const selectedCategory = categorySelect.value;
+            if (selectedCategory in subcategories) {
+                subcategoryColumn.style.display = 'block';
+                subcategorySelect.innerHTML = '<option value="" disabled selected>Select Subcategory</option>';
+                subcategories[selectedCategory].forEach(subcategory => {
+                    const option = document.createElement('option');
+                    option.value = subcategory.toLowerCase();
+                    option.textContent = subcategory;
+                    subcategorySelect.appendChild(option);
+                });
+    
+                // Show or hide not-applicable elements based on category
+                notApplicableTags.forEach(tag => tag.style.display = 'none');
+                if (selectedCategory === 'cycle') {
+                    notApplicableTags.forEach(tag => tag.style.display = 'block');
+                    // Hide input fields for car-specific attributes
+                    ccInput.style.display = 'none';
+                    carFuelSelect.style.display = 'none';
+                    transmissionSelect.style.display = 'none';
+                    bootCapacityInput.style.display = 'none';
+                    featuresSelect.style.display = 'none';
+                } else {
+                    // Show input fields for car-specific attributes
+                    ccInput.style.display = 'block';
+                    carFuelSelect.style.display = 'block';
+                    transmissionSelect.style.display = 'block';
+                    bootCapacityInput.style.display = 'block';
+                    featuresSelect.style.display = 'block';
+                }
+            } else {
+                subcategoryColumn.style.display = 'none';
+                notApplicableTags.forEach(tag => tag.style.display = 'none');
+            }
         });
-        </script>
+    
+    </script>
+    
 </body>
 </html>
     

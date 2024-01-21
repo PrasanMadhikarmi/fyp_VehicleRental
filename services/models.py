@@ -42,4 +42,4 @@ class CustomerPayment(models.Model):
     vendor_payment_ts = models.DateTimeField(null = True, blank = True)
 
     def __str__(self):
-        return f"{self.booking_id} - {self.payment_amount} - {self.payment_date} - {self.vendor_paid_status}"
+        return f"{self.booking_id} - {self.total_paid_amount} - {self.payment_date} - {self.vendor_paid_status}"
