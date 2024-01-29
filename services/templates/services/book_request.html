@@ -75,19 +75,18 @@
                             {% endif %}
                         </td>
                        
+                        
                         <td data-label="Fees" style="width: 80px;">
                             {% if hist.status == "Paid" %}
-                            {% for payment in custPay %}
-                                {% for fees in fees_list %}
-                                    {% if payment.booking_id_id == fees.booking_id %}
-                                        Rs {{ fees.fees }}
+                                {% for fees_item in fees_list %}
+                                    {% if hist.id == fees_item.booking_id %}
+                                        Rs {{ fees_item.fees }}
                                     {% endif %}
                                 {% endfor %}
-                            {% endfor %}
                             {% endif %}
                         </td>
                         
-                        
+                      
                             
 
                         <td data-label="Action">

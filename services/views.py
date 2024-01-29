@@ -171,6 +171,7 @@ def booking_request(request):
             'fees': fees
         })
         total_fees += fees
+    
 
     context = {
         'history': history,
