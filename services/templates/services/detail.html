@@ -33,6 +33,32 @@
         .popup-close {
             margin-top: 10px;
         }
+
+        #showcase {
+            position: relative;
+            height: 90vh;
+        }
+
+        #thumbnail-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+
+            padding: 10px;
+            background-color: #00000000;
+        }
+
+        .thumbnail {
+            width: 100px; 
+            height: 100px; 
+            object-fit: cover;
+            cursor: pointer;
+            margin-right: 10px;
+            border: 5px solid rgb(255, 255, 255);
+            box-shadow: 5px 3px black;
+        }
     </style>
 </head>
 
@@ -41,8 +67,15 @@
 
     {% include 'home/navbar.html' %}
     <section id="showcase">
-        <div class="container">
-            <img src="{{car_pk.image1.url}}" class="img-fluid">
+        <div class="container" style="height: 95vh;">
+            <img id="mainImage" src="{{car_pk.image1.url}}" class="img-fluid">
+        </div>
+        <div id="thumbnail-container">
+            <img class="thumbnail" src="{{car_pk.image1.url}}" onclick="updateMainImage('{{car_pk.image1.url}}')">
+            <img class="thumbnail" src="{{car_pk.image2.url}}" onclick="updateMainImage('{{car_pk.image2.url}}')">
+            <img class="thumbnail" src="{{car_pk.image3.url}}" onclick="updateMainImage('{{car_pk.image3.url}}')">
+            <img class="thumbnail" src="{{car_pk.image4.url}}" onclick="updateMainImage('{{car_pk.image4.url}}')">
+            <img class="thumbnail" src="{{car_pk.image5.url}}" onclick="updateMainImage('{{car_pk.image5.url}}')">
         </div>
     </section>
 
@@ -52,27 +85,44 @@
             <h1 class="title">{{car_pk.brand}} {{car_pk.model}}</h1>
             <h6>{{review_count}} Reviews</h6>
             <hr class="dash-hr">
-            <div class="ft-container">
+            <div class="ft-container" style="justify-content: space-around;">
                 <div class="ft">
                     <img src="{% static 'services/avatar.png' %}"><span>{{car_pk.capacity}} Passenger</span>
                 </div>
                 <div class="ft">
+                    <img src="{% static 'services/settings.png' %}"><span>{{car_pk.transmission}}</span>
+                </div>
+
+                {% if 'bike'  in car_pk.category and 'cycle'  in car_pk.category %}
+                <div class="ft">
                     <img src="{% static 'services/pump.png' %}"><span>{{car_pk.carFuel}}</span>
                 </div>
+
                 <div class="ft">
-                    <img src="{% static 'services/settings.png' %}"><span> {{car_pk.transmission}}</span>
+                    <img src="{% static 'services/boot.png' %}"><span>{{car_pk.bootCapacity}} litres </span>
                 </div>
-                <div class="ft">
-                    <img src="{% static 'services/boot.png' %}"><span> {{car_pk.bootCapacity}} litres </span>
-                </div>
+                {% endif %}
             </div>
+
             <hr class="dash-hr">
+            <h5 class="sub-title">Description</h5>
+            <p>{{car_pk.description}}</p>
+
+
+
+            {% if 'bike' not in car_pk.category and 'cycle' not in car_pk.category %}
             <h5 class="sub-title">Included</h5>
             <div class="full-ft-container">
                 {% for feature in car_pk.features %}
                 <div class="s-ft">✔ {{feature}}</div>
                 {% endfor %}
             </div>
+            {% endif %}
+
+
+
+
+
             <hr class="large-sep">
             <h5 class="sub-title">Reviews</h5>
 
@@ -219,6 +269,9 @@
     {% endif %}
 
     <script>
+        function updateMainImage(imageUrl) {
+            document.getElementById('mainImage').src = imageUrl;
+        }
         document.addEventListener("DOMContentLoaded", function () {
             setTimeout(function () {
                 setValuesFromSearchData();

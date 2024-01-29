@@ -30,6 +30,7 @@
 			box-sizing: border-box;
 			gap: 10px;
 			border-radius: 30px;
+			margin-top: 30px;
 		}
 
 		.search-column {
@@ -77,10 +78,13 @@
 		}
 
 		@media (min-width: 768px) {
+
 			.search-column {
 				max-width: none;
 			}
+			
 		}
+
 
 		.search-dropdown {
 			position: relative;
@@ -123,12 +127,30 @@
 			left: 0;
 			width: 100%;
 		}
+
+		@media screen and (max-width: 450px) {
+			.main-container {
+				margin-top: 0 !important;
+				/* Change the margin-top value for smaller screens */
+			}
+			.box{
+				width: 100% !important;
+			}
+			.search-container {
+			display: block;
+			}
+			.search-button{
+				width: 100%;
+				margin-top: 5px;
+			}
+
+		}
 	</style>
 </head>
 
 <body>
 	{% include 'home/navbar.html' %}
-	<div class="main-container">
+	<div class="main-container" style="margin-top: -50px;">
 
 		<form style="margin: 0 auto;" action="{% url 'services:vehicle_display' %}" method="post">
 			{% csrf_token %}
@@ -142,10 +164,12 @@
 						<input class="search-input" type="text" name="location" placeholder="Location">
 					</div>
 					<div class="search-column">
-						<input class="search-input datetimeinput" type="text" name="from" placeholder="From" onchange=saveToCookie()> 
+						<input class="search-input datetimeinput" type="text" name="from" placeholder="From"
+							onchange=saveToCookie()>
 					</div>
 					<div class="search-column">
-						<input class="search-input datetimeinput" type="text" name="until" placeholder="Until" onchange=saveToCookie()>
+						<input class="search-input datetimeinput" type="text" name="until" placeholder="Until"
+							onchange=saveToCookie()>
 					</div>
 					<div class="search-column">
 						<div class="search-dropdown">
@@ -166,7 +190,7 @@
 					</div>
 					<button class="search-button" type="submit">
 						<span class="search-icon"></span>
-					</button>					
+					</button>
 				</div>
 			</div>
 		</form>
@@ -250,7 +274,7 @@
 		</div>
 	</section>
 
-	<section id="newsletter">
+	<!-- <section id="newsletter">
 		<div class="container">
 			<h2 class="title">Join Our Newsletter</h2>
 			<hr class="sep">
@@ -267,7 +291,7 @@
 
 			</form>
 		</div>
-	</section>
+	</section> -->
 
 	<footer class="footer-distributed">
 

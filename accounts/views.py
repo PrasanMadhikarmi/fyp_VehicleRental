@@ -159,12 +159,13 @@ def delete_vehicle(request, vehicle_id):
 
 
 def edit_vehicle(request, vehicle_id):
+    print(vehicle_id)
     vehicle = VehicleRegistration.objects.get(id=vehicle_id)
 
     if request.method == 'POST':
-        form = VehicleRegistrationForm(request.POST, instance=vehicle)
+        form = VehicleRegistrationForm(request.POST, request.FILES, instance=vehicle)
         form.save()
-        print(form.fields)
+        print(form.cleaned_data)
         return redirect('accounts:myvehicles')
     else:
         form = VehicleRegistrationForm(instance=vehicle)

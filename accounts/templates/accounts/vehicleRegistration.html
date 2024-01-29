@@ -2,17 +2,22 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vehicle Registration Form</title>
     <link rel="stylesheet" href="{% static 'accounts/vehicleRegistration.css' %}">
     <style>
-        .not-applicable-tag{
+        .not-applicable-tag {
+            display: none;
+        }
+        .cc-tag {
             display: none;
         }
     </style>
 </head>
+
 <body>
     {% include 'home/navbar.html' %}
     <div class="container">
@@ -29,7 +34,7 @@
                 </ul>
             </div>
             {% endif %}
-            
+
             <div class="form-row">
                 <div class="form-group">
                     <label for="brand">Vehicle Brand:</label>
@@ -67,7 +72,7 @@
                         <option value="car">Car</option>
                         <option value="bike">Bike</option>
                         <option value="cycle">Cycle</option>
-                      </select>
+                    </select>
                     {{ form.category.errors }}
                 </div>
             </div>
@@ -76,18 +81,19 @@
                     <label for="cc">Vehicle CC:</label>
                     <input type="text" id="cc" name="cc" required>
                     <p class="not-applicable-tag">Not applicable for Cycle category</p>
+                    <p class="cc-tag">Not applicable for Cycle category</p>
                     {{ form.cc.errors }}
                 </div>
-                
+
                 <div class="form-group">
                     <label for="description">Vehicle Subcategory:</label>
-                    <div class="search-column"   id="subcategoryColumn">
+                    <div class="search-column" id="subcategoryColumn">
                         <div class="search-dropdown">
-                          <select class="search-input" name="subcategory" id="subcategorySelect">
-                            <option value="" disabled selected>Select Subcategory</option>
-                          </select>
+                            <select class="search-input" name="subcategory" id="subcategorySelect">
+                                <option value="" disabled selected>Select Subcategory</option>
+                            </select>
                         </div>
-                      </div>
+                    </div>
                     {{ form.subcategory.errors }}
                 </div>
             </div>
@@ -127,32 +133,32 @@
             </div>
             <div class="form-row">
 
-           
-            <div class="form-group">
-                <label for="bootCapacity">Boot Capacity:</label>
-                <input type="text" id="bootCapacity" name="bootCapacity" required>
-                {{ form.bootCapacity.errors }}
-                <p class="not-applicable-tag">Not applicable for Cycle category</p>
-            </div>
-            
-            <div class="form-group">
-                <label for="description">Vehicle Description:</label>
-                <textarea id="description" name="description" required></textarea>
-                {{ form.description.errors }}
-            </div>
+
+                <div class="form-group">
+                    <label for="bootCapacity">Boot Capacity:</label>
+                    <input type="text" id="bootCapacity" name="bootCapacity" required>
+                    {{ form.bootCapacity.errors }}
+                    <p class="not-applicable-tag">Not applicable for Cycle category</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Vehicle Description:</label>
+                    <textarea id="description" name="description" required></textarea>
+                    {{ form.description.errors }}
+                </div>
             </div>
             <div class="form-group">
                 <label for="features">Features (Ctrl + Left click) for multiple selction:</label>
                 <select id="features" name="features" multiple>
                     {% for choice in form.features.field.choices %}
-                        <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                    <option value="{{ choice.0 }}">{{ choice.1 }}</option>
                     {% endfor %}
                 </select>
                 <p class="not-applicable-tag">Not applicable for Cycle category</p>
                 {{ form.features.errors }}
             </div>
-            
-            
+
+
             <h3>Vehicle Images</h3>
             <div class="form-row">
                 <div class="form-group">
@@ -201,6 +207,7 @@
             </div>
         </form>
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script>
         const categorySelect = document.getElementById('categorySelect');
         const subcategoryColumn = document.getElementById('subcategoryColumn');
@@ -211,13 +218,13 @@
         const transmissionSelect = document.getElementById('transmission');
         const bootCapacityInput = document.getElementById('bootCapacity');
         const featuresSelect = document.getElementById('features');
-    
+
         const subcategories = {
             car: ['Sedan', 'SUV', 'Electric'],
             bike: ['Sports', 'Naked', 'Offroad'],
             cycle: ['Mountain Bike', 'BMX', 'Electric'],
         };
-    
+
         categorySelect.addEventListener('change', () => {
             const selectedCategory = categorySelect.value;
             if (selectedCategory in subcategories) {
@@ -229,33 +236,27 @@
                     option.textContent = subcategory;
                     subcategorySelect.appendChild(option);
                 });
-    
-                // Show or hide not-applicable elements based on category
-                notApplicableTags.forEach(tag => tag.style.display = 'none');
-                if (selectedCategory === 'cycle') {
-                    notApplicableTags.forEach(tag => tag.style.display = 'block');
-                    // Hide input fields for car-specific attributes
-                    ccInput.style.display = 'none';
-                    carFuelSelect.style.display = 'none';
-                    transmissionSelect.style.display = 'none';
-                    bootCapacityInput.style.display = 'none';
-                    featuresSelect.style.display = 'none';
-                } else {
-                    // Show input fields for car-specific attributes
-                    ccInput.style.display = 'block';
-                    carFuelSelect.style.display = 'block';
-                    transmissionSelect.style.display = 'block';
-                    bootCapacityInput.style.display = 'block';
-                    featuresSelect.style.display = 'block';
+
+                if (selectedCategory === 'bike') {
+                    $('#cc').show()
+                    $('#carFuel, #bootCapacity, #features, #transmission').hide();
+                    $('.not-applicable-tag').hide();
+                    $('.not-applicable-tag:not(:first)').show();
                 }
-            } else {
-                subcategoryColumn.style.display = 'none';
-                notApplicableTags.forEach(tag => tag.style.display = 'none');
+                else if (selectedCategory === 'cycle') {
+                    // Fields for 'cycle' category
+                    $('.not-applicable-tag').show();
+                    $('#carFuel, #bootCapacity, #features, #cc, #transmission').hide();
+                }
+                else if (selectedCategory === 'car') {
+                    // Fields for other categories
+                    $('.not-applicable-tag').hide();
+                    $('#carFuel, #bootCapacity, #features, #cc, #transmission').show();
+                }
             }
         });
-    
     </script>
-    
+
 </body>
+
 </html>
-    

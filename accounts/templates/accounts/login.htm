@@ -1,46 +1,56 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Login</title>
 	<link rel="stylesheet" href="{% static 'accounts/loginstyle.css' %}">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+		integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw=="
+		crossorigin="anonymous" />
 </head>
+
 <body>
 	<div class="master">
 		<div class="main-container">
+
 			<div class="left-pane"><img src="{% static 'accounts/Elite rental logo.png'%}"></div>
 			<div class="right-pane">
-				<div class="title">
-					<h2>Login</h2>
+				<div class="title" style="display: flex; align-items: center;">
+					<a href="{% url 'home:index' %}">
+						<i class="fa fa-arrow-left" aria-hidden="true"></i>
+					</a>
+					<h2 style="margin-left: 10px;">Login</h2>
 				</div>
 
-				<div class="entryField">		
+				<div class="entryField">
 					<form method="POST">
-							{%csrf_token %}
-							<input type="text" name="username" placeholder=Username>
-						</div>
-						<div class="entryField">		
-			
-							<input type="password" name="password" placeholder="Password">
-						</div>
-						<div class="fpass"><a href="{% url 'reset_password' %}">Forget Password?</a></div>
-						<button class="login-btn" type="submit">
-							Login
-						</button>
-					</form>
-					<div class="signin">
-						Don't have an account? <a href="{% url 'accounts:register' %}">Register</a><br><br>
-						{% for message in messages %}
-						<p style="color: red;">{{message}}</p>
-						{% endfor %}
-					</div>
-					
-			
+						{%csrf_token %}
+						<input type="text" name="username" placeholder=Username>
+				</div>
+				<div class="entryField">
+
+					<input type="password" name="password" placeholder="Password">
+				</div>
+				<div class="fpass"><a href="{% url 'reset_password' %}">Forget Password?</a></div>
+				<button class="login-btn" type="submit">
+					Login
+				</button>
+				</form>
+				<div class="signin">
+					Don't have an account? <a href="{% url 'accounts:register' %}">Register</a><br><br>
+					{% for message in messages %}
+					<p style="color: red;">{{message}}</p>
+					{% endfor %}
+				</div>
+
+
 
 			</div>
 		</div>
 	</div>
 </body>
+
 </html>

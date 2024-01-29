@@ -23,7 +23,7 @@
         .vehicle-container {
             display: flex;
             flex-wrap: wrap;
-            justify-content: space-between;
+
             gap: 20px;
         }
 
@@ -36,6 +36,13 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             overflow: hidden;
             margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .vehicle-card {
+                width: 95%;
+                margin: 0 auto;
+            }
         }
 
         .vehicle-card img {
@@ -259,8 +266,52 @@
             width: 200px;
         }
     </style>
+    <style>
+        .alert-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            /* Set a high z-index to ensure it's on top */
+        }
 
+        .alert-box {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            padding: 20px;
+            text-align: center;
+        }
 
+        .alert-box h2 {
+            color: #333;
+        }
+
+        .alert-box p {
+            color: #555;
+            margin-bottom: 15px;
+        }
+
+        .alert-box button {
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        .alert-box button:hover {
+            background-color: #2980b9;
+        }
+    </style>
     <style>
         .row {
             display: flex;
@@ -332,6 +383,17 @@
         .slider.round:before {
             border-radius: 50%;
         }
+
+        .not-applicable-tag {
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .cc-tag {
+            display: none;
+            font-size: 12px;
+            font-weight: bold;
+        }
     </style>
 </head>
 
@@ -370,20 +432,20 @@
                         {% csrf_token %}
                         <input type="hidden" name="id" value="{{ vehicle.id }}">
                         <button type="button" class="edit-button" data-id="{{ vehicle.id }}"
-                            data-isVerified="{{ vehicle.isVerified }}"
-                            data-brand="{{ vehicle.brand }}" data-model="{{ vehicle.model }}"
-                            data-location="{{ vehicle.location }}" data-price="{{ vehicle.price }}"
-                            data-capacity="{{ vehicle.capacity }}" data-category="{{ vehicle.category }}"
-                            data-subcategory="{{ vehicle.subcategory }}" data-description="{{ vehicle.description }}"
-                            data-cc="{{ vehicle.cc }}" data-year="{{ vehicle.year }}" data-color="{{ vehicle.color }}"
+                            data-isVerified="{{ vehicle.isVerified }}" data-brand="{{ vehicle.brand }}"
+                            data-model="{{ vehicle.model }}" data-location="{{ vehicle.location }}"
+                            data-price="{{ vehicle.price }}" data-capacity="{{ vehicle.capacity }}"
+                            data-category="{{ vehicle.category }}" data-subcategory="{{ vehicle.subcategory }}"
+                            data-description="{{ vehicle.description }}" data-cc="{{ vehicle.cc }}"
+                            data-year="{{ vehicle.year }}" data-color="{{ vehicle.color }}"
                             data-transmission="{{ vehicle.transmission }}"
-                            data-bootCapacity="{{ vehicle.bootCapacity }}" data-carFuel="{{ vehicle.carFuel }}"
                             data-features="{{ vehicle.features|join:',' }}" data-isVerified="{{ vehicle.isVerified }}"
                             data-available="{{ vehicle.available }}" data-image1="{{ vehicle.image1.url }}"
                             data-image2="{{ vehicle.image2.url }}" data-image3="{{ vehicle.image3.url }}"
                             data-image4="{{ vehicle.image4.url }}" data-image5="{{ vehicle.image5.url }}"
                             data-bluebookimg="{{ vehicle.bluebookimg.url }}"
-                            data-citizenimg="{{ vehicle.citizenimg.url }}">
+                            data-citizenimg="{{ vehicle.citizenimg.url }}" data-boot="{{ vehicle.bootCapacity }}"
+                            data-fuel="{{ vehicle.carFuel }}">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
                                 class="bi bi-pencil" viewBox="0 0 16 16">
                                 <path
@@ -414,24 +476,23 @@
                 <div class="modal-content">
                     <span class="close">&times;</span>
                     <form id="editForm" style="width: 100%;" method="post"
-                        action="{% url 'accounts:edit_vehicle' vehicle.id %}" enctype="multipart/form-data">
+                        data-edit-url="{% url 'accounts:edit_vehicle' vehicle_id=0 %}" enctype="multipart/form-data">
 
                         {% csrf_token %}
                         <div class="row">
                             <div class="col-md-6">
-                                <h3>Edit {{ vehicle.brand }} {{ vehicle.model }}</h3>
+                                <h3>Edit</h3>
                             </div>
                             <div class="col-md-6" style="text-align: right;">
                                 <label class="switch">
-                                    <input type="checkbox" id="available" name="available"
-                                        {% if vehicle.available %}checked{% endif %}>
+                                    <input type="checkbox" id="available" name="available">
                                     <span class="slider round"></span>
                                 </label>
                             </div>
                         </div>
 
-                        <input type="hidden" name="id" value="">
-                        <input type="hidden" name="isVerified" value="">
+                        <input type="hidden" id="id" name="id" value="">
+                        <input type="hidden" name="isVerified" value="{{vehicle.isVerified}}">
 
 
 
@@ -461,31 +522,37 @@
                             </div>
                         </div>
                         <label for="cc">Engine Displacement:</label>
-                        <input type="text" id="cc" name="cc"><br>
+                        <input type="text" id="cc" name="cc">
+                        <p class="not-applicable-tag">Not applicable for Cycle category</p>
+                        <p class="cc-tag">Not applicable for Cycle category</p>
+                        <br>
 
                         <label for="year">Manufacture Year:</label>
                         <input type="text" id="year" name="year"><br>
 
                         <label for="color">Color:</label>
-                        <input type="text" id="color" name="color"><br>
-
+                        <input type="text" id="color" name="color">
+                        <br>
                         <label for="transmission">Transmission:</label>
                         <select id="transmission" name="transmission">
                             <option value="Manual">Manual</option>
                             <option value="Automatic">Automatic</option>
                             <option value="CVT">CVT</option>
-                        </select><br>
-
+                        </select>
+                        <p class="not-applicable-tag">Not applicable for Cycle category</p>
+                        <br>
                         <label for="bootCapacity">Boot Capacity:</label>
-                        <input type="text" id="bootCapacity" name="bootCapacity"><br>
-
+                        <input type="text" id="bootCapacity" name="bootCapacity">
+                        <p class="not-applicable-tag">Not applicable for Cycle category</p>
+                        <br>
                         <label for="carFuel">Fuel Type:</label>
                         <select id="carFuel" name="carFuel">
                             <option value="Petrol">Petrol</option>
                             <option value="Diesel">Diesel</option>
                             <option value="Electric">Electric</option>
-                        </select><br>
-
+                        </select>
+                        <p class="not-applicable-tag">Not applicable for Cycle category</p>
+                        <br>
                         <label for="features">Vehicle Features:</label>
                         <select id="features" name="features" multiple>
                             <option value="Sunroof">Sunroof</option>
@@ -498,7 +565,9 @@
                             <option value="Backup camera">Backup camera</option>
                             <option value="Cruise Control">Cruise Control</option>
                             <option value="Push-Button Start">Push-Button Start</option>
-                        </select><br>
+                        </select>
+                        <p class="not-applicable-tag">Not applicable for Cycle category</p>
+                        <br>
                         <label for="description">Description:</label>
                         <textarea id="description" name="description"></textarea><br>
                         {% for i in "12345" %}
@@ -507,6 +576,9 @@
                             onchange="handleFileSelect(event, 'image{{ i }}')"><br>
                         <img class="img-preview" id="image{{ i }}-preview" src=""><br>
                         {% endfor %}
+
+
+
 
                         <label for="bluebookimg">Bluebook Image:</label>
                         <input type="file" id="bluebookimg" name="bluebookimg" accept="image/*"
@@ -519,7 +591,8 @@
                         <img class="img-preview" id="citizenimg-preview" src=""><br>
 
 
-                        <button type="submit">Save Changes</button>
+                        <button type="button" onclick="submitForm()">Save Changes</button>
+
 
                     </form>
                 </div>
@@ -530,63 +603,9 @@
 
 
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script>
-        document.getElementById('editForm').addEventListener('submit', function (event) {
-            var availableCheckbox = document.getElementById('available');
-            var availableValue = availableCheckbox.checked;
-            availableCheckbox.name = 'available';
-            availableCheckbox.value = availableValue;
-        });
-
-
-
-
-        document.addEventListener('DOMContentLoaded', function () {
-            var editButtons = document.querySelectorAll('.edit-button');
-
-            editButtons.forEach(function (button) {
-                button.addEventListener('click', function () {
-
-                    var id = this.getAttribute('data-id');
-                    var isVerified = this.getAttribute('data-isVerified');
-                    var brand = this.getAttribute('data-brand');
-                    var model = this.getAttribute('data-model');
-                    var location = this.getAttribute('data-location');
-                    var price = this.getAttribute('data-price');
-                    var capacity = this.getAttribute('data-capacity');
-                    var category = this.getAttribute('data-category');
-                    var subcategory = this.getAttribute('data-subcategory');
-                    var description = this.getAttribute('data-description');
-                    var cc = this.getAttribute('data-cc');
-                    var year = this.getAttribute('data-year');
-                    var color = this.getAttribute('data-color');
-                    var transmission = this.getAttribute('data-transmission');
-                    var bootCapacity = this.getAttribute('data-bootCapacity');
-                    var carFuel = this.getAttribute('data-carFuel');
-                    var features = this.getAttribute('data-features');
-                    var available = this.getAttribute('data-available');
-
-
-
-                    var image1 = this.getAttribute('data-image1');
-                    var image2 = this.getAttribute('data-image2');
-                    var image3 = this.getAttribute('data-image3');
-                    var image4 = this.getAttribute('data-image4');
-                    var image5 = this.getAttribute('data-image5');
-                    var bluebookimg = this.getAttribute('data-bluebookimg');
-                    var citizenimg = this.getAttribute('data-citizenimg');
-
-
-
-
-                    openEditModal(id,isVerified, brand, model, location, price, capacity, category,
-                        subcategory, description, cc,
-                        year, color, transmission, bootCapacity, carFuel, features, image1,
-                        image2, image3, image4, image5, bluebookimg, citizenimg, available);
-                });
-            });
-        });
-
         function handleFileSelect(event, inputId) {
             const file = event.target.files[0];
             const reader = new FileReader();
@@ -602,135 +621,188 @@
         }
 
 
-        function openEditModal(id,isVerified, brand, model, location, price, capacity, category, subcategory, description,
-            cc,
-            year, color, transmission, bootCapacity, carFuel, features, image1,
-            image2, image3, image4, image5, bluebookimg, citizenimg, available) {
-            var modal = document.getElementById('editVehicleModal');
 
-            // Set the values in the modal form
-            modal.querySelector('input[name="id"]').value = id;
-            modal.querySelector('input[name="isVerified"]').value = isVerified;
-            modal.querySelector('input[name="brand"]').value = brand;
-            modal.querySelector('input[name="model"]').value = model;
-            modal.querySelector('input[name="location"]').value = location;
-            modal.querySelector('input[name="price"]').value = price;
-            modal.querySelector('input[name="capacity"]').value = capacity;
-            modal.querySelector('select[name="category"]').value = category;
-            changeCategory(category);
-            modal.querySelector('select[name="subcategory"]').value = subcategory;
-            modal.querySelector('textarea[name="description"]').value = description;
-            modal.querySelector('input[name="cc"]').value = cc;
-            modal.querySelector('input[name="year"]').value = year;
-            modal.querySelector('input[name="color"]').value = color;
-            modal.querySelector('select[name="transmission"]').value = transmission;
-            modal.querySelector('input[name="bootCapacity"]').value = bootCapacity;
-            modal.querySelector('select[name="carFuel"]').value = carFuel;
-            modal.querySelector('select[name="features"]').value = features;
-            modal.querySelector('input[name="available"]').checked = (available === 'True');
+        $(document).ready(function () {
 
-            // Display images
-            document.getElementById('image1-preview').src = image1;
-            document.getElementById('image2-preview').src = image2;
-            document.getElementById('image3-preview').src = image3;
-            document.getElementById('image4-preview').src = image4;
-            document.getElementById('image5-preview').src = image5;
-            document.getElementById('bluebookimg-preview').src = bluebookimg;
-            document.getElementById('citizenimg-preview').src = citizenimg;
+            $('.edit-button').on('click', function () {
+                // Extract vehicle data from the data attributes
 
-            var featuresSelect = modal.querySelector('select[name="features"]');
+                var vehicleData = {
+                    id: $(this).data('id'),
+                    brand: $(this).data('brand'),
+                    model: $(this).data('model'),
+                    location: $(this).data('location'),
+                    price: $(this).data('price'),
+                    capacity: $(this).data('capacity'),
+                    category: $(this).data('category'),
+                    subcategory: $(this).data('subcategory'),
+                    cc: $(this).data('cc'),
+                    year: $(this).data('year'),
+                    color: $(this).data('color'),
+                    transmission: $(this).data('transmission'),
+                    bootCapacity: $(this).data('boot'),
+                    carFuel: $(this).data('fuel'),
+                    features: $(this).data('features'),
+                    description: $(this).data('description'),
+                    image1: $(this).data('image1'),
+                    image2: $(this).data('image2'),
+                    image3: $(this).data('image3'),
+                    image4: $(this).data('image4'),
+                    image5: $(this).data('image5'),
+                    bluebookimg: $(this).data('bluebookimg'),
+                    citizenimg: $(this).data('citizenimg'),
+                    available: $(this).data('available')
+                };
 
+                console.log('vehicleData:', vehicleData);
+                console.log('carFuel:', $(this).data('fuel'));
+                console.log('bootCapacity:', $(this).data('boot'));
 
-            // Loop through all options in the select element
-            featuresSelect.querySelectorAll('option').forEach(function (option) {
-                // Check if the feature is in the list of selected features
-                if (features.includes(option.value)) {
-                    // If yes, set the selected attribute
-                    option.selected = true;
-                }
+                // Open the edit modal and populate form fields
+                openEditModal(vehicleData);
+                toggleFieldsBasedOnCategory($(this).data('category'));
             });
-
-
-
-            // Show the modal
-            modal.style.display = 'block';
-        }
-
-        function closeModal() {
-            var modal = document.getElementById('editVehicleModal');
-            modal.style.display = 'none';
-        }
-
-        document.addEventListener('DOMContentLoaded', function () {
-            var span = document.getElementsByClassName('close')[0];
-
-            span.onclick = function () {
-                closeModal();
-            }
-
-            window.onclick = function (event) {
-                var modal = document.getElementById('editVehicleModal');
-                if (event.target == modal) {
-                    closeModal();
-                }
-            }
         });
-    </script>
+        $(document).ready(function () {
+            // Your existing code
 
-    <script>
-        const categorySelect = document.getElementById('categorySelect');
-        const subcategoryColumn = document.getElementById('subcategoryColumn');
-        const subcategorySelect = document.getElementById('subcategorySelect');
-
-        const subcategories = {
-            car: ['Sedan', 'SUV', 'Electric'],
-            bike: ['Sports', 'Naked', 'Offroad'],
-            cycle: ['Mountain Bike', 'BMX', 'Electric'],
-        };
-
-        categorySelect.addEventListener('change', () => {
-            const selectedCategory = categorySelect.value;
-            if (selectedCategory in subcategories) {
-                subcategoryColumn.style.display = 'block';
-                subcategorySelect.innerHTML = '<option value="" disabled selected>Select Subcategory</option>';
-                subcategories[selectedCategory].forEach(subcategory => {
-                    const option = document.createElement('option');
-                    option.value = subcategory.toLowerCase();
-                    option.textContent = subcategory;
-                    subcategorySelect.appendChild(option);
-                });
-            } else {
-                subcategoryColumn.style.display = 'none';
-            }
+            // Event listener for category selection change
+            $('#categorySelect').on('change', function () {
+                var currentSubcategory = $('#subcategorySelect').val();
+                updateSubcategories(currentSubcategory);
+                toggleFieldsBasedOnCategory($('#categorySelect').val)
+            });
         });
 
-        function changeCategory(category) {
-            const categorySelect = document.getElementById('categorySelect');
-            const subcategoryColumn = document.getElementById('subcategoryColumn');
-            const subcategorySelect = document.getElementById('subcategorySelect');
-            const subcategories = {
+        function openEditModal(vehicleData) {
+
+            // Set the modal title
+            $('#editVehicleModal h3').text('Edit ' + vehicleData.brand + ' ' + vehicleData.model);
+
+            // Set the form action URL
+            var editUrl = $('#editForm').data('edit-url').replace('0', vehicleData.id);
+            $('#editForm').attr('action', editUrl);
+            console.log(editUrl)
+
+            // Populate form fields with vehicle data
+
+            $('#id').val(vehicleData.id);
+            $('#brand').val(vehicleData.brand);
+            $('#model').val(vehicleData.model);
+            $('#location').val(vehicleData.location);
+            $('#price').val(vehicleData.price);
+            $('#capacity').val(vehicleData.capacity);
+            $('#categorySelect').val(vehicleData.category);
+            updateSubcategories(vehicleData.subcategory);
+            $('#subcategorySelect').val(vehicleData.subcategory);
+            $('#cc').val(vehicleData.cc);
+            $('#year').val(vehicleData.year);
+            $('#color').val(vehicleData.color);
+            $('#transmission').val(vehicleData.transmission);
+            $('#bootCapacity').val(vehicleData.bootCapacity);
+            $('#carFuel').val(vehicleData.carFuel);
+            var featuresArray = vehicleData.features.split(',');
+            $('#features').val(featuresArray);
+            $('#description').val(vehicleData.description);
+
+            for (var i = 1; i <= 5; i++) {
+                $('#image' + i + '-preview').attr('src', vehicleData['image' + i]);
+            }
+            $('#bluebookimg-preview').attr('src', vehicleData.bluebookimg);
+            $('#citizenimg-preview').attr('src', vehicleData.citizenimg);
+
+            var isAvailable = vehicleData.available;
+            $('input[name="available"]').prop('checked', isAvailable === 'True');
+
+
+            // Open the modal
+            $('#editVehicleModal').show();
+
+
+
+        }
+
+
+
+        function toggleFieldsBasedOnCategory() {
+            var selectedCategory = $('#categorySelect').val();
+
+            // Hide or show fields based on the selected category
+            if (selectedCategory === 'bike') {
+                $('#cc').show()
+                $('#carFuel, #bootCapacity, #features, #transmission').hide();
+                $('.not-applicable-tag').hide();
+                $('.not-applicable-tag:not(:first)').show();
+            } else if (selectedCategory === 'cycle') {
+                // Fields for 'cycle' category
+                $('.not-applicable-tag').show();
+                $('#carFuel, #bootCapacity, #features, #cc, #transmission').hide();
+            } else if (selectedCategory === 'car') {
+                // Fields for other categories
+                $('.not-applicable-tag').hide();
+                $('#carFuel, #bootCapacity, #features, #cc, #transmission').show();
+            }
+        }
+
+        // Function to update subcategory options based on the selected category and current subcategory
+        function updateSubcategories(currentSubcategory) {
+            console.log('updateSubcategories called');
+
+            var selectedCategory = $('#categorySelect').val();
+            console.log('Selected Category:', selectedCategory);
+            console.log('Current Subcategory:', currentSubcategory);
+
+            var subcategorySelect = $('#subcategorySelect');
+
+            // Clear existing options
+            subcategorySelect.empty();
+
+            // Define subcategories for each category
+            var subcategories = {
                 car: ['Sedan', 'SUV', 'Electric'],
                 bike: ['Sports', 'Naked', 'Offroad'],
                 cycle: ['Mountain Bike', 'BMX', 'Electric'],
             };
 
-            const selectedCategory = category;
+            // Populate subcategory options based on the selected category
             if (selectedCategory in subcategories) {
-                subcategoryColumn.style.display = 'block';
-                subcategorySelect.innerHTML =
-                    '<option value="" disabled selected>Select Subcategory</option>';
-                subcategories[selectedCategory].forEach(subcategory => {
-                    const option = document.createElement('option');
-                    option.value = subcategory.toLowerCase();
-                    option.textContent = subcategory;
-                    subcategorySelect.appendChild(option);
+                subcategories[selectedCategory].forEach(function (subcategory) {
+                    var option = $('<option>', {
+                        value: subcategory,
+                        text: subcategory
+                    });
+
+                    // Set selected attribute for the current subcategory
+                    if (subcategory === currentSubcategory) {
+                        option.attr('selected', 'selected');
+                    }
+
+                    subcategorySelect.append(option);
                 });
             } else {
-                subcategoryColumn.style.display = 'none';
+                // If the selected category is not found, add a default option
+                subcategorySelect.append($('<option>', {
+                    value: '',
+                    text: 'Select Subcategory'
+                }));
             }
-
-
         }
+
+
+        // Handle button click to open edit modal
+
+
+        $("#editVehicleModal .close").click(function () {
+            // Reset form fields
+            $("#editForm")[0].reset();
+
+            // Hide any error messages if applicable
+
+            // Hide the modal
+            $("#editVehicleModal").hide();
+        });
+
+
 
 
         function confirmDelete() {
@@ -739,6 +811,77 @@
 
         function redirectToVehicleRegistration() {
             window.location.href = "{% url 'accounts:vehicle_registration' %}";
+        }
+
+        // Function to handle the AJAX submission
+        function submitForm() {
+
+            // Create a FormData object from the form
+            var formData = new FormData(document.getElementById('editForm'));
+
+            // Get the edit URL from the form's data-edit-url attribute
+            var editUrl = $('#editForm').data('edit-url').replace('0', $('#id').val());
+            console.log('url:', editUrl)
+            $('#editForm').attr('action', editUrl);
+
+            // Log form data to the console for debugging
+            for (var pair of formData.entries()) {
+                if (pair[1] instanceof File) {
+                    console.log(pair[0] + ', ' + pair[1].name);
+                } else {
+                    console.log(pair[0] + ', ' + pair[1]);
+                }
+            }
+
+
+            // Use AJAX to submit the form data
+            $.ajax({
+                type: 'POST',
+                url: editUrl,
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    // Handle success
+                    console.log('Form submission successful:', response);
+                    showAlert('Success', 'The vehicle has been updated');
+                },
+                error: function (error) {
+                    // Handle error
+                    console.error('Form submission error:', error);
+                    showAlert('Error', 'Form submission failed.');
+                }
+            });
+        }
+
+
+        function showAlert(title, message) {
+            // Create an overlay
+            var overlay = $('<div class="alert-overlay"></div>');
+
+            // Create a modal-like alert box
+            var alertBox = $('<div class="alert-box"><h2>' + title + '</h2><p>' + message +
+                '</p><button onclick="refreshPage()">OK</button></div>');
+
+            // Append the alert to the overlay
+            overlay.append(alertBox);
+
+            // Append the overlay to the body
+            $('body').append(overlay);
+
+            // Center the alert box
+            var leftPosition = ($(window).width() - alertBox.outerWidth()) / 2;
+            var topPosition = ($(window).height() - alertBox.outerHeight()) / 2;
+            alertBox.css({
+                'left': leftPosition + 'px',
+                'top': topPosition + 'px'
+            });
+        }
+
+
+        function refreshPage() {
+            // Reload the current page
+            location.reload();
         }
     </script>
 </body>

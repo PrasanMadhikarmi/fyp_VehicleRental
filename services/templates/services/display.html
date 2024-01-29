@@ -40,12 +40,19 @@
                     <h3 class="info-text">{{info.brand}} {{info.model}}</h3>
                     <div class="feature-wrapper">
                         <img src="{% static 'services/avatar.png' %}">
+                        {% if info.category == 'cycle'%}
+                        {%else%}
                         <img src="{% static 'services/pump.png' %}">
+                        {%endif%}
                         <img src="{% static 'services/settings.png' %}">
                     </div>
                     <div class="featureNum-wrapper">
                         <h6>{{info.capacity}}</h6>
+                        {% if info.category == 'cycle'%}
+                        {%else%}
+
                         <h6>{{info.carFuel}}</h6>
+                        {%endif%}
                         <h6 class="bring-left">{{info.transmission}}</h6>
                     </div>
                 </div>
