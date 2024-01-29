@@ -105,7 +105,7 @@ def userProfile(request):
 
     if request.user.is_authenticated:
         if request.method == 'POST':
-            user_info_id = request.POST.get('UserId')
+            user_info_id = request.user.id
             address_name = request.POST.get('address')
             street = request.POST.get('street')
             postalcode = request.POST.get('postalcode')

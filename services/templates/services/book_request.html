@@ -29,7 +29,7 @@
                     <th scope="col">PickUp Time</th>
                     <th scope="col">Duration</th>
                     <th scope="col">Status</th>
-                    <th scope="col">Fees</th>
+                    <th scope="col" style="width: 80px;">Fees</th>
                     <th scope="col">Action</th>
                 </tr>
             </thead>
@@ -75,7 +75,7 @@
                             {% endif %}
                         </td>
                        
-                        <td data-label="Fees">
+                        <td data-label="Fees" style="width: 80px;">
                             {% if hist.status == "Paid" %}
                             {% for payment in custPay %}
                                 {% for fees in fees_list %}

@@ -82,7 +82,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'eliterentalsDB',
         'USER': 'root',
-        'PASSWORD': 'root',
+        'PASSWORD': 'Heraldstuds123',
         'HOST': 'localhost',
         'PORT': '3306',
     }
@@ -131,7 +131,6 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # SMTP Config
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
