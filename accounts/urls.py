@@ -20,6 +20,7 @@ urlpatterns = [
          views.edit_vehicle, name='edit_vehicle'),
     path('delete_vehicle/<int:vehicle_id>/',
          views.delete_vehicle, name='delete_vehicle'),
+     path('verify/', views.verification_view, name='verification_view'),
 
 
 ]

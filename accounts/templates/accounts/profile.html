@@ -68,7 +68,99 @@
                 }
             }
         }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fefefe;
+            padding: 30px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 20px;
+            color: #888;
+            cursor: pointer;
+        }
+
+        /* Form Styles */
+        form {
+            display: grid;
+            gap: 20px;
+        }
+
+        label {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .image-preview {
+            margin-top: 10px;
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        .uploadBtn {
+            background-color: #657caa;
+            color: rgb(255, 255, 255);
+            border: 0;
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .submitBtnVerify {
+            background-color: #2470d3;
+            color: white;
+            border: 0;
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        /* Center the form on the screen */
+        @media (max-width: 600px) {
+            .modal-content {
+                width: 90%;
+            }
+        }
+
+        .image-preview {
+            max-width: 200px;
+            /* Adjust the max-width as needed */
+            /* max-height: unset; */
+            /* Leave max-height unset to maintain aspect ratio */
+        }
     </style>
+
 </head>
 
 <body>
@@ -88,11 +180,48 @@
             <div class="container"
                 style="display:flex; flex-direction:column; justify-content: center; align-items: center;">
 
-                <div class="pp default-avatar"></div>
+                <div class="pp default-avatar" style="display: flex; justify-content: center; align-items: center;">
+                    {% if user_verification_status.user_photo %}
+                    <img src="{{ user_verification_status.user_photo.url }}" alt="User Photo"
+                        style="max-width: 100%; max-height: 100%;">
+                    {% endif %}
+                </div>
 
-                <h3 for="Username">{{user.username}}</h3>
+                <h3 for="Username" style="margin-top: 10px;">{{user.username}}</h3>
+                <br>
+                {% if not user_verification_status.is_verified and user_verification_status.reverify %}
+                <button id="verifyButton"
+                    style="width:150px; background-color: #2470d3; color: white; border: 0; padding: 10px; border-radius: 10px;"
+                    type="button" onclick="openModal()">
+                    Verify
+                </button>
+                {% else %}
+                {% if not user_verification_status.is_verified %}
+                {% if user_verification_status.user_photo is not None and not user_verification_status.reverify %}
+                <button id="verifyButton"
+                    style="width:150px; background-color: #d4ac3c; color: white; border: 0; padding: 10px; border-radius: 10px;"
+                    type="button" disabled>
+                    Sent for Verification
+                </button>
+                {% else %}
+                <button id="verifyButton"
+                    style="width:150px; background-color: #2470d3; color: white; border: 0; padding: 10px; border-radius: 10px;"
+                    type="button" onclick="openModal()">
+                    Verify
+                </button>
 
-                <div class="acctab">
+
+                {% endif %}
+                {% else %}
+                <button
+                    style="width:150px; background-color:  #08ca5f; color: white; border: 0; padding: 10px; border-radius: 10px;"
+                    disabled>
+                    Verified
+                </button>
+                {% endif %}
+                {% endif %}
+
+                <div class="acctab" style="margin-top: 20px;">
                     <span class="home-icon"><i class="fa fa-home" aria-hidden="true"></i></span> Accounts
                 </div>
 
@@ -100,7 +229,39 @@
 
             </div>
         </div>
+        <div id="verificationModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()" style="margin-bottom: 10px;">&times;</span>
+                <br>
+                <h2>User Verification</h2>
+                <br>
+                <form id="verificationForm" method="post" enctype="multipart/form-data"
+                    action="{% url 'accounts:verification_view' %}">
+                    {% csrf_token %}
+                    <!-- ... other fields ... -->
 
+                    <label for="user_photo" class="upload-btn-wrapper">
+                        <button type="button" class="uploadBtn"
+                            onclick="document.getElementById('user_photo_input').click()">Upload a file</button>
+                        <input type="file" id="user_photo_input" name="user_photo" accept="image/*"
+                            onchange="displayImage(this, 'imagePreview')" style="display: none;">
+                    </label>
+                    <img id="imagePreview" class="image-preview" src="">
+
+                    <label for="citizen_ship_image" class="upload-btn-wrapper">
+                        <button type="button" class="uploadBtn"
+                            onclick="document.getElementById('citizen_ship_image_input').click()">Upload a
+                            file</button>
+                        <input type="file" id="citizen_ship_image_input" name="citizen_ship_image" accept="image/*"
+                            onchange="displayImage(this, 'imagePreviewCitizenship')" style="display: none;">
+                    </label>
+                    <img id="imagePreviewCitizenship" class="image-preview" src="">
+
+                    <!-- ... submit button ... -->
+                    <button type="submit" class="submitBtnVerify">Submit</button>
+                </form>
+            </div>
+        </div>
         <div class="main-content">
             <div style="width: 100%; text-align: left;">
                 <h1 class="secondaryTitle" style="color: #202020;">Payment Details</h1>
@@ -110,7 +271,7 @@
                     <h4 style="color: #313233;">Awaiting Payment</h4>
                     <div class="card-main">
                         <span style="color: #d5696c;">Nrs {{total_unpaid_to_vendor}}</span>
-                        
+
                     </div>
                 </div>
 
@@ -118,7 +279,7 @@
                     <h4 style="color: #313233;">Paid Amount</h4>
                     <div class="card-main">
                         <span style="color: #86e564;">Nrs {{total_paid_to_vendor}}</span>
-                        
+
                     </div>
                 </div>
             </cards>
@@ -274,7 +435,34 @@
 
 
     <script>
+        function displayImage(input, previewId) {
+            var preview = document.getElementById(previewId);
+            var file = input.files[0];
 
+            if (file) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                preview.src = '#'; // Reset preview if no file is selected
+            }
+        }
+
+        function openModal() {
+            var modal = document.getElementById('verificationModal');
+            if (modal) {
+                modal.style.display = 'block';
+            }
+        }
+
+        function closeModal() {
+            var modal = document.getElementById('verificationModal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        }
     </script>
 </body>
 

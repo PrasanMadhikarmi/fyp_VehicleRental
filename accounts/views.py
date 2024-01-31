@@ -5,7 +5,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.conf import settings
 from django.core.mail import send_mail
-from accounts.models import UserAddress, VehicleRegistration
+from accounts.models import UserAddress, UserVerificationStatus, VehicleRegistration
 from services.models import CustomerPayment
 
 from .forms import CreateUserForm, VehicleRegistrationForm
@@ -98,6 +98,10 @@ def vehicle_registration(request):
 
 def userProfile(request):
     current_user = request.user
+    user_verification_status, created = UserVerificationStatus.objects.get_or_create(
+    user=request.user,
+    defaults={'is_verified': False}
+    )
 
     data = User.objects.get(id=current_user.id)
     if UserAddress.objects.filter(user_info_id=current_user.id).exists():
@@ -138,9 +142,33 @@ def userProfile(request):
             'address': data2,
             'total_unpaid_to_vendor': total_unpaid_to_vendor,
             'total_paid_to_vendor': total_paid_to_vendor,
+            'user_verification_status':user_verification_status
         }
 
         return render(request, "accounts/profile.html", context)
+    
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
+
+@login_required
+def verification_view(request):
+    user = request.user
+    verification_model, created = UserVerificationStatus.objects.get_or_create(user=user)
+    verification_model.reverify = False
+    verification_model.save()
+
+    if request.method == 'POST':
+        handle_uploaded_file(request.FILES.get('user_photo'), verification_model, 'user_photo')
+        handle_uploaded_file(request.FILES.get('citizen_ship_image'), verification_model, 'citizen_ship_image')
+
+    return redirect('accounts:profile')
+
+
+def handle_uploaded_file(file, model_instance, file_field):
+    if file:
+        file_path = default_storage.save(f'accounts/{file_field}/{file.name}', ContentFile(file.read()))
+        setattr(model_instance, file_field, file_path)
+        model_instance.save()
 
 
 def myVehicles(request):

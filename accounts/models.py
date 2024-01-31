@@ -1,6 +1,9 @@
 from django.db import models
 from django.conf import settings
 from multiselectfield import MultiSelectField
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.core.mail import send_mail
 class UserAddress(models.Model):
     country_choices=(
     ("Nepal","Nepal"),
@@ -84,3 +87,33 @@ class VehicleRegistration(models.Model):
 
     def __str__(self):
         return f"{self.brand} {self.model}"
+    
+class UserVerificationStatus(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE) 
+    user_photo = models.ImageField(upload_to='accounts/user_photos', null=True, blank=True)
+    is_verified = models.BooleanField(default=False)
+    citizen_ship_image = models.ImageField(upload_to='accounts/citizenship_images', null=True, blank=True)
+    reverify = models.BooleanField(default=True)
+
+
+@receiver(post_save, sender=UserVerificationStatus)
+def send_verification_email(sender, instance, **kwargs):
+    if instance.is_verified and not instance.reverify:
+        # Send email for verification success
+        subject = 'Verification Success'
+        message = f'Congratulations! You have been successfully verified and can now make bookings.'
+        send_mail(subject, message, 'eliterental.helpline@gmail.com', [instance.user.email])
+
+    elif not instance.is_verified and instance.reverify and instance.user_photo is None:
+        # Send email for re-verification
+        subject = 'Verification Required'
+        message = f'Unfortunately, your verification status has not been done. Please verify to make bookings.'
+        send_mail(subject, message, 'eliterental.helpline@gmail.com', [instance.user.email])
+    elif not instance.is_verified and instance.reverify and instance.user_photo is not None:
+        # Send email for re-verification
+        subject = 'Re-verification Required'
+        message = f'Unfortunately, your verification status has been reset. Please re-verify to continue making bookings.'
+        send_mail(subject, message, 'eliterental.helpline@gmail.com', [instance.user.email])
+
+    def __str__(self):
+        return self.user.username

@@ -2,6 +2,7 @@ import base64
 from django.shortcuts import redirect, render
 
 from accounts.models import VehicleRegistration
+from accounts.models import UserVerificationStatus
 from datetime import datetime
 from services.forms import BookingForm
 from django.utils import timezone
@@ -59,6 +60,11 @@ def vehicleDisplay(request):
 
 def detail(request, car_id):
     car_pk = VehicleRegistration.objects.get(pk=car_id)
+    user_verification_status, created = UserVerificationStatus.objects.get_or_create(
+    user=request.user,
+    defaults={'is_verified': False}
+    )
+
 
     if request.method == 'POST':
         form = BookingForm(request.POST)
@@ -125,6 +131,7 @@ def detail(request, car_id):
     context = {
         'car_pk': car_pk,
         'form': form,
+        'check_verify':user_verification_status
     }
 
     return render(request, 'services/detail.html', context)

@@ -51,8 +51,8 @@
         }
 
         .thumbnail {
-            width: 100px; 
-            height: 100px; 
+            width: 100px;
+            height: 100px;
             object-fit: cover;
             cursor: pointer;
             margin-right: 10px;
@@ -229,11 +229,16 @@
                             <h5 class="form-label">Drop Off Time</h5>
                             <input class="form-entry" type="time" name="dropTime">
                         </div>
-                        {% if user.is_authenticated %}
-
-                        <div class="row btn-c">
-                            <button class="booking-btn book" type="submit" name="BookInstantly">Book Instantly</button>
-                        </div>
+                        {% if user.is_authenticated%}
+                            {% if check_verify.is_verified %}
+                            <div class="row btn-c">
+                                <button class="booking-btn book" type="submit" name="BookInstantly">Book Instantly</button>
+                            </div>
+                            {% else %}
+                            <div class="row btn-c">
+                                <button class="booking-btn book" style="background-color: rgb(173, 72, 72);" name="BookInstantly" type="button" onclick="redirectToProfile()">Click here to verify before booking</button>
+                            </div>
+                            {% endif %}
                         {% else %}
 
                         <div class="row btn-c">
@@ -269,6 +274,12 @@
     {% endif %}
 
     <script>
+        function redirectToProfile() {
+            // Assuming 'profileUrl' is the URL you want to redirect to
+            var profileUrl = "{% url 'accounts:profile' %}";
+            window.location.href = profileUrl;
+        }
+
         function updateMainImage(imageUrl) {
             document.getElementById('mainImage').src = imageUrl;
         }
