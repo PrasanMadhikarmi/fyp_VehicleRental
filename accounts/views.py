@@ -160,6 +160,8 @@ def verification_view(request):
     if request.method == 'POST':
         handle_uploaded_file(request.FILES.get('user_photo'), verification_model, 'user_photo')
         handle_uploaded_file(request.FILES.get('citizen_ship_image'), verification_model, 'citizen_ship_image')
+        send_mail(f'Verification Request from {user.username}', f'{user.username} has requested for their profile verification.\n Please redirect to this URL to verify the vehicle: http://127.0.0.1:8000/admin/accounts/userverificationstatus/{user.id}/change/', 'eliterental.helpline@gmail.com',
+                ['rentalsu.elite@gmail.com'], fail_silently=False)
 
     return redirect('accounts:profile')
 
