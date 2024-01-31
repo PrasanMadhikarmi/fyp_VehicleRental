@@ -239,7 +239,7 @@
                     action="{% url 'accounts:verification_view' %}">
                     {% csrf_token %}
                     <!-- ... other fields ... -->
-
+                    <h5>Profile Picture:</h5>
                     <label for="user_photo" class="upload-btn-wrapper">
                         <button type="button" class="uploadBtn"
                             onclick="document.getElementById('user_photo_input').click()">Upload a file</button>
@@ -247,7 +247,7 @@
                             onchange="displayImage(this, 'imagePreview')" style="display: none;">
                     </label>
                     <img id="imagePreview" class="image-preview" src="">
-
+                    <h5>Citizenship:</h5>
                     <label for="citizen_ship_image" class="upload-btn-wrapper">
                         <button type="button" class="uploadBtn"
                             onclick="document.getElementById('citizen_ship_image_input').click()">Upload a

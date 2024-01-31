@@ -25,10 +25,18 @@ def register(request):
         if request.method == 'POST':
             form = CreateUserForm(request.POST)
             if form.is_valid():
-                form.save()
-                UserVerificationStatus.objects.create(user=request.user)
-                return redirect('accounts:success')
-
+                user = form.save()
+                
+                # Log in the user
+                username = form.cleaned_data.get('username')
+                password = form.cleaned_data.get('password1')
+                user = authenticate(request, username=username, password=password)
+                login(request, user)
+                
+                # Create UserVerificationStatus for the newly registered user
+                UserVerificationStatus.objects.create(user=user)
+                
+                return redirect('home:index')
             else:
                 messages.error(request, "Error")
 
@@ -159,7 +167,7 @@ def verification_view(request):
     if request.method == 'POST':
         handle_uploaded_file(request.FILES.get('user_photo'), verification_model, 'user_photo')
         handle_uploaded_file(request.FILES.get('citizen_ship_image'), verification_model, 'citizen_ship_image')
-        send_mail(f'Verification Request from {user.username}', f'{user.username} has requested for their profile verification.\n Please redirect to this URL to verify the vehicle: http://127.0.0.1:8000/admin/accounts/userverificationstatus/{user.id}/change/', 'eliterental.helpline@gmail.com',
+        send_mail(f'Verification Request from {user.username}', f'{user.username} has requested for their profile verification.\n Please redirect to this URL to verify the profile: http://127.0.0.1:8000/admin/accounts/userverificationstatus/{verification_model.id}/change/', 'eliterental.helpline@gmail.com',
                 ['rentalsu.elite@gmail.com'], fail_silently=False)
 
     return redirect('accounts:profile')
