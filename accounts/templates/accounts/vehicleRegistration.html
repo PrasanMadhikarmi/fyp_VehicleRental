@@ -127,8 +127,8 @@
                 <div class="form-group">
                     <label for="cc">Vehicle CC:</label>
                     <input type="text" id="cc" name="cc" required>
-                    <p class="not-applicable-tag">Not applicable for Cycle category</p>
-                    <p class="cc-tag">Not applicable for Cycle category</p>
+                    <p class="not-applicable-tag">Not applicable for category</p>
+                    <p class="cc-tag">Not applicable for category</p>
                     {{ form.cc.errors }}
                 </div>
 
@@ -152,7 +152,7 @@
                         <option value="Diesel">Diesel</option>
                         <option value="Electric">Electric</option>
                     </select>
-                    <p class="not-applicable-tag">Not applicable for Cycle category</p>
+                    <p class="not-applicable-tag">Not applicable for category</p>
                     {{ form.carFuel.errors }}
                 </div>
                 <div class="form-group">
@@ -174,7 +174,7 @@
                         <option value="Automatic">Automatic</option>
                         <option value="CVT">CVT</option>
                     </select>
-                    <p class="not-applicable-tag">Not applicable for Cycle category</p>
+                    <p class="not-applicable-tag">Not applicable for category</p>
                     {{ form.transmission.errors }}
                 </div>
             </div>
@@ -185,7 +185,7 @@
                     <label for="bootCapacity">Boot Capacity:</label>
                     <input type="text" id="bootCapacity" name="bootCapacity" required>
                     {{ form.bootCapacity.errors }}
-                    <p class="not-applicable-tag">Not applicable for Cycle category</p>
+                    <p class="not-applicable-tag">Not applicable for category</p>
                 </div>
 
                 <div class="form-group">
@@ -201,7 +201,7 @@
                     <option value="{{ choice.0 }}">{{ choice.1 }}</option>
                     {% endfor %}
                 </select>
-                <p class="not-applicable-tag">Not applicable for Cycle category</p>
+                <p class="not-applicable-tag">Not applicable for category</p>
                 {{ form.features.errors }}
             </div>
 
