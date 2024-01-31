@@ -431,15 +431,14 @@
                     <form style="width: 100%;" method="post" action="">
                         {% csrf_token %}
                         <input type="hidden" name="id" value="{{ vehicle.id }}">
-                        <button type="button" class="edit-button" data-id="{{ vehicle.id }}"
-                            data-isVerified="{{ vehicle.isVerified }}" data-brand="{{ vehicle.brand }}"
+                        <button type="button" class="edit-button" data-id="{{ vehicle.id }}" data-brand="{{ vehicle.brand }}"
                             data-model="{{ vehicle.model }}" data-location="{{ vehicle.location }}"
                             data-price="{{ vehicle.price }}" data-capacity="{{ vehicle.capacity }}"
                             data-category="{{ vehicle.category }}" data-subcategory="{{ vehicle.subcategory }}"
                             data-description="{{ vehicle.description }}" data-cc="{{ vehicle.cc }}"
                             data-year="{{ vehicle.year }}" data-color="{{ vehicle.color }}"
                             data-transmission="{{ vehicle.transmission }}"
-                            data-features="{{ vehicle.features|join:',' }}" data-isVerified="{{ vehicle.isVerified }}"
+                            data-features="{{ vehicle.features|join:',' }}" data-verified="{{ vehicle.isVerified }}"
                             data-available="{{ vehicle.available }}" data-image1="{{ vehicle.image1.url }}"
                             data-image2="{{ vehicle.image2.url }}" data-image3="{{ vehicle.image3.url }}"
                             data-image4="{{ vehicle.image4.url }}" data-image5="{{ vehicle.image5.url }}"
@@ -492,7 +491,7 @@
                         </div>
 
                         <input type="hidden" id="id" name="id" value="">
-                        <input type="hidden" name="isVerified" value="{{vehicle.isVerified}}">
+                        <input type="hidden" name="isVerified" value="">
 
 
 
@@ -629,6 +628,7 @@
 
                 var vehicleData = {
                     id: $(this).data('id'),
+                    verified: $(this).data('verified'),
                     brand: $(this).data('brand'),
                     model: $(this).data('model'),
                     location: $(this).data('location'),
@@ -687,6 +687,7 @@
             // Populate form fields with vehicle data
 
             $('#id').val(vehicleData.id);
+            $('#isVerified').val(vehicleData.verified);
             $('#brand').val(vehicleData.brand);
             $('#model').val(vehicleData.model);
             $('#location').val(vehicleData.location);
@@ -833,7 +834,9 @@
                 }
             }
 
+            console.log(formData)
 
+            alert('Please wait while we send a verification request to admin! ')
             // Use AJAX to submit the form data
             $.ajax({
                 type: 'POST',

@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.conf import settings
-
+from django.core.mail import send_mail
 from accounts.models import UserAddress, VehicleRegistration
 from services.models import CustomerPayment
 
@@ -163,11 +163,14 @@ def delete_vehicle(request, vehicle_id):
 def edit_vehicle(request, vehicle_id):
     print(vehicle_id)
     vehicle = VehicleRegistration.objects.get(id=vehicle_id)
+    request_user = vehicle.user
 
     if request.method == 'POST':
         form = VehicleRegistrationForm(request.POST, request.FILES, instance=vehicle)
         form.save()
         print(form.cleaned_data)
+        send_mail('Verification regarding Vehicle Update', f'{request_user.username} has requested for vehicle verification for their edit.\n Please redirect to this URL to verify the vehicle: http://127.0.0.1:8000/admin/accounts/vehicleregistration/{vehicle_id}/change/', 'eliterental.helpline@gmail.com',
+              ['rentalsu.elite@gmail.com'], fail_silently=False)
         return redirect('accounts:myvehicles')
     else:
         form = VehicleRegistrationForm(instance=vehicle)
