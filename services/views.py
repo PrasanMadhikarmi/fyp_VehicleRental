@@ -60,10 +60,7 @@ def vehicleDisplay(request):
 
 def detail(request, car_id):
     car_pk = VehicleRegistration.objects.get(pk=car_id)
-    user_verification_status, created = UserVerificationStatus.objects.get_or_create(
-    user=request.user,
-    defaults={'is_verified': False}
-    )
+    user_verification_status = UserVerificationStatus.objects.get(user=request.user)
 
 
     if request.method == 'POST':

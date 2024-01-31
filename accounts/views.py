@@ -26,7 +26,9 @@ def register(request):
             form = CreateUserForm(request.POST)
             if form.is_valid():
                 form.save()
+                UserVerificationStatus.objects.create(user=request.user)
                 return redirect('accounts:success')
+
             else:
                 messages.error(request, "Error")
 
@@ -98,10 +100,7 @@ def vehicle_registration(request):
 
 def userProfile(request):
     current_user = request.user
-    user_verification_status, created = UserVerificationStatus.objects.get_or_create(
-    user=request.user,
-    defaults={'is_verified': False}
-    )
+    user_verification_status = UserVerificationStatus.objects.get(user=request.user)
 
     data = User.objects.get(id=current_user.id)
     if UserAddress.objects.filter(user_info_id=current_user.id).exists():
@@ -153,7 +152,7 @@ from django.core.files.base import ContentFile
 @login_required
 def verification_view(request):
     user = request.user
-    verification_model, created = UserVerificationStatus.objects.get_or_create(user=user)
+    verification_model = UserVerificationStatus.objects.get(user=user)
     verification_model.reverify = False
     verification_model.save()
 
