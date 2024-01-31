@@ -431,12 +431,12 @@
                     <form style="width: 100%;" method="post" action="">
                         {% csrf_token %}
                         <input type="hidden" name="id" value="{{ vehicle.id }}">
-                        <button type="button" class="edit-button" data-id="{{ vehicle.id }}" data-brand="{{ vehicle.brand }}"
-                            data-model="{{ vehicle.model }}" data-location="{{ vehicle.location }}"
-                            data-price="{{ vehicle.price }}" data-capacity="{{ vehicle.capacity }}"
-                            data-category="{{ vehicle.category }}" data-subcategory="{{ vehicle.subcategory }}"
-                            data-description="{{ vehicle.description }}" data-cc="{{ vehicle.cc }}"
-                            data-year="{{ vehicle.year }}" data-color="{{ vehicle.color }}"
+                        <button type="button" class="edit-button" data-id="{{ vehicle.id }}"
+                            data-brand="{{ vehicle.brand }}" data-model="{{ vehicle.model }}"
+                            data-location="{{ vehicle.location }}" data-price="{{ vehicle.price }}"
+                            data-capacity="{{ vehicle.capacity }}" data-category="{{ vehicle.category }}"
+                            data-subcategory="{{ vehicle.subcategory }}" data-description="{{ vehicle.description }}"
+                            data-cc="{{ vehicle.cc }}" data-year="{{ vehicle.year }}" data-color="{{ vehicle.color }}"
                             data-transmission="{{ vehicle.transmission }}"
                             data-features="{{ vehicle.features|join:',' }}" data-verified="{{ vehicle.isVerified }}"
                             data-available="{{ vehicle.available }}" data-image1="{{ vehicle.image1.url }}"
@@ -628,7 +628,7 @@
 
                 var vehicleData = {
                     id: $(this).data('id'),
-                    verified: $(this).data('verified'),
+                    isVerified: $(this).data('verified'),
                     brand: $(this).data('brand'),
                     model: $(this).data('model'),
                     location: $(this).data('location'),
@@ -655,8 +655,6 @@
                 };
 
                 console.log('vehicleData:', vehicleData);
-                console.log('carFuel:', $(this).data('fuel'));
-                console.log('bootCapacity:', $(this).data('boot'));
 
                 // Open the edit modal and populate form fields
                 openEditModal(vehicleData);
@@ -687,7 +685,10 @@
             // Populate form fields with vehicle data
 
             $('#id').val(vehicleData.id);
-            $('#isVerified').val(vehicleData.verified);
+            const isVerifiedValue = vehicleData.isVerified.toLowerCase();
+
+            // Set the value of the hidden input field
+            $('input[name="isVerified"]').val(isVerifiedValue);
             $('#brand').val(vehicleData.brand);
             $('#model').val(vehicleData.model);
             $('#location').val(vehicleData.location);
@@ -765,8 +766,8 @@
                 cycle: ['Mountain Bike', 'BMX', 'Electric'],
             };
 
-            // Populate subcategory options based on the selected category
             if (selectedCategory in subcategories) {
+                subcategorySelect.empty(); // Clear existing options before adding new ones
                 subcategories[selectedCategory].forEach(function (subcategory) {
                     var option = $('<option>', {
                         value: subcategory,
@@ -775,6 +776,7 @@
 
                     // Set selected attribute for the current subcategory
                     if (subcategory === currentSubcategory) {
+                        console.log('current subcategory');
                         option.attr('selected', 'selected');
                     }
 
@@ -782,6 +784,7 @@
                 });
             } else {
                 // If the selected category is not found, add a default option
+                subcategorySelect.empty(); // Clear existing options
                 subcategorySelect.append($('<option>', {
                     value: '',
                     text: 'Select Subcategory'
@@ -836,7 +839,6 @@
 
             console.log(formData)
 
-            alert('Please wait while we send a verification request to admin! ')
             // Use AJAX to submit the form data
             $.ajax({
                 type: 'POST',

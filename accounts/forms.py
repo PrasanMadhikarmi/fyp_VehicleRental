@@ -24,4 +24,13 @@ class VehicleRegistrationForm(forms.ModelForm):
         model = VehicleRegistration
         fields = ['brand', 'model', 'cc', 'year', 'color', 'transmission', 'bootCapacity', 'carFuel', 'features', 'location', 'price', 'capacity', 'category', 'subcategory', 'description', 'image1', 'image2', 'image3', 'image4', 'image5', 'bluebookimg', 'citizenimg', 'isVerified', 'available']
 
+    def clean(self):
+        cleaned_data = super().clean()
+
+        # Set isVerified and available to False if there are changes
+        if self.has_changed() and ('available' not in self.changed_data or len(self.changed_data) > 1):
+            cleaned_data['isVerified'] = False
+            cleaned_data['available'] = False
+
+        return cleaned_data
 

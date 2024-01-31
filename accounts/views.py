@@ -1,4 +1,6 @@
 # Create your views here.
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
 from django.shortcuts import redirect, render
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
@@ -26,16 +28,17 @@ def register(request):
             form = CreateUserForm(request.POST)
             if form.is_valid():
                 user = form.save()
-                
+
                 # Log in the user
                 username = form.cleaned_data.get('username')
                 password = form.cleaned_data.get('password1')
-                user = authenticate(request, username=username, password=password)
+                user = authenticate(
+                    request, username=username, password=password)
                 login(request, user)
-                
+
                 # Create UserVerificationStatus for the newly registered user
                 UserVerificationStatus.objects.create(user=user)
-                
+
                 return redirect('home:index')
             else:
                 messages.error(request, "Error")
@@ -108,7 +111,8 @@ def vehicle_registration(request):
 
 def userProfile(request):
     current_user = request.user
-    user_verification_status = UserVerificationStatus.objects.get(user=request.user)
+    user_verification_status = UserVerificationStatus.objects.get(
+        user=request.user)
 
     data = User.objects.get(id=current_user.id)
     if UserAddress.objects.filter(user_info_id=current_user.id).exists():
@@ -149,13 +153,11 @@ def userProfile(request):
             'address': data2,
             'total_unpaid_to_vendor': total_unpaid_to_vendor,
             'total_paid_to_vendor': total_paid_to_vendor,
-            'user_verification_status':user_verification_status
+            'user_verification_status': user_verification_status
         }
 
         return render(request, "accounts/profile.html", context)
-    
-from django.core.files.storage import default_storage
-from django.core.files.base import ContentFile
+
 
 @login_required
 def verification_view(request):
@@ -165,17 +167,20 @@ def verification_view(request):
     verification_model.save()
 
     if request.method == 'POST':
-        handle_uploaded_file(request.FILES.get('user_photo'), verification_model, 'user_photo')
-        handle_uploaded_file(request.FILES.get('citizen_ship_image'), verification_model, 'citizen_ship_image')
+        handle_uploaded_file(request.FILES.get(
+            'user_photo'), verification_model, 'user_photo')
+        handle_uploaded_file(request.FILES.get(
+            'citizen_ship_image'), verification_model, 'citizen_ship_image')
         send_mail(f'Verification Request from {user.username}', f'{user.username} has requested for their profile verification.\n Please redirect to this URL to verify the profile: http://127.0.0.1:8000/admin/accounts/userverificationstatus/{verification_model.id}/change/', 'eliterental.helpline@gmail.com',
-                ['rentalsu.elite@gmail.com'], fail_silently=False)
+                  ['rentalsu.elite@gmail.com'], fail_silently=False)
 
     return redirect('accounts:profile')
 
 
 def handle_uploaded_file(file, model_instance, file_field):
     if file:
-        file_path = default_storage.save(f'accounts/{file_field}/{file.name}', ContentFile(file.read()))
+        file_path = default_storage.save(
+            f'accounts/{file_field}/{file.name}', ContentFile(file.read()))
         setattr(model_instance, file_field, file_path)
         model_instance.save()
 
@@ -203,11 +208,25 @@ def edit_vehicle(request, vehicle_id):
     request_user = vehicle.user
 
     if request.method == 'POST':
-        form = VehicleRegistrationForm(request.POST, request.FILES, instance=vehicle)
-        form.save()
-        print(form.cleaned_data)
-        send_mail('Verification regarding Vehicle Update', f'{request_user.username} has requested for vehicle verification for their edit.\n Please redirect to this URL to verify the vehicle: http://127.0.0.1:8000/admin/accounts/vehicleregistration/{vehicle_id}/change/', 'eliterental.helpline@gmail.com',
-              ['rentalsu.elite@gmail.com'], fail_silently=False)
+        form = VehicleRegistrationForm(
+            request.POST, request.FILES, instance=vehicle)
+
+        # Check if there are changes in fields other than 'available'
+        if form.has_changed() and ('available' not in form.changed_data or len(form.changed_data) > 1):
+            form.save()
+            # vehicle.isVerified = False
+            # vehicle.available = False
+            # vehicle.save()
+
+            # Send email only if there are changes other than 'available'
+            print(form.cleaned_data)
+            send_mail('Verification regarding Vehicle Update', f'{request_user.username} has requested for vehicle verification for their edit.\n Please redirect to this URL to verify the vehicle: http://127.0.0.1:8000/admin/accounts/vehicleregistration/{vehicle_id}/change/', 'eliterental.helpline@gmail.com',
+                      ['rentalsu.elite@gmail.com'], fail_silently=False)
+
+        else:
+            # No changes or only 'available' field changed, no need to send email
+            form.save()
+
         return redirect('accounts:myvehicles')
     else:
         form = VehicleRegistrationForm(instance=vehicle)

@@ -60,8 +60,13 @@ def vehicleDisplay(request):
 
 def detail(request, car_id):
     car_pk = VehicleRegistration.objects.get(pk=car_id)
-    user_verification_status = UserVerificationStatus.objects.get(user=request.user)
-
+    if request.user.is_authenticated:
+        # User is logged in, fetch UserVerificationStatus
+        user_verification_status = UserVerificationStatus.objects.get(
+            user=request.user)
+    else:
+        # User is not logged in, set a default value
+        user_verification_status = {}
 
     if request.method == 'POST':
         form = BookingForm(request.POST)
@@ -77,11 +82,15 @@ def detail(request, car_id):
                 request, 'Booking successful. We will send you a confirmation email.')
             booking_instance = form.save()  # Assuming you're using a ModelForm
 
-            print(f"Pick Date: {booking_instance.pickDate}, Pick Time: {booking_instance.pickTime}")
-            print(f"Drop Date: {booking_instance.dropDate}, Drop Time: {booking_instance.dropTime}")
+            print(
+                f"Pick Date: {booking_instance.pickDate}, Pick Time: {booking_instance.pickTime}")
+            print(
+                f"Drop Date: {booking_instance.dropDate}, Drop Time: {booking_instance.dropTime}")
 
-            pick_datetime = datetime.combine(booking_instance.pickDate, booking_instance.pickTime)
-            drop_datetime = datetime.combine(booking_instance.dropDate, booking_instance.dropTime)
+            pick_datetime = datetime.combine(
+                booking_instance.pickDate, booking_instance.pickTime)
+            drop_datetime = datetime.combine(
+                booking_instance.dropDate, booking_instance.dropTime)
 
             print(pick_datetime)
             print(drop_datetime)
@@ -93,7 +102,8 @@ def detail(request, car_id):
 
             # Calculate total price based on the price per day
             price_per_day = booking_instance.vehicle_id.price
-            total_price = (duration_hours // 24) * price_per_day  # Assuming a day has 24 hours
+            total_price = (duration_hours // 24) * \
+                price_per_day  # Assuming a day has 24 hours
 
             # Save the duration and total price to the booking instance
             booking_instance.booking_duration = duration_hours
@@ -109,13 +119,13 @@ def detail(request, car_id):
             booking_id = booking_instance.id
 
             send_confirmation_email(
-                email = booking_instance.user_id.email,
+                email=booking_instance.user_id.email,
                 booking_id=booking_id,
                 subject='Booking Confirmation',
                 booking_details=booking_instance  # Pass the actual booking instance
             )
             send_confirmation_email(
-                email = booking_instance.vehicle_id.user.email,
+                email=booking_instance.vehicle_id.user.email,
                 booking_id=booking_id,
                 subject='New Booking Received',
                 booking_details=booking_instance  # Pass the actual booking instance
@@ -128,17 +138,17 @@ def detail(request, car_id):
     context = {
         'car_pk': car_pk,
         'form': form,
-        'check_verify':user_verification_status
+        'check_verify': user_verification_status
     }
 
     return render(request, 'services/detail.html', context)
 
 
-def send_confirmation_email(email,booking_id, subject, booking_details):
+def send_confirmation_email(email, booking_id, subject, booking_details):
     to_email = email  # Assuming your form has an 'email' field
 
     if subject == 'Booking Confirmation':
-    # Modify the email message to include booking details and ID
+        # Modify the email message to include booking details and ID
         email_message = f'Thank you for booking! Please make the payment through the my booking page.\n\nBooking ID: {booking_id}\nName: {booking_details.name}\nEmail: {booking_details.email}\nPhone: {booking_details.number}\nPickup Date: {booking_details.pickDate}\nPickup Time: {booking_details.pickTime}\nDrop Off Date: {booking_details.dropDate}\nDrop Off Time: {booking_details.dropTime}'
     elif subject == 'New Booking Received':
         email_message = f'You have received a new booking! Please accept and request the payment through the my booking request page.\n\nBooking ID: {booking_id}\nName: {booking_details.name}\nEmail: {booking_details.email}\nPhone: {booking_details.number}\nPickup Date: {booking_details.pickDate}\nPickup Time: {booking_details.pickTime}\nDrop Off Date: {booking_details.dropDate}\nDrop Off Time: {booking_details.dropTime}'
@@ -161,7 +171,8 @@ def booking(request):
 
 def booking_request(request):
     history = bookInstantly.objects.filter(vehicle_id__user=request.user)
-    custPay = CustomerPayment.objects.filter(booking_id__vehicle_id__user=request.user)
+    custPay = CustomerPayment.objects.filter(
+        booking_id__vehicle_id__user=request.user)
 
     # Calculate the fees for each payment in the view
     fees_list = []
@@ -175,7 +186,6 @@ def booking_request(request):
             'fees': fees
         })
         total_fees += fees
-    
 
     context = {
         'history': history,
@@ -185,7 +195,6 @@ def booking_request(request):
         'total_pay': total_pay
     }
     return render(request, 'services/book_request.html', context)
-
 
 
 def cancel_booking_view(request, booking_id):
@@ -207,7 +216,7 @@ def cancel_booking_by_vendor(request, booking_id):
     booking.status = "Cancelled"
     booking.save()
 
-    vehicleInstance = VehicleRegistration.objects.get(id = booking.vehicle_id.id)
+    vehicleInstance = VehicleRegistration.objects.get(id=booking.vehicle_id.id)
     vehicleInstance.available = True
     vehicleInstance.save()
 
@@ -226,8 +235,7 @@ def send_cancel_email(toemail, booking_id, subject, booking_details):
               [email], fail_silently=False)
 
 
-
-def payment_success(request,booking_id):
+def payment_success(request, booking_id):
 
     bookInstance = bookInstantly.objects.get(id=booking_id)
     bookInstance.status = "Paid"
@@ -258,7 +266,7 @@ def payment_success(request,booking_id):
     payment_instance.save()
 
     send_confirmation_email(
-        email = bookInstance.vehicle_id.user.email,
+        email=bookInstance.vehicle_id.user.email,
         booking_id=booking_id,
         subject=f'Payment received',
         booking_details=bookInstance  # Pass the actual booking instance
@@ -266,16 +274,20 @@ def payment_success(request,booking_id):
 
     return render(request, 'services/payment_success.htm')
 
+
 def payment_failed(request):
     return render(request, 'services/failed_payment.htm')
 
 # accepts
+
+
 def request_payment(request, booking_id):
     bookInstance = bookInstantly.objects.get(id=booking_id)
     bookInstance.status = "Accepted"
     bookInstance.save()
 
-    vehicleInstance = VehicleRegistration.objects.get(id = bookInstance.vehicle_id.id)
+    vehicleInstance = VehicleRegistration.objects.get(
+        id=bookInstance.vehicle_id.id)
     vehicleInstance.available = False
     vehicleInstance.save()
 
