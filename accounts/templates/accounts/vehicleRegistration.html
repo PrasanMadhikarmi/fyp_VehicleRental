@@ -15,7 +15,54 @@
         .cc-tag {
             display: none;
         }
+        
     </style>
+        <style>
+            .alert-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 1000;
+                /* Set a high z-index to ensure it's on top */
+            }
+    
+            .alert-box {
+                background: #fff;
+                border-radius: 8px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+                max-width: 400px;
+                padding: 20px;
+                text-align: center;
+            }
+    
+            .alert-box h2 {
+                color: #333;
+            }
+    
+            .alert-box p {
+                color: #555;
+                margin-bottom: 15px;
+            }
+    
+            .alert-box button {
+                background-color: #3498db;
+                color: #fff;
+                border: none;
+                border-radius: 5px;
+                padding: 10px 20px;
+                cursor: pointer;
+            }
+    
+            .alert-box button:hover {
+                background-color: #2980b9;
+            }
+        </style>
 </head>
 
 <body>
@@ -23,7 +70,7 @@
     <div class="container">
         <h1>Vehicle Registration</h1>
         <hr>
-        <form id="vehicleForm" method="post" enctype="multipart/form-data">
+        <form id="vehicleForm" method="post" enctype="multipart/form-data" data-edit-url="{% url 'accounts:vehicle_registration' %}">
             {% csrf_token %}
             {% if form.non_field_errors %}
             <div class="alert alert-danger">
@@ -203,7 +250,8 @@
                 </div>
             </div>
             <div class="form-group">
-                <button type="submit">Submit</button>
+                <button onclick="submitFormViaAjax()">Submit</button>
+
             </div>
         </form>
     </div>
@@ -256,7 +304,81 @@
             }
         });
     </script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    // Your existing code...
+
+    function submitFormViaAjax() {
+        const form = document.getElementById('vehicleForm');
+        const formData = new FormData(form);
+        const editUrl = form.getAttribute('data-edit-url'); // Get the URL from data-edit-url attribute
+
+        var formvalue = new FormData(document.getElementById('vehicleForm'));
+        // Log form data to the console for debugging
+        for (var pair of formvalue.entries()) {
+                if (pair[1] instanceof File) {
+                    console.log(pair[0] + ', ' + pair[1].name);
+                } else {
+                    console.log(pair[0] + ', ' + pair[1]);
+                }
+            }
+
+        $.ajax({
+            type: 'POST',
+            url: editUrl,  // Use the retrieved URL for form submission
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                // Handle success response here
+                console.log('Form submission successful:', response);
+                showAlert('Success', 'The vehicle has been sent for verification.');
+            },
+            error: function (error) {
+                    // Handle error
+                    console.error('Form submission error:', error);
+                    showAlert('Error', 'Form submission failed.');
+                }
+        });
+    }
+
+    // Attach the new function to form submission
+    $('#vehicleForm').submit(function(e) {
+        e.preventDefault();  // Prevent the default form submission
+        submitFormViaAjax(); // Call the AJAX submission function
+    });
+
+    function showAlert(title, message) {
+            // Create an overlay
+            var overlay = $('<div class="alert-overlay"></div>');
+
+            // Create a modal-like alert box
+            var alertBox = $('<div class="alert-box"><h2>' + title + '</h2><p>' + message +
+                '</p><button onclick="refreshPage()">OK</button></div>');
+
+            // Append the alert to the overlay
+            overlay.append(alertBox);
+
+            // Append the overlay to the body
+            $('body').append(overlay);
+
+            // Center the alert box
+            var leftPosition = ($(window).width() - alertBox.outerWidth()) / 2;
+            var topPosition = ($(window).height() - alertBox.outerHeight()) / 2;
+            alertBox.css({
+                'left': leftPosition + 'px',
+                'top': topPosition + 'px'
+            });
+        }
+
+
+        function refreshPage() {
+            // Reload the current page
+            location.reload();
+        }
+</script>
 </body>
 
 </html>

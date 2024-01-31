@@ -78,12 +78,14 @@ def logoutUser(request):
 @login_required
 def vehicle_registration(request):
     if request.method == 'POST':
+        print('submission')
         form = VehicleRegistrationForm(request.POST, request.FILES)
 
         # Save the vehicle registration data
         vehicle_registration = form.save(commit=False)
         vehicle_registration.user = request.user
         vehicle_registration.save()
+        print('submitted')
 
         # Redirect to a success page or do something else upon successful registration.
         return redirect('accounts:successreg')
