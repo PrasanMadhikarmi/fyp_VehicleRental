@@ -41,7 +41,10 @@ INSTALLED_APPS = [
     'home.apps.HomeConfig',
     'accounts.apps.AccountsConfig',
     'services.apps.ServicesConfig',
-    'multiselectfield'
+    'multiselectfield',
+    'about.apps.AboutConfig',
+    'contact.apps.ContactConfig',
+    'faq.apps.FaqConfig',
 ]
 LANGUAGES = [
     ('en', ('English')),

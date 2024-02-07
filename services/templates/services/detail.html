@@ -59,6 +59,18 @@
             border: 5px solid rgb(255, 255, 255);
             box-shadow: 5px 3px black;
         }
+
+        .star-rating {
+            font-size: 24px;
+        }
+
+        .star {
+            cursor: pointer;
+        }
+
+        .selected {
+            color: gold;
+        }
     </style>
 </head>
 
@@ -127,55 +139,103 @@
             <h5 class="sub-title">Reviews</h5>
 
             <!-- need loop -->
-            {% for uR in review_car %}
-
+            {% for uR in reviews %}
             <div class="review">
                 <div class="picture-panel">
                     <div class="profile-pic">
-                        <img src="{% static 'services/rv-img.png' %}" alt="">
+                        {% for profile in user_profiles_with_reviews %}
+                        {% if profile.user_id == uR.user_id_id %}
+            
+                        <img src="{{ profile.user_photo.url }}" alt="{{ profile.user_id }}">
+                        {% endif %}
+                        {% endfor %}
                     </div>
                 </div>
                 <div class="text-panel">
                     <div class="name-dt">
-                        <h4 class="tp-n">{{uR.name}}</h4>
-                        <h5 class="tp-dt">{{uR.timeStamp}}</h5>
+                        <h4 class="tp-n">{{ uR.name }}</h4>
+                        <h5 class="tp-dt">{{ uR.timeStamp }}</h5>
                     </div>
                     <div class="rv">
-                        <p>{{uR.message}}</p>
+                        <p>{{ uR.message }}</p>
                     </div>
+                    <h5 class="tp-dt">Ratings:{{ uR.rating }} star</h5>
                 </div>
             </div>
             <hr class="dash-hr">
             {% endfor %}
+
             <!-- end loop -->
 
-
+            {% if user_has_used_the_vehicle %}
             <h5 class="sub-title">Write a Review</h5>
             <div class="reviewForm-container">
-
                 <h5 class="form-label forRV">Message</h5>
-                <form method="POST" action="/services/detail/{{car_pk.id}}">
+                <form method="POST" action="/services/submit-review/{{ car_pk.id }}">
                     {% csrf_token %}
                     <textarea class="form-entry msg" type="message" name="message"></textarea>
+
                     <div class="divided">
                         <div class="i-f1">
                             <h5 class="form-label forRV">Full Name</h5>
-                            <input class="review-entry" type="text" name="fullname">
+                            <input class="review-entry" type="text" name="name">
                         </div>
                         <div class="i-f2">
                             <h5 class="form-label forRV">Email Address</h5>
                             <input class="review-entry" type="email" name="email">
                         </div>
+
+                        <!-- Rating field -->
+                        <div class="i-f3">
+                            <h5 class="form-label forRV">Rating</h5>
+                            <div class="star-rating" data-rating="0">
+                                <span class="star" data-value="1">&#9733;</span>
+                                <span class="star" data-value="2">&#9733;</span>
+                                <span class="star" data-value="3">&#9733;</span>
+                                <span class="star" data-value="4">&#9733;</span>
+                                <span class="star" data-value="5">&#9733;</span>
+                            </div>
+                            <input type="hidden" name="rating" id="rating" value="0">
+                        </div>
+
                         <div class="row btn-p">
-                            <button class="booking-btn post" name="SendReview"> Post Review</button>
+
+                            <button class="booking-btn post" type="submit" name="SendReview">Post Review</button>
                         </div>
                     </div>
                 </form>
-
-
-
             </div>
+            {% endif %}
+
+
+
         </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const stars = document.querySelectorAll('.star');
+                const ratingInput = document.getElementById('rating');
+
+                stars.forEach(star => {
+                    star.addEventListener('click', function () {
+                        const value = parseInt(this.getAttribute('data-value'));
+                        ratingInput.value = value;
+                        highlightStars(value);
+                    });
+                });
+
+                function highlightStars(value) {
+                    stars.forEach(star => {
+                        const starValue = parseInt(star.getAttribute('data-value'));
+                        if (starValue <= value) {
+                            star.classList.add('selected');
+                        } else {
+                            star.classList.remove('selected');
+                        }
+                    });
+                }
+            });
+        </script>
 
 
 
@@ -230,15 +290,17 @@
                             <input class="form-entry" type="time" name="dropTime">
                         </div>
                         {% if user.is_authenticated%}
-                            {% if check_verify.is_verified %}
-                            <div class="row btn-c">
-                                <button class="booking-btn book" type="submit" name="BookInstantly">Book Instantly</button>
-                            </div>
-                            {% else %}
-                            <div class="row btn-c">
-                                <button class="booking-btn book" style="background-color: rgb(173, 72, 72);" name="BookInstantly" type="button" onclick="redirectToProfile()">Click here to verify before booking</button>
-                            </div>
-                            {% endif %}
+                        {% if check_verify.is_verified %}
+                        <div class="row btn-c">
+                            <button class="booking-btn book" type="submit" name="BookInstantly">Book Instantly</button>
+                        </div>
+                        {% else %}
+                        <div class="row btn-c">
+                            <button class="booking-btn book" style="background-color: rgb(173, 72, 72);"
+                                name="BookInstantly" type="button" onclick="redirectToProfile()">Click here to verify
+                                before booking</button>
+                        </div>
+                        {% endif %}
                         {% else %}
 
                         <div class="row btn-c">

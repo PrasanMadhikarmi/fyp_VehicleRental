@@ -159,6 +159,37 @@
             /* max-height: unset; */
             /* Leave max-height unset to maintain aspect ratio */
         }
+
+
+        /* CSS */
+        .button-88 {
+            display: flex;
+            align-items: center;
+            font-family: inherit;
+            font-weight: 500;
+            font-size: 14px;
+            padding: 0 20px 0 20px;
+            height: 40px;
+            color: white;
+            background: #ad5389;
+            background: linear-gradient(0deg, rgb(38, 175, 77) 0%, rgba(102, 247, 113, 1) 100%);
+            border: none;
+
+            letter-spacing: 0.05em;
+            border-radius: 20em;
+            cursor: pointer;
+            user-select: none;
+
+        }
+
+
+
+
+
+        .button-88:disabled {
+            background: linear-gradient(0deg, rgb(77, 77, 77) 0%, rgb(165, 170, 166) 100%);
+
+        }
     </style>
 
 </head>
@@ -263,8 +294,18 @@
             </div>
         </div>
         <div class="main-content">
-            <div style="width: 100%; text-align: left;">
+            <div style="width: 100%; display: flex; justify-content: space-between;">
                 <h1 class="secondaryTitle" style="color: #202020;">Payment Details</h1>
+                {% if total_unpaid_to_vendor == 0 %}
+                <button class="button-88" disabled>Request Payment</button>
+                {%else%}
+                {% if has_already_requested %}
+                <button id="" type="button" class="button-88" disabled>Request Already Made</button>
+                {%else%}
+                <button id="requestPaymentBtn" type="button" class="button-88">Request Payment</button>
+                {%endif%}
+
+                {% endif%}
             </div>
             <cards>
                 <div class="card" style="background-color: #f9d9df;">
@@ -431,6 +472,45 @@
         </div>
 
     </footer>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("requestPaymentBtn").addEventListener("click", function() {
+                // Disable the button to prevent multiple clicks
+                this.disabled = true;
+
+                
+                // AJAX request
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "{% url 'accounts:request_payment_view' %}", true);
+                xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+                xhr.onload = function() {
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                        // Success
+                        var response = JSON.parse(xhr.responseText);
+                        console.log(response);
+                        // Refresh the page after successful request
+                        location.reload();
+                    } else {
+                        // Error
+                        console.error(xhr.statusText);
+                        // Re-enable the button in case of error
+                        document.getElementById("requestPaymentBtn").disabled = false;
+                    }
+                };
+                xhr.onerror = function() {
+                    console.error("Request failed");
+                    // Re-enable the button in case of error
+                    document.getElementById("requestPaymentBtn").disabled = false;
+                };
+                xhr.send(JSON.stringify({}));
+            });
+        });
+    </script>
+    
 
 
 

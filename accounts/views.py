@@ -8,7 +8,7 @@ from django.contrib import messages
 from django.conf import settings
 from django.core.mail import send_mail
 from accounts.models import UserAddress, UserVerificationStatus, VehicleRegistration
-from services.models import CustomerPayment
+from services.models import CustomerPayment, PaymentRequest
 
 from .forms import CreateUserForm, VehicleRegistrationForm
 from django.contrib.auth import authenticate, login, logout
@@ -108,11 +108,14 @@ def vehicle_registration(request):
 
     return render(request, 'accounts/vehicleRegistration.html', {'form': form})
 
-
+@login_required
 def userProfile(request):
     current_user = request.user
     user_verification_status = UserVerificationStatus.objects.get(
         user=request.user)
+    
+    has_already_requested = PaymentRequest.objects.filter(customer_payments__booking_id__vehicle_id__user_id=request.user, request_status = 'Pending').exists()
+
 
     data = User.objects.get(id=current_user.id)
     if UserAddress.objects.filter(user_info_id=current_user.id).exists():
@@ -153,7 +156,8 @@ def userProfile(request):
             'address': data2,
             'total_unpaid_to_vendor': total_unpaid_to_vendor,
             'total_paid_to_vendor': total_paid_to_vendor,
-            'user_verification_status': user_verification_status
+            'user_verification_status': user_verification_status,
+            'has_already_requested':has_already_requested
         }
 
         return render(request, "accounts/profile.html", context)
@@ -232,3 +236,42 @@ def edit_vehicle(request, vehicle_id):
         form = VehicleRegistrationForm(instance=vehicle)
 
     return redirect('accounts:myvehicles')
+
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+from django.db.models import Sum
+
+@csrf_exempt
+def request_payment_view(request):
+    if request.method == 'POST':
+       
+        # Fetch all records from CustomerPayment for the user where vendor_paid_status is false
+        customer_payments = CustomerPayment.objects.filter(
+            booking_id__vehicle_id__user_id=request.user,
+            vendor_paid_status=False
+            )
+        print(customer_payments)
+        
+        # Create a PaymentRequest object for each CustomerPayment record
+        for payment in customer_payments:
+            # Assuming you want to use the same requested_amount for all payments
+            total_requested_amount = customer_payments.aggregate(total_vendor_payment=Sum('vendor_payment'))['total_vendor_payment']
+
+            
+            # Create a new PaymentRequest object
+            payment_request = PaymentRequest.objects.create(
+                requested_amount=total_requested_amount,
+                request_status='Pending'
+            )
+            # Add the CustomerPayment record to the PaymentRequest
+            payment_request.customer_payments.add(payment)
+            
+
+        # Return a success message
+        data = {
+            'message': 'Payment requests created successfully.'
+        }
+        return JsonResponse(data)
+    else:
+        # If the request method is not POST, return a 405 Method Not Allowed response
+        return JsonResponse({'error': 'Method not allowed'}, status=405)

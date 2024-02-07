@@ -21,6 +21,7 @@ urlpatterns = [
     path('delete_vehicle/<int:vehicle_id>/',
          views.delete_vehicle, name='delete_vehicle'),
      path('verify/', views.verification_view, name='verification_view'),
+     path('request_payment/', views.request_payment_view, name='request_payment_view'),
 
 
 ]

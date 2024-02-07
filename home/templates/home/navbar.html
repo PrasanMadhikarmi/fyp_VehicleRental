@@ -329,9 +329,9 @@
         <ul class="nav-links">
             <li><a class='href' href="{% url 'home:index' %}">Home</a></li>
             <li><a class='href' href="{% url 'services:index' %}">Services</a></li>
-            <li><a class='href' href="">About</a></li>
-            <li><a class='href' href="">Contact</a></li>
-            <li><a class='href' href="">FAQ</a></li>
+            <li><a class='href' href="{% url 'about:about_index' %}">About</a></li>
+            <li><a class='href' href="{% url 'contact:contact_index' %}">Contact</a></li>
+            <li><a class='href' href="{% url 'faq:faq_index' %}">FAQ</a></li>
 
             {% if user.is_authenticated %}
             <li><a class=""

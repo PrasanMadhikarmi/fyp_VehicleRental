@@ -10,6 +10,7 @@ urlpatterns = [
     path("vehicle_display", views.vehicleDisplay, name="vehicle_display"),
     path('detail/<int:car_id>', views.detail, name="detail"),
     path('booking', views.booking, name="booking"),
+    path('submit-review/<int:vehicle_id>', views.submit_review, name="submitReview"),
     path('booking-request', views.booking_request, name="booking_request"), 
     path('request_payment/<int:booking_id>/', views.request_payment, name="request_payment"), 
     path('payment_failed', views.payment_failed, name="payment_failed"),

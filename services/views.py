@@ -7,7 +7,7 @@ from datetime import datetime
 from services.forms import BookingForm
 from django.utils import timezone
 
-from services.models import CustomerPayment, bookInstantly
+from services.models import CustomerPayment, bookInstantly, vehicleReview
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404
@@ -61,9 +61,18 @@ def vehicleDisplay(request):
 def detail(request, car_id):
     car_pk = VehicleRegistration.objects.get(pk=car_id)
     if request.user.is_authenticated:
+        user_has_used_the_vehicle = bookInstantly.objects.filter(vehicle_id=car_pk, user_id=request.user).exists()
         # User is logged in, fetch UserVerificationStatus
         user_verification_status = UserVerificationStatus.objects.get(
             user=request.user)
+        
+        reviews = vehicleReview.objects.filter(vehicle_id=car_pk)
+        user_ids_with_reviews = reviews.values_list('user_id', flat=True)
+        user_profiles_with_reviews = UserVerificationStatus.objects.filter(user__in=user_ids_with_reviews)
+
+
+
+
     else:
         # User is not logged in, set a default value
         user_verification_status = {}
@@ -138,7 +147,10 @@ def detail(request, car_id):
     context = {
         'car_pk': car_pk,
         'form': form,
-        'check_verify': user_verification_status
+        'check_verify': user_verification_status,
+        'user_has_used_the_vehicle':user_has_used_the_vehicle,
+        'reviews':reviews,
+        'user_profiles_with_reviews':user_profiles_with_reviews
     }
 
     return render(request, 'services/detail.html', context)
@@ -222,7 +234,7 @@ def cancel_booking_by_vendor(request, booking_id):
 
     send_cancel_email(booking.email, booking.id,
                       f'Booking Cancelled by Vendor for booking Id {booking_id}', booking)
-    return redirect('services:booking')
+    return redirect('services:booking_request')
 
 
 # Assuming your form has an 'email' field
@@ -245,7 +257,7 @@ def payment_success(request, booking_id):
         commission_percentage = 10
     elif bookInstance.vehicle_id.category == 'bike':
         commission_percentage = 8
-    elif bookInstance.vehicle_id.category == 'bicycle':
+    elif bookInstance.vehicle_id.category == 'cycle':
         commission_percentage = 5
     else:
         commission_percentage = 0
@@ -305,3 +317,29 @@ def send_payment_request_email(email, booking_id, subject, booking_details):
 
     send_mail(subject, email_message, 'eliterental.helpline@gmail.com',
               [to_email], fail_silently=False)
+
+
+
+
+def submit_review(request, vehicle_id):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        message = request.POST.get('message')
+        rating = request.POST.get('rating')
+
+        vehicle_instance = get_object_or_404(
+                VehicleRegistration, pk=vehicle_id)
+        # Create and save the review
+        review = vehicleReview.objects.create(
+            user_id= request.user,
+            name=name,
+            email=email,
+            message=message,
+            rating=rating,
+            vehicle_id=vehicle_instance
+        )
+        review.save()
+
+        # Redirect to a thank you page or the vehicle details page
+        return redirect('services:detail', car_id=vehicle_id)  # Corrected the parameter name to 'vehicle_id'
