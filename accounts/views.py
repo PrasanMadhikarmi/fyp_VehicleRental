@@ -265,7 +265,9 @@ def request_payment_view(request):
             )
             # Add the CustomerPayment record to the PaymentRequest
             payment_request.customer_payments.add(payment)
-            
+
+        send_mail(f'{request.user.username} has requested for awaiting payment', 'eliterental.helpline@gmail.com',
+            ['rentalsu.elite@gmail.com'], fail_silently=False)
 
         # Return a success message
         data = {
