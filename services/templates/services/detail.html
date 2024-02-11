@@ -334,16 +334,16 @@
 
         </div>
     </div>
-
-    {% if messages %}
+    {% for message in messages %}
+    {% if message.tags == 'success' %}
     <div class="popup">
         <div class="popup-content">
             <div style="border-radius:200px; height:200px; width:200px; background: #F8FAF5; margin:0 auto;">
                 <i class="checkmark">✓</i>
             </div>
-            <h1 style="margin-bottom: 40px; margin-top: 20px;">{% for message in messages %}
+            <h1 style="margin-bottom: 40px; margin-top: 20px;">
                 <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
-                    {% endfor %}</h1>
+                    </h1>
            
             <!-- Add a link to a page -->
             <p><a href="{% url 'services:booking' %}" style="padding: 15px; background-color: rgb(30, 83, 145); color: white; border-radius: 5px; margin-top: 20px; text-decoration: none;">Please go to my booking page for payment.</a></p>
@@ -351,6 +351,7 @@
         </div>
     </div>
     {% endif %}
+    {% endfor %}
 
     <script>
         function redirectToProfile() {
