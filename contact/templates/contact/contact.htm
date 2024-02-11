@@ -1,56 +1,61 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact</title>
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="{%static 'contact/contact.css'%}">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Contact</title>
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="{%static 'contact/contact.css'%}">
 </head>
+
 <body>
-    {% include 'home/navbar.html' %}
+	{% include 'home/navbar.html' %}
 
-    <section id="showcase">
-        <div class="container">
-        </div>
-    </section>
+	<section id="showcase">
+		<div class="container">
+		</div>
+	</section>
 
-    <section id="contactbox">
-        <div class="container">
-            <h1>Contact Us</h1>
-            <hr class="sep">
-            <div class="img-container">
-                    <img src="{% static 'contact/fb.png' %}">
+	<section id="contactbox">
+		<div class="container">
+			<h1>Contact Us</h1>
+			<hr class="sep">
+			<div class="img-container">
+				<img src="{% static 'contact/fb.png' %}">
 
-                    <img src="{% static 'contact/instagram.png' %}">
+				<img src="{% static 'contact/instagram.png' %}">
 
-                    <img src="{% static 'contact/twitter.png' %}">
-            </div>
-            <div class="entryfield">
-                <form method="POST">
-                    {% csrf_token %}
-                Your Name*
-                    <input name="name" type="text" class="input-field">    
+				<img src="{% static 'contact/twitter.png' %}">
+			</div>
+			<div class="entryfield">
+				<form method="POST" style="max-width: 600px; margin: 0 auto;">
+					{% csrf_token %}
+					<div style="display: flex; flex-direction: column; gap: 10px;">
+						<label for="name">Your Name*</label>
+						<input name="name" type="text" class="input-field" style="padding: 8px; border-radius: 5px; border: 1px solid #ccc;">
+						
+						<label for="email">Your Email*</label>
+						<input name="email" type="email" class="input-field" style="padding: 8px; border-radius: 5px; border: 1px solid #ccc;">
+						
+						<label for="subject">Subject</label>
+						<input name="subject" type="text" class="input-field" style="padding: 8px; border-radius: 5px; border: 1px solid #ccc;">
+						
+						<label for="message">Your Message*</label>
+						<textarea name="message" class="msg-field" style="padding: 8px; border-radius: 5px; border: 1px solid #ccc;"></textarea>
+					</div>
+					
+					<button type="submit" class="send-btn" style="margin-bottom:20px;padding: 10px 20px; border: none; border-radius: 5px; background-color: #007bff; color: #fff; cursor: pointer;">Send</button>
+				</form>
+				
+			</div>
 
-                Your Email*
-                    <input name="email" type="email" class="input-field"> 
-      
-                Subject
-                    <input name="subject" type="text" class="input-field"> 
-    
-                 Your Message*
-                    <textarea name="message" type="message" class="msg-field"> </textarea>
-                    <button type= "submit" class="send-btn">Send</button>
+		</div>
+		</div>
+	</section>
 
-                </form>
-</div>
-
-            </div>
-        </div>
-    </section>
-
-    <footer class="footer-distributed">
+	<footer class="footer-distributed">
 
 		<div class="footer-left">
 
@@ -111,4 +116,5 @@
 
 	</footer>
 </body>
+
 </html>
