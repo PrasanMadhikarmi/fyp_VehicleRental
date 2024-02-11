@@ -15,6 +15,7 @@ from django.http import request
 import requests as req
 import xml.etree.ElementTree as ET
 
+
 # Create your views here.
 
 
@@ -61,7 +62,7 @@ def vehicleDisplay(request):
 def detail(request, car_id):
     car_pk = VehicleRegistration.objects.get(pk=car_id)
     if request.user.is_authenticated:
-        user_has_used_the_vehicle = bookInstantly.objects.filter(vehicle_id=car_pk, user_id=request.user).exists()
+        user_has_used_the_vehicle = bookInstantly.objects.filter(vehicle_id=car_pk, user_id=request.user, status = "Paid").exists()
         # User is logged in, fetch UserVerificationStatus
         user_verification_status = UserVerificationStatus.objects.get(
             user=request.user)
@@ -74,8 +75,13 @@ def detail(request, car_id):
 
 
     else:
+        reviews = vehicleReview.objects.filter(vehicle_id=car_pk)
         # User is not logged in, set a default value
         user_verification_status = {}
+        user_has_used_the_vehicle = False
+        user_ids_with_reviews = reviews.values_list('user_id', flat=True)
+        user_profiles_with_reviews = UserVerificationStatus.objects.filter(user__in=user_ids_with_reviews)
+
 
     if request.method == 'POST':
         form = BookingForm(request.POST)

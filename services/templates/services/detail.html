@@ -120,7 +120,7 @@
                     <img src="{% static 'services/settings.png' %}"><span>{{car_pk.transmission}}</span>
                 </div>
 
-                {% if 'bike'  in car_pk.category and 'cycle'  in car_pk.category %}
+                {% if 'car'  in car_pk.category %}
                 <div class="ft">
                     <img src="{% static 'services/pump.png' %}"><span>{{car_pk.carFuel}}</span>
                 </div>

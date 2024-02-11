@@ -34,10 +34,11 @@
                     </a>
                 </div>
             </div>
-
+<br>
             <div class="info-row">
                 <div class="left-wrapper">
                     <h3 class="info-text">{{info.brand}} {{info.model}}</h3>
+                    <br>
                     <div class="feature-wrapper">
                         <img src="{% static 'services/avatar.png' %}">
                         {% if info.category == 'cycle'%}
@@ -78,7 +79,7 @@
                     </h4>
                 </div>
                 <a href="/services/detail/{{info.id}}?{{info.brand}}{{info.model}}"><button
-                        class="detail-btn">Detail</button></a>
+                        class="detail-btn" style="background-color: rgb(65, 65, 176);">Detail</button></a>
             </div>
 
 
