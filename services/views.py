@@ -319,7 +319,7 @@ def send_payment_request_email(email, booking_id, subject, booking_details):
     to_email = email  # Assuming your form has an 'email' field
 
     # Modify the email message to include booking details and ID
-    email_message = f'Booking ID: {booking_id} has requested payment! \nName: {booking_details.name}\nEmail: {booking_details.email}\nPhone: {booking_details.number}\nPickup Date: {booking_details.pickDate}\nPickup Time: {booking_details.pickTime}\nDrop Off Date: {booking_details.dropDate}\nDrop Off Time: {booking_details.dropTime}'
+    email_message = f'Payment request for {booking_details.vehicle_id.brand} {booking_details.vehicle_id.model}! \nName: {booking_details.name}\nEmail: {booking_details.email}\nPhone: {booking_details.number}\nPickup Date: {booking_details.pickDate}\nPickup Time: {booking_details.pickTime}\nDrop Off Date: {booking_details.dropDate}\nDrop Off Time: {booking_details.dropTime}'
 
     send_mail(subject, email_message, 'eliterental.helpline@gmail.com',
               [to_email], fail_silently=False)
