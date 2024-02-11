@@ -71,6 +71,21 @@
         .selected {
             color: gold;
         }
+
+        h1 {
+          color: #88B04B;
+          font-family: "Nunito Sans", "Helvetica Neue", sans-serif;
+          font-weight: 900;
+          font-size: 28px;
+          margin-bottom: 10px;
+        }
+
+        i {
+        color: #abdd61;
+        font-size: 100px;
+        line-height: 200px;
+        margin-left:-15px;
+      }
     </style>
 </head>
 
@@ -145,7 +160,7 @@
                     <div class="profile-pic">
                         {% for profile in user_profiles_with_reviews %}
                         {% if profile.user_id == uR.user_id_id %}
-            
+
                         <img src="{{ profile.user_photo.url }}" alt="{{ profile.user_id }}">
                         {% endif %}
                         {% endfor %}
@@ -323,14 +338,16 @@
     {% if messages %}
     <div class="popup">
         <div class="popup-content">
-            <ul class="messages">
-                {% for message in messages %}
+            <div style="border-radius:200px; height:200px; width:200px; background: #F8FAF5; margin:0 auto;">
+                <i class="checkmark">✓</i>
+            </div>
+            <h1 style="margin-bottom: 40px; margin-top: 20px;">{% for message in messages %}
                 <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
-                    {% endfor %}
-            </ul>
+                    {% endfor %}</h1>
+           
             <!-- Add a link to a page -->
-            <p><a href="{% url 'services:booking' %}">Please go to my booking page for payment.</a></p>
-            <button class="popup-close" onclick="closePopup()">Close</button>
+            <p><a href="{% url 'services:booking' %}" style="padding: 15px; background-color: rgb(30, 83, 145); color: white; border-radius: 5px; margin-top: 20px; text-decoration: none;">Please go to my booking page for payment.</a></p>
+
         </div>
     </div>
     {% endif %}
