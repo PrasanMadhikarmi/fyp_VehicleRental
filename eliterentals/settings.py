@@ -62,7 +62,7 @@ JAZZMIN_SETTINGS = {
     "site_brand": "EliteRental",
 
     # Logo to use for your site, must be present in static files, used for brand on top left
-    "site_logo": "accounts/Elite rental logo with white text.png",
+    "site_logo": "accounts/Elite rental logo with white text for admin.png",
 
     # Logo to use for your site, must be present in static files, used for login form logo (defaults to site_logo)
     "login_logo": None,
@@ -266,7 +266,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'eliterentalsDB',
         'USER': 'root',
-        'PASSWORD': 'root',
+        'PASSWORD': 'Heraldstuds123',
         'HOST': 'localhost',
         'PORT': '3306',
     }

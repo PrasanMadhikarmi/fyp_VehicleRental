@@ -1,11 +1,12 @@
 from django.contrib import admin
 
 
-from services.models import CustomerPayment, bookInstantly, PaymentRequest
+from services.models import CustomerPayment, bookInstantly, PaymentRequest, vehicleReview
 
 # Register your models here.
 admin.site.register(CustomerPayment)
 admin.site.register(bookInstantly)
+admin.site.register(vehicleReview)
 
 class PaymentRequestAdmin(admin.ModelAdmin):
     list_display = ('id', 'request_date', 'requested_amount', 'paid_date', 'request_status')
