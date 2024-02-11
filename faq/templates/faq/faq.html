@@ -11,37 +11,7 @@
 
 </head>
 <body>
-
-    <div class="nav-bar">
-        <div class="nav-logo">
-            <h1>
-            <span class="highlight">Elite</span>Rental
-        </h1></div>
-        <div class="nav-link">
-            
-            <nav>
-				<ul>
-					<li><a class="link-href" href="{% url 'home:index' %}">Home</a></li>
-					<li><a class="link-href" href="{% url 'services:index' %}">Cars</a></li>
-					<li><a class="link-href" href="{% url 'about:about_index' %}">About</a></li>
-					<li><a class="link-href" href="{% url 'contact:contact_index' %}">Contact</a></li>
-					<li><a class="active link-href" href="{% url 'faq:faq_index' %}">FAQ</a></li>
-				</ul>
-			</nav>
-        </div>
-
-        <div class="p-f">
-            <div>
-            {% if user.is_authenticated %}
-                <li><a class="link-href" href="{% url 'services:booking' %}">Booking</a></li>
-                <li><a class="img-hover link-href"   href="{% url 'accounts:profile' %}"><img src="{% static 'home/user-24.png' %}"></a></li>
-                <li><a class="img-hover link-href" href="{% url 'accounts:logout' %}"><img src="{% static 'home/logout-24.png' %}"></a></li>
-            {% else %}
-                <li style="color:yellow;"><a href="{% url 'accounts:loginPage' %}">Login</a></li>
-            {% endif %}
-            </div>
-        </div>
-    </div>
+	{% include 'home/navbar.html' %}
 
     <section id="showcase">
 		<div class="container">
